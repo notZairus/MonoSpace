@@ -8,7 +8,7 @@ import {
   Sparkles,
   Target,
 } from "lucide-react";
-import { SignInButton, Show, SignUpButton, UserButton } from "@clerk/react";
+import { Show, UserButton } from "@clerk/react";
 import { Button } from "../components/ui/button";
 import { Link } from "react-router";
 
