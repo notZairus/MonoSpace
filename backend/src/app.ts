@@ -6,8 +6,8 @@ import cors from "cors";
 import session from "express-session";
 import { clerkMiddleware } from "@clerk/express";
 import { rateLimit } from "express-rate-limit";
-
 import tasks from "./routes/tasks";
+import subjects from "./routes/subjects";
 
 const app = express();
 
@@ -40,6 +40,11 @@ app.get("/api", (req, res) => {
   res.status(200).send("hello from api!!");
 });
 
+// ROUTES ////////////////////////////////////////////////
+// ROUTES ////////////////////////////////////////////////
+// ROUTES ////////////////////////////////////////////////
+
+app.use("/api/subjects", subjects);
 app.use("/api/tasks", tasks);
 
 export default app;

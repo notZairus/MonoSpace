@@ -3,24 +3,10 @@ jest.mock("@clerk/express", () => ({
   getAuth: jest.fn(),
 }));
 
-// jest.mock("../prisma/client.ts", () => ({
-//   prisma: {
-//     task: {
-//       create: jest.fn().mockResolvedValue({
-//         id: "task_123",
-//         name: "Science Assignment",
-//         description: "Finish alchemy exercises from chapter 5",
-//         color: "red",
-//         status: "PENDING",
-//         deadline: "2026-06-01T10:00:00.000Z",
-//       }),
-//     },
-//   },
-// }));
-
 import request from "supertest";
 import app from "../app";
 import { getAuth } from "@clerk/express";
+import { prisma } from "../prisma/client";
 
 const mockedGetAuth = getAuth as jest.MockedFunction<typeof getAuth>;
 
@@ -29,6 +15,17 @@ beforeEach(() => {
 });
 
 describe("POST /api/tasks", () => {
+  beforeEach(() => {
+    jest.spyOn(prisma.task, "create").mockResolvedValue({
+      id: "task_123",
+      name: "Science Assignment",
+      description: "Finish alchemy exercises from chapter 5",
+      color: "red",
+      status: "PENDING",
+      deadline: "2026-06-01T10:00:00.000Z",
+    } as any);
+  });
+
   jest.mock("../prisma/client.ts", () => ({
     prisma: {
       task: {
@@ -107,7 +104,7 @@ describe("GET /api/tasks", () => {
     expect(res.statusCode).toBe(403);
   });
 
-  it("should return 200 and list of tasks when user is authenticated", async () => {
+  it("should return 200 and list of all tasks when user is authenticated", async () => {
     mockedGetAuth.mockReturnValue({
       userId: "user_3ELLuVRYI9vSdxvsujMaNsZPx58",
     } as any);
@@ -116,5 +113,31 @@ describe("GET /api/tasks", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty("tasks");
+  });
+
+  it("should return 200 and list of all completed tasks when user is authenticated", async () => {
+    mockedGetAuth.mockReturnValue({
+      userId: "user_3ELLuVRYI9vSdxvsujMaNsZPx58",
+    } as any);
+
+    const res = await request(app).get("/api/tasks?status=completed");
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("tasks");
+    expect(res.body.tasks[0].completed).not.toBeNull();
+  });
+
+  it("should return 200 and list all overdue tasks when user is authenticated", async () => {
+    mockedGetAuth.mockReturnValue({
+      userId: "user_3ELLuVRYI9vSdxvsujMaNsZPx58",
+    } as any);
+
+    const res = await request(app).get("/api/tasks?status=overdue");
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("tasks");
+    expect(new Date(res.body.tasks[0].deadline).getTime()).toBeLessThan(
+      new Date().getTime(),
+    );
   });
 });

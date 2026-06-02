@@ -1,17 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { type Task } from "@studybase/shared";
 import { useAuth } from "@clerk/react";
-import { get } from "../api/task";
+import { getSubjects } from "../api/subject";
 
-export function useTasks() {
+export function useSubjects() {
   const { getToken } = useAuth();
 
   return useQuery<Task[]>({
-    queryKey: ["tasks"],
+    queryKey: ["subjects"],
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {
       const token = await getToken();
-      return get(token as string);
+      return getSubjects(token as string);
     },
   });
 }

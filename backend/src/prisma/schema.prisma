@@ -40,6 +40,8 @@ model Task {
   parentId String?
   parent Task? @relation("SubTaskRelation", fields: [parentId], references: [id], onDelete: Cascade)
   children Task[] @relation("SubTaskRelation")
+
+  @@index([userId])
 }
 
 model Subject {
@@ -49,4 +51,9 @@ model Subject {
   tasks Task[] @relation("TaskSubjectRelation")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, name])
+
+  @@unique([userId, name])
 }

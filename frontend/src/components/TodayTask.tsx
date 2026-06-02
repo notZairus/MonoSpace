@@ -1,4 +1,4 @@
-import { useTasks } from "../hooks/useGetTasks";
+import { useTasks } from "../hooks/useTasks";
 import TaskItem from "./TaskItem";
 import { Card, CardTitle, CardHeading, CardContent } from "./ui/card";
 import { ScrollBar, ScrollArea } from "./ui/scroll-area";
@@ -18,8 +18,10 @@ function TodayTask() {
       })
     : [];
 
+  console.log(todayTasks);
+
   return (
-    <Card className="w-full max-h-120 bg-primary text-white shadow-lg">
+    <Card className="w-full max-h-108 bg-primary text-white shadow-lg">
       <CardTitle>Today</CardTitle>
       <div className="flex items-center justify-between">
         <CardHeading className="text-xl">Today's Tasks</CardHeading>
@@ -27,26 +29,37 @@ function TodayTask() {
       <CardContent className="flex flex-col gap-2 px-0">
         <div className="flex flex-row gap-4">
           <Card className="flex-1 bg-white/10 ring-0 border-0 shadow-md p-2 sm:p-3 rounded-lg text-white/80">
-            <p className="-mt-1 sm:mt-1 text-xl sm:text-3xl text-center font-heading font-semibold tracking-tight">
-              {todayTasks.filter((task) => task.status === "COMPLETED").length}{" "}
-              / {todayTasks.length}
-            </p>
-            <p className="tracking-wider sm:leading-3.5 text-center text-[10px]">
-              TODAY'S TASKS COMPLETED
-            </p>
+            {todayTasks.length > 0 && (
+              <>
+                <p className="-mt-1 sm:mt-1 text-xl sm:text-3xl text-center font-heading font-semibold tracking-tight">
+                  {
+                    todayTasks.filter((task) => task.status === "COMPLETED")
+                      .length
+                  }{" "}
+                  / {todayTasks.length}
+                </p>
+                <p className="tracking-wider sm:leading-3.5 text-center text-[10px]">
+                  TODAY'S TASKS COMPLETED
+                </p>
+              </>
+            )}
           </Card>
           <Card className="flex-1 bg-white/10 text-white/80 border-0 ring-0 shadow-md p-3 rounded-lg">
-            <p className="-mt-1 sm:mt-1 text-xl sm:text-3xl text-center font-heading font-semibold tracking-tight">
-              {`${
-                (todayTasks.filter((task) => task.status === "COMPLETED")
-                  .length /
-                  todayTasks.length) *
-                100
-              }%`}
-            </p>
-            <p className="tracking-wider sm:leading-3.5 text-[10px] sm:text-[10px] text-center">
-              TODAYS WORK IS DONE
-            </p>
+            {todayTasks.length > 0 && (
+              <>
+                <p className="-mt-1 sm:mt-1 text-xl sm:text-3xl text-center font-heading font-semibold tracking-tight">
+                  {`${
+                    (todayTasks.filter((task) => task.status === "COMPLETED")
+                      .length /
+                      todayTasks.length) *
+                    100
+                  }%`}
+                </p>
+                <p className="tracking-wider sm:leading-3.5 text-[10px] sm:text-[10px] text-center">
+                  TODAYS WORK IS DONE
+                </p>
+              </>
+            )}
           </Card>
           <Card className="flex-1 bg-white/10 border-0 ring-0 shadow-md p-3 rounded-lg"></Card>
         </div>

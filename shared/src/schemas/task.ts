@@ -6,7 +6,7 @@ export const createTaskSchema = z.object({
   color: z.enum(["red", "yellow", "green"]),
   subjects: z.array(z.string().min(3)).min(1),
   status: z.enum(["PENDING", "COMPLETED"]),
-  deadline: z.string().optional(),
+  deadline: z.string(),
 });
 
 export type TaskDTO = z.infer<typeof createTaskSchema>;

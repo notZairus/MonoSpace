@@ -6,7 +6,7 @@ import { type Task } from "@studybase/shared";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import TaskItem from "./TaskItem";
 import { getUpcomingTasks } from "../lib/utils";
-import { useTasks } from "../hooks/useGetTasks";
+import { useTasks } from "../hooks/useTasks";
 import {
   Tabs,
   TabsContent,
@@ -17,6 +17,8 @@ import {
 function UpcomingTasks() {
   const [showAddTaskModal, setShowAddTaskModal] = useState<boolean>(false);
   const { data: tasks } = useTasks();
+
+  console.log(tasks);
 
   if (!tasks) {
     return <div>Loading...</div>;
@@ -30,8 +32,6 @@ function UpcomingTasks() {
 
   const uncompletedTasks = tasks.filter((task) => task.status !== "COMPLETED");
   const upcomingTasks: Task[] = getUpcomingTasks(uncompletedTasks);
-
-  console.log("Upcoming Tasks:", upcomingTasks);
 
   return (
     <>

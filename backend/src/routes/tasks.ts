@@ -8,17 +8,24 @@ const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
+  if (!userId) res.status(403).send({ message: "Forbidden" });
 
-  if (!userId) {
-    return res.status(403).send({
-      message: "Forbidden",
-    });
+  const { status } = req.query;
+
+  const where: any = { userId };
+
+  if (status === "overdue") {
+    where.deadline = { lt: new Date() };
+    where.completedAt = null;
+  } else if (status === "completed") {
+    where.completedAt = { not: null };
+  } else {
+    const today = new Date();
+    where.deadline = { gte: today };
   }
 
   const tasks = await prisma.task.findMany({
-    where: {
-      userId: userId,
-    },
+    where,
     include: {
       subjects: true,
     },
@@ -53,9 +60,17 @@ router.post("/", async (req: Request, res: Response) => {
       deadline: data.deadline ? new Date(data.deadline) : undefined,
       color: data.color,
       subjects: {
-        create: data.subjects.map((sub) => ({
-          userId: userId,
-          name: sub,
+        connectOrCreate: data.subjects.map((sub) => ({
+          where: {
+            userId_name: {
+              userId,
+              name: sub,
+            },
+          },
+          create: {
+            userId,
+            name: sub,
+          },
         })),
       },
     },
@@ -67,7 +82,7 @@ router.post("/", async (req: Request, res: Response) => {
   });
 });
 
-router.patch("/status/:taskId", async (req: Request, res: Response) => {
+router.patch("/:taskId/status", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
 
   if (!userId) {
