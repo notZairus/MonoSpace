@@ -46,3 +46,13 @@ export async function updateTask(
     body: JSON.stringify(data),
   });
 }
+
+export async function deleteTask(token: string, id: string) {
+  await fetch(`http://localhost:3000/api/tasks/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}

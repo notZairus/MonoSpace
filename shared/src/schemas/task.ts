@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Subtask } from "./subtask";
+import { type Subtask } from "./subtask";
 
 export const createTaskSchema = z.object({
   name: z.string().trim().min(4),

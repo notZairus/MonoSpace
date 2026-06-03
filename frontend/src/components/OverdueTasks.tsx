@@ -23,9 +23,15 @@ function OverdueTasks() {
           <ScrollArea className="max-h-73 h-73 w-full pr-3">
             <ScrollBar className="text-primary" />
             <div className="space-y-2">
-              {tasks.map((task) => (
-                <TaskItem key={task.id} task={task} />
-              ))}
+              {tasks
+                .sort(
+                  (a, b) =>
+                    new Date(b.deadline).getTime() -
+                    new Date(a.deadline).getTime(),
+                )
+                .map((task) => (
+                  <TaskItem key={task.id} task={task} />
+                ))}
             </div>
           </ScrollArea>
         </CardContent>

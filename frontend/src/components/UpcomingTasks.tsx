@@ -18,8 +18,6 @@ function UpcomingTasks() {
   const [showAddTaskModal, setShowAddTaskModal] = useState<boolean>(false);
   const { data: tasks } = useTasks();
 
-  console.log(tasks);
-
   if (!tasks) {
     return <div>Loading...</div>;
   }

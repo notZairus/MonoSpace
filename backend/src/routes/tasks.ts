@@ -6,6 +6,8 @@ import { prisma } from "../prisma/client";
 
 const router = Router();
 
+// GET ///////////////////////////////////////////////
+
 router.get("/", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
   if (!userId) res.status(403).send({ message: "Forbidden" });
@@ -34,6 +36,8 @@ router.get("/", async (req: Request, res: Response) => {
 
   return res.status(200).send({ tasks });
 });
+
+// POST //////////////////////////////////////////////
 
 router.post("/", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
@@ -158,6 +162,25 @@ router.patch("/:taskId", async (req, res) => {
   return res.status(200).send({
     task: task,
   });
+});
+
+// DELETE ////////////////////////////////////////////
+router.delete("/:taskId", async (req, res) => {
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+
+  const { taskId } = req.params;
+
+  await prisma.task.delete({
+    where: {
+      id: taskId,
+    },
+  });
+
+  return res.status(200).send({ message: "successful" });
 });
 
 export default router;
