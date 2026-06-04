@@ -86,7 +86,7 @@ jobs:
             CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}
             EOF
 
-            cd /var/www/StudyBase/backend
+            cd /var/www/StudyBase/shared
             npm install
             npm run build
 
