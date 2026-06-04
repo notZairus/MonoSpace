@@ -29,7 +29,7 @@ jobs:
         run: npm run build --workspace=shared
 
       - name: Generate Prisma client (backend)
-        run: npm run prisma:generate --workspace=backend
+        run: npx prisma generate --workspace=backend
 
       - name: Build backend
         run: npm run build --workspace=backend
