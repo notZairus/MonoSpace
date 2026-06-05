@@ -116,7 +116,7 @@ jobs:
 
             \. "$HOME/.nvm/nvm.sh"
             cd /var/www/StudyBase/shared
-            npm install
+            npm ci
             npm run build
           EOF
 
@@ -127,7 +127,7 @@ jobs:
             
             \. "$HOME/.nvm/nvm.sh"
             cd /var/www/StudyBase/backend
-            npm install
+            npm ci
             npx prisma generate
             npm run build
           EOF
@@ -139,6 +139,6 @@ jobs:
 
             \. "$HOME/.nvm/nvm.sh"
             cd /var/www/StudyBase/frontend
-            npm install
+            npm ci
             npm run build
           EOF
