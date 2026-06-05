@@ -9,34 +9,6 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install dependencies (workspaces)
-        run: npm install
-
-      - name: Build shared
-        run: npm run build --workspace=shared
-
-      - name: Generate Prisma client (backend)
-        run: npm run prisma:generate --workspace=backend
-
-      - name: Build backend
-        run: npm run build --workspace=backend
-
-      - name: Build frontend
-        run: npm run build --workspace=frontend
-
   shared:
     runs-on: ubuntu-latest
 
@@ -59,7 +31,7 @@ jobs:
         working-directory: ./shared
 
       - name: Upload shared artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: shared
           path: ./shared/dist
@@ -74,7 +46,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download shared artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: shared
 
@@ -102,7 +74,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download shared artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: shared
 
