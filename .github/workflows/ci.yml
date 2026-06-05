@@ -99,15 +99,15 @@ jobs:
             EOT
           EOF
 
-      - name: install root dependencies on server
-        run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            set -e
+      # - name: install root dependencies on server
+      #   run: |
+      #     ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+      #       set -e
 
-            \. "$HOME/.nvm/nvm.sh"
-            cd /var/www/StudyBase
-            npm install
-          EOF
+      #       \. "$HOME/.nvm/nvm.sh"
+      #       cd /var/www/StudyBase
+      #       npm ci
+      #     EOF
 
       - name: build shared on server
         run: |
@@ -136,7 +136,7 @@ jobs:
         run: |
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -e
-            
+
             \. "$HOME/.nvm/nvm.sh"
             cd /var/www/StudyBase/frontend
             npm install
