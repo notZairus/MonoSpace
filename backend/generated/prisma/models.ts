@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Task.js'
-export type * from './models/Subtask.js'
-export type * from './models/Subject.js'
-export type * from './commonInputTypes.js'
+export type * from './models/Task'
+export type * from './models/Subtask'
+export type * from './models/Subject'
+export type * from './commonInputTypes'
