@@ -1,4 +1,4 @@
-import type { Task } from "@studybase/shared";
+import type { Task } from "../schemas/task.schema";
 import { cn } from "../lib/utils";
 import TaskShowcase from "./TaskShowcase";
 import { useState } from "react";

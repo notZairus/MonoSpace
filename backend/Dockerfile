@@ -2,17 +2,11 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
 COPY backend ./backend/
-COPY shared ./shared/
 
-
-RUN npm install
-
-RUN npm run build --workspace=shared
-RUN npm install --workspace=backend
-RUN npm run prisma:generate --workspace=backend
-RUN npm run build --workspace=backend
+RUN cd backend && npm install
+RUN cd backend && npm run prisma:generate
+RUN cd backend && npm run build
 
 VOLUME ["/app/data"]
 

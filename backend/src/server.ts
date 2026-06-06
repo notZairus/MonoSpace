@@ -1,5 +1,4 @@
 import app from "./app";
-import tasks from "./routes/tasks";
 
 const PORT = process.env.PORT || 3000;
 

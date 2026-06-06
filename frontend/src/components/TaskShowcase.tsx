@@ -18,7 +18,7 @@ import {
   ChevronDown,
   Trash2, // Imported Trash icon for delete
 } from "lucide-react";
-import { type Task, type TaskDTO } from "@studybase/shared";
+import { type Task, type TaskDTO } from "../schemas/task.schema";
 import { useToggleCompleteTask } from "../hooks/useToggleComplete";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { TaskDTO } from "@studybase/shared";
+import type { TaskDTO } from "../schemas/task.schema";
 import { useAuth } from "@clerk/react";
 import { createTask } from "../api/task";
 

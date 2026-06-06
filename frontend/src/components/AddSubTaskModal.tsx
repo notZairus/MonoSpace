@@ -14,8 +14,8 @@ import { AlertCircle, CheckCircle2, Circle } from "lucide-react";
 import {
   createSubTaskSchema,
   type SubtaskDTO,
-  type Task,
-} from "@studybase/shared";
+} from "../schemas/subtask.schema";
+import { type Task } from "../schemas/task.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateSubtask } from "../hooks/useCreateSubtask";

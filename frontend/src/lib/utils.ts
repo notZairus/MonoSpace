@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { type Task } from "@studybase/shared";
+import { type Task } from "../schemas/task.schema";
 
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
 

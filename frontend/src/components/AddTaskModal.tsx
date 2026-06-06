@@ -19,7 +19,7 @@ import {
   CheckCircle2,
   Circle,
 } from "lucide-react";
-import { type TaskDTO, createTaskSchema } from "@studybase/shared";
+import { type TaskDTO, createTaskSchema } from "../schemas/task.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateTask } from "../hooks/useCreateTask";

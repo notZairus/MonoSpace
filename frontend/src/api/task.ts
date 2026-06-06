@@ -1,4 +1,4 @@
-import type { TaskDTO } from "@studybase/shared";
+import type { TaskDTO } from "../schemas/task.schema";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 

@@ -1,4 +1,4 @@
-import type { SubtaskDTO } from "@studybase/shared";
+import type { SubtaskDTO } from "../schemas/subtask.schema";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 

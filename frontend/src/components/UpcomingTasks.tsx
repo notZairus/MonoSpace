@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeading, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import AddTaskModal from "./AddTaskModal";
-import { type Task } from "@studybase/shared";
+import { type Task } from "../schemas/task.schema";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import TaskItem from "./TaskItem";
 import { getUpcomingTasks } from "../lib/utils";

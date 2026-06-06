@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
 import { updateTask } from "../api/task";
-import type { TaskDTO } from "@studybase/shared";
+import type { TaskDTO } from "../schemas/task.schema";
 
 export function useUpdateTask() {
   const { getToken } = useAuth();

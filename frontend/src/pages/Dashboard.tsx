@@ -10,80 +10,6 @@ import {
 import UpcomingTasks from "../components/UpcomingTasks";
 import { useSubjects } from "../hooks/useSubjects";
 
-// const subjects = [
-//   {
-//     id: 1,
-//     name: "Mathematics",
-//     color: "#FF5733",
-//   },
-//   {
-//     id: 2,
-//     name: "Physics",
-//     color: "#33C1FF",
-//   },
-//   {
-//     id: 3,
-//     name: "Chemistry",
-//     color: "#9D33FF",
-//   },
-//   {
-//     id: 4,
-//     name: "Biology",
-//     color: "#33FF57",
-//   },
-
-//   {
-//     id: 5,
-//     name: "History",
-//     color: "#FFB833",
-//   },
-//   {
-//     id: 6,
-//     name: "Geography",
-//     color: "#33FFD6",
-//   },
-//   {
-//     id: 7,
-//     name: "English",
-//     color: "#FF33A8",
-//   },
-//   {
-//     id: 8,
-//     name: "Computer Science",
-//     color: "#3375FF",
-//   },
-//   {
-//     id: 9,
-//     name: "Economics",
-//     color: "#8DFF33",
-//   },
-//   {
-//     id: 10,
-//     name: "Art",
-//     color: "#FF6EC7",
-//   },
-//   {
-//     id: 11,
-//     name: "Music",
-//     color: "#6E33FF",
-//   },
-//   {
-//     id: 12,
-//     name: "Philosophy",
-//     color: "#33FFD1",
-//   },
-//   {
-//     id: 13,
-//     name: "Psychology",
-//     color: "#FF9E33",
-//   },
-//   {
-//     id: 14,
-//     name: "Sociology",
-//     color: "#33A8FF",
-//   },
-// ];
-
 function Dashboard() {
   const { data: subjects } = useSubjects();
 
@@ -126,7 +52,7 @@ function Dashboard() {
               </CardContent>
             </Card>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 w-full sm:max-w-xs">
             <Card className="w-full bg-primary shadow-lg text-white max-h-108">
               <CardTitle>Pomodoro</CardTitle>
               <div className="flex items-center justify-between">

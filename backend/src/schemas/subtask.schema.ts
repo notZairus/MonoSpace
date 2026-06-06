@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { Task } from "./task";
+import type { Task } from "./task.schema";
 
 export const createSubTaskSchema = z.object({
   parentId: z.string(),

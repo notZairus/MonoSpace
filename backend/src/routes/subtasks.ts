@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createSubTaskSchema } from "@studybase/shared";
+import { createSubTaskSchema } from "../schemas/subtask.schema";
 import { getAuth } from "@clerk/express";
 import z from "zod";
 import { prisma } from "../../prisma/client";

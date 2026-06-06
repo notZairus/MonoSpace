@@ -1,5 +1,9 @@
 import { Request, Router, Response } from "express";
-import { createTaskSchema, Task, updateTaskSchema } from "@studybase/shared";
+import {
+  createTaskSchema,
+  Task,
+  updateTaskSchema,
+} from "../schemas/task.schema";
 import { z } from "zod";
 import { getAuth } from "@clerk/express";
 import { prisma } from "../../prisma/client";

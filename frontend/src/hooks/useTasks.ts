@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { type Task } from "@studybase/shared";
+import { type Task } from "../schemas/task.schema";
 import { useAuth } from "@clerk/react";
 import { get } from "../api/task";
 
