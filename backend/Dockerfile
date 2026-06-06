@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY backend ./backend/
 
-RUN cd backend && npm install
+RUN cd backend && npm ci
 RUN cd backend && npm run prisma:generate
 RUN cd backend && npm run build
 
