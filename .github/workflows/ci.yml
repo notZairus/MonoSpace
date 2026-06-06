@@ -99,46 +99,13 @@ jobs:
             EOT
           EOF
 
-      # - name: install root dependencies on server
-      #   run: |
-      #     ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-      #       set -e
-
-      #       \. "$HOME/.nvm/nvm.sh"
-      #       cd /var/www/StudyBase
-      #       npm ci
-      #     EOF
-
-      - name: build shared on server
+      - name: Restart application using Docker Compose
         run: |
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -e
-
-            \. "$HOME/.nvm/nvm.sh"
-            cd /var/www/StudyBase/shared
-            npm ci
-            npm run build
+            cd /var/www/StudyBase
+            docker-compose down
+            docker-compose up --build -d 
           EOF
 
-      - name: build backend on server
-        run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            set -e
-            
-            \. "$HOME/.nvm/nvm.sh"
-            cd /var/www/StudyBase/backend
-            npm ci
-            npx prisma generate
-            npm run build
-          EOF
-
-      - name: build frontend on server
-        run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            set -e
-
-            \. "$HOME/.nvm/nvm.sh"
-            cd /var/www/StudyBase/frontend
-            npm ci
-            npm run build
-          EOF
+      
