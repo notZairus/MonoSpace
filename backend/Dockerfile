@@ -12,4 +12,4 @@ RUN npm run build
 VOLUME ["/app/data"]
 
 EXPOSE 3000
-CMD ["sh", "-c", "cd backend && DATABASE_URL='file:/app/data/prod.db' npx prisma migrate deploy && node dist/src/server.js"]
+CMD ["sh", "-c", "DATABASE_URL='file:/app/data/prod.db' npx prisma migrate deploy && node dist/src/server.js"]
