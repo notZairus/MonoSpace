@@ -1,34 +1,33 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
-import { updateTask } from "../api/task";
-import type { TaskDTO } from "../schemas/task.schema";
+import type { subjectDTO } from "../schemas/subject.schema";
+import { updateSubject } from "../api/subject";
 
-export function useUpdateTask() {
+export function useUpdateSubject() {
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({
       id,
-      data,
+      field,
     }: {
       id: string;
-      data: Partial<TaskDTO>;
+      field: Partial<subjectDTO>;
     }) => {
       const token = await getToken();
-      await updateTask(token as string, id, data);
+      await updateSubject(
+        token as string,
+        id as string,
+        field as Partial<subjectDTO>,
+      );
     },
-    onSuccess: (_, data) => {
-      queryClient.invalidateQueries({
-        queryKey: ["tasks"],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ["task", "id", data.id],
-      });
-
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ["subjects"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
       });
     },
   });

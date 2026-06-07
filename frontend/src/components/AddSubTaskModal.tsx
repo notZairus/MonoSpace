@@ -15,7 +15,6 @@ import {
   createSubTaskSchema,
   type SubtaskDTO,
 } from "../schemas/subtask.schema";
-import { type Task } from "../schemas/task.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateSubtask } from "../hooks/useCreateSubtask";
@@ -38,11 +37,11 @@ const priorityConfig = {
 function AddSubTaskModal({
   open,
   setOpen,
-  parentTask,
+  parentId,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  parentTask: Omit<Task, "subjects"> & { subjects: string[] };
+  parentId: string;
 }) {
   const {
     register,
@@ -54,7 +53,7 @@ function AddSubTaskModal({
   } = useForm({
     resolver: zodResolver(createSubTaskSchema),
     defaultValues: {
-      parentId: parentTask.id,
+      parentId: parentId,
       name: "",
       description: "",
       status: "PENDING",
@@ -63,8 +62,6 @@ function AddSubTaskModal({
   });
 
   const createSubTask = useCreateSubtask();
-
-  if (!parentTask) return null;
 
   const watchedStatus = watch("status");
   const watchedColor = watch("color");

@@ -10,11 +10,14 @@ import { TrashIcon } from "lucide-react";
 import SubjectShowcase from "./SubjectShowcase";
 import { useState } from "react";
 import type { Subject } from "../schemas/subject.schema";
+import { Button } from "./ui/button";
+import AddSubjectModal from "./AddSubjectModal";
 
 const Subjects = () => {
   const { data: subjects } = useSubjects();
   const [openSubjectShowcase, setOpenSubjectShowcase] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
+  const [openAddSubjectModal, setOpenAddSubjectModal] = useState(false);
 
   if (!subjects) {
     return <div>Loading...</div>;
@@ -26,14 +29,26 @@ const Subjects = () => {
         <SubjectShowcase
           open={openSubjectShowcase}
           setOpen={setOpenSubjectShowcase}
-          subject={selectedSubject}
+          subjectId={selectedSubject?.id}
         />
       )}
+
+      <AddSubjectModal
+        open={openAddSubjectModal}
+        setOpen={setOpenAddSubjectModal}
+      />
 
       <Card className="w-full max-h-108">
         <CardTitle>Subjects</CardTitle>
         <div className="flex items-center justify-between">
           <CardHeading className="text-xl">All Subjects</CardHeading>
+          <Button
+            size="icon-sm"
+            className="text-white"
+            onClick={() => setOpenAddSubjectModal(true)}
+          >
+            +
+          </Button>
         </div>
         <CardContent className="w-full p-0">
           <div className="flex flex-wrap w-full gap-2">

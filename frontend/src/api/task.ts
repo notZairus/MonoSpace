@@ -25,13 +25,16 @@ export async function createTask(token: string, data: TaskDTO) {
 }
 
 export async function toggleCompleteTask(token: string, id: string) {
-  await fetch(`${serverUrl}/tasks/${id}/status`, {
+  const res = await fetch(`${serverUrl}/tasks/${id}/status`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
+
+  const data = await res.json();
+  return data;
 }
 
 export async function updateTask(

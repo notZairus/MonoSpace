@@ -12,9 +12,13 @@ export function useCreateSubtask() {
       const token = await getToken();
       await createSubtask(token as string, subtask);
     },
-    onSuccess: () => {
+    onSuccess: (_, subtask) => {
       queryClient.invalidateQueries({
         queryKey: ["tasks"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["task", "id", subtask.parentId],
       });
     },
   });

@@ -41,6 +41,27 @@ router.get("/", async (req: Request, res: Response) => {
   return res.status(200).send({ tasks });
 });
 
+router.get("/:taskId", async (req: Request, res: Response) => {
+  const { userId } = getAuth(req);
+  if (!userId) res.status(403).send({ message: "Forbidden" });
+
+  const { taskId } = req.params;
+
+  if (taskId) {
+    const task = await prisma.task.findFirst({
+      where: {
+        id: taskId as string,
+      },
+      include: {
+        subjects: true,
+        subtasks: true,
+      },
+    });
+
+    return res.status(200).send({ task });
+  }
+});
+
 // POST //////////////////////////////////////////////
 
 router.post("/", async (req: Request, res: Response) => {
@@ -112,13 +133,22 @@ router.patch("/:taskId/status", async (req: Request, res: Response) => {
     return res.sendStatus(404);
   }
 
-  const task = await prisma.task.update({
+  await prisma.task.update({
     where: {
       id: taskId as string,
     },
     data: {
       status: targetTask.status === "PENDING" ? "COMPLETED" : "PENDING",
       completedAt: targetTask.status === "PENDING" ? new Date() : null,
+    },
+  });
+
+  const task = await prisma.task.findFirst({
+    where: {
+      id: taskId as string,
+    },
+    include: {
+      subjects: true,
     },
   });
 

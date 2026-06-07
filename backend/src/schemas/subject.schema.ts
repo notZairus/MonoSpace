@@ -12,3 +12,9 @@ export type Subject = subjectDTO & {
   userId: string;
   tasks: Task[];
 };
+
+export const updateSubjectSchema = z.object({
+  name: z.string().trim().optional(),
+});
+
+export type UpdateSubjectDTO = z.infer<typeof updateSubjectSchema>;

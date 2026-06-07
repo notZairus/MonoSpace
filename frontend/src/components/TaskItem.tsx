@@ -33,7 +33,7 @@ const TaskItem = ({
 
   return (
     <>
-      <TaskShowcase open={showTask} setOpen={setShowTask} task={task} />
+      <TaskShowcase open={showTask} setOpen={setShowTask} taskId={task.id} />
 
       <div
         className={cn(

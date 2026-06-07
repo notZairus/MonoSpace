@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -43,6 +43,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../components/ui/hover-card";
+import { useTask } from "../hooks/useTasks";
 
 const colorConfig: Record<
   Task["color"],
@@ -74,24 +75,21 @@ const colorConfig: Record<
 interface TaskShowcaseProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  task: Task;
+  taskId: string;
 }
 
-const TaskShowcase = ({
-  open = false,
-  setOpen,
-  task: taskProp,
-}: TaskShowcaseProps) => {
-  const [task, setTask] = useState<
-    (Omit<Task, "subjects"> & { subjects: string[] }) | null
-  >(null);
+const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
+  const { data: task } = useTask(taskId);
+  const [taskCopy, setTaskCopy] = useState({
+    name: task?.name || "",
+    description: task?.description || "",
+  });
   const [openAddSubTaskModal, setOpenSubTaskModal] = useState(false);
-  const [openConfirmDelete, setOpenConfirmDelete] = useState(false); // State for confirmation dialog
+  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
   const toggleComplete = useToggleCompleteTask();
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
-  // const deleteTask = useDeleteTask(); // Initialize your delete hook here
 
   const { data: allAvailableSubjects } = useSubjects();
   const debouncedHandleUpdate = useDebouncedCallback(
@@ -104,17 +102,7 @@ const TaskShowcase = ({
     500,
   );
 
-  useEffect(() => {
-    function placeTask() {
-      setTask({
-        ...taskProp,
-        subjects: taskProp.subjects.map((s) => s.name),
-      });
-    }
-    placeTask();
-  }, [taskProp]);
-
-  if (!task) {
+  if (!task || !taskCopy.name || !taskCopy.description) {
     return (
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
         <DialogContent>Loading...</DialogContent>
@@ -124,13 +112,9 @@ const TaskShowcase = ({
 
   const color = colorConfig[task.color];
   const isCompleted = task.status === "COMPLETED";
+  const subjs = task.subjects?.map((s) => s.name);
 
   const handleToggleComplete = () => {
-    setTask({
-      ...task,
-      status: task.status === "PENDING" ? "COMPLETED" : "PENDING",
-    });
-
     toggleComplete.mutate(task.id);
   };
 
@@ -145,19 +129,17 @@ const TaskShowcase = ({
   ).length;
 
   const emitUpdate = (fields: Partial<TaskDTO>) => {
-    console.log(fields);
-    setTask({ ...task, ...fields });
     debouncedHandleUpdate(task.id, fields);
   };
 
   const handleAddSubject = (subj: string) => {
-    const existing = task.subjects || [];
+    const existing = subjs || [];
     if (existing.some((s) => s === subj)) return;
     emitUpdate({ subjects: [...existing, subj] });
   };
 
   const handleRemoveSubject = (subjectName: string) => {
-    const existing = task.subjects || [];
+    const existing = subjs || [];
     emitUpdate({ subjects: existing.filter((s) => s !== subjectName) });
   };
 
@@ -166,7 +148,7 @@ const TaskShowcase = ({
       <AddSubTaskModal
         open={openAddSubTaskModal}
         setOpen={setOpenSubTaskModal}
-        parentTask={task}
+        parentId={task.id}
       />
 
       {/* Confirmation Dialog for Deletion */}
@@ -228,8 +210,11 @@ const TaskShowcase = ({
                   <DialogTitle className="sr-only">{task.name}</DialogTitle>
                   <input
                     type="text"
-                    value={task.name}
-                    onChange={(e) => emitUpdate({ name: e.target.value })}
+                    value={taskCopy.name}
+                    onChange={(e) => {
+                      setTaskCopy({ ...taskCopy, name: e.target.value });
+                      emitUpdate({ name: e.target.value });
+                    }}
                     placeholder="Task title..."
                     className={`w-full bg-transparent border-0 p-0 text-lg font-semibold tracking-tight leading-snug focus:outline-none focus:ring-0 placeholder:text-muted-foreground/40 transition-colors ${
                       isCompleted
@@ -253,8 +238,14 @@ const TaskShowcase = ({
             {/* Description Block - Editable Textarea */}
             <div className="relative bg-muted/20 rounded-xl border border-border/60 focus-within:border-muted-foreground/30 focus-within:bg-muted/30 transition-all">
               <textarea
-                value={task.description || ""}
-                onChange={(e) => emitUpdate({ description: e.target.value })}
+                value={taskCopy.description || ""}
+                onChange={(e) => {
+                  setTaskCopy({
+                    ...taskCopy,
+                    description: e.target.value,
+                  });
+                  emitUpdate({ description: e.target.value });
+                }}
                 placeholder="Add a detailed description..."
                 className="w-full max-h-36 bg-transparent border-0 p-3 text-[14px] text-muted-foreground/90 leading-relaxed placeholder:text-muted-foreground/40 focus:outline-none focus:ring-0 resize-y"
               />
@@ -379,7 +370,7 @@ const TaskShowcase = ({
                 </span>
 
                 <div className="flex flex-wrap justify-end gap-1.5 max-w-[75%] items-center">
-                  {task.subjects?.map((s) => (
+                  {subjs.map((s) => (
                     <span
                       key={s}
                       className="inline-flex items-center gap-1 text-xs pl-2 pr-1 py-0.5 rounded-md bg-secondary text-secondary-foreground font-medium border border-border/40"
@@ -419,7 +410,7 @@ const TaskShowcase = ({
                             key={subject.id}
                             onClick={() => handleAddSubject(subject.name)}
                             disabled={task.subjects?.some(
-                              (s) => (s as string) === subject.name,
+                              (s) => s.name === subject.name,
                             )}
                             className="rounded-lg py-1.5 px-2.5 cursor-pointer disabled:opacity-40"
                           >
@@ -454,7 +445,7 @@ const TaskShowcase = ({
               </div>
 
               <div>
-                <ScrollArea className="h-40 rounded-xl border border-border/50 bg-card/30">
+                <ScrollArea className="h-32 rounded-xl border border-border/50 bg-card/30">
                   <ScrollBar />
                   <div className="rounded-xl border border-border/50 bg-card/30 divide-y divide-border/30 overflow-hidden">
                     {task.subtasks?.map((sub) => {
