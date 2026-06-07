@@ -11,6 +11,10 @@ on:
 jobs:
   deploy-studybase:
     runs-on: ubuntu-latest
+    env:
+      SSH_OPTS: >-
+        -o ServerAliveInterval=60
+        -o ServerAliveCountMax=60
     steps:
 
       - name: Set up SSH
@@ -23,7 +27,7 @@ jobs:
       
       - name: Pull latest changes on server
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh $SSH_OPTS ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -e
             cd /var/www/StudyBase
             git pull origin main
@@ -32,40 +36,39 @@ jobs:
 
       - name: Copy frontend env file to server
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh $SSH_OPTS ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -e
 
             cd /var/www/StudyBase/frontend
 
-            cat > .env <<EOT
-            VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
-            VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
-            EOT
+            printf '%s\n' \
+              "VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}" \
+              "VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}" \
+              > .env
           EOF
 
       - name: Copy backend env file to server
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh $SSH_OPTS ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -e
             
             cd /var/www/StudyBase/backend
 
-            cat > .env <<EOT
-            CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }}
-            CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
-            NODE_ENV=production
-            PORT=${{ secrets.PORT }}
-            SECRET_KEY=${{ secrets.SECRET_KEY }}
-            EOT
+            printf '%s\n' \
+              "CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }}" \
+              "CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}" \
+              "DATABASE_URL=${{ secrets.DATABASE_URL }}" \
+              "NODE_ENV=production" \
+              "PORT=${{ secrets.PORT }}" \
+              "SECRET_KEY=${{ secrets.SECRET_KEY }}" \
+              > .env
           EOF
 
       - name: Restart application using Docker Compose
         run: |
-          ssh -tt ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh $SSH_OPTS ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             set -e
             cd /var/www/StudyBase
             docker compose down
             docker compose up --build -d
-            exit
           EOF
