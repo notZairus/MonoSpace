@@ -33,8 +33,6 @@ jobs:
       - name: Copy frontend env file to server
         run: |
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            set -e
-
             cd /var/www/StudyBase/frontend
 
             cat > .env <<EOT
@@ -46,8 +44,6 @@ jobs:
       - name: Copy backend env file to server
         run: |
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            set -e
-            
             cd /var/www/StudyBase/backend
 
             cat > .env <<EOT
@@ -62,8 +58,7 @@ jobs:
 
       - name: Restart application using Docker Compose
         run: |
-          ssh -tt ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            set -e
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd /var/www/StudyBase
             docker compose down
             docker compose up --build -d
