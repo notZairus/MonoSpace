@@ -17,8 +17,6 @@
   "description": "",
   "dependencies": {
     "@clerk/express": "^2.1.22",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^25.9.1",
     "@prisma/adapter-better-sqlite3": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@types/express-session": "^1.19.0",
@@ -34,6 +32,8 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/supertest": "^7.2.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.9.1",
     "jest": "^30.4.2",
     "prisma": "^7.8.0",
     "supertest": "^7.2.2",
