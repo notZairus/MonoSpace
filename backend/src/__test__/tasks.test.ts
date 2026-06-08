@@ -26,21 +26,6 @@ describe("POST /api/tasks", () => {
     } as any);
   });
 
-  jest.mock("../prisma/client.ts", () => ({
-    prisma: {
-      task: {
-        create: jest.fn().mockResolvedValue({
-          id: "task_123",
-          name: "Science Assignment",
-          description: "Finish alchemy exercises from chapter 5",
-          color: "red",
-          status: "PENDING",
-          deadline: "2026-06-01T10:00:00.000Z",
-        }),
-      },
-    },
-  }));
-
   it("should return 201 when authenticated and the data sent is valid", async () => {
     mockedGetAuth.mockReturnValue({ userId: "user_test_123" } as any);
 
