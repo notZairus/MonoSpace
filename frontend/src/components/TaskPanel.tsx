@@ -7,27 +7,17 @@ import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import TaskItem from "./TaskItem";
 import { getUpcomingTasks } from "../lib/utils";
 import { useTasks } from "../hooks/useTasks";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
-function UpcomingTasks() {
+function TaskPanel() {
   const [showAddTaskModal, setShowAddTaskModal] = useState<boolean>(false);
   const { data: tasks } = useTasks();
+  const { data: overdueTasks } = useTasks("overdue");
+  const { data: completedTasks } = useTasks("completed");
 
-  if (!tasks) {
+  if (!tasks || !overdueTasks || !completedTasks) {
     return <div>Loading...</div>;
   }
-
-  const allTasks = tasks.sort(
-    (a, b) =>
-      new Date(a.deadline as string).getTime() -
-      new Date(b.deadline as string).getTime(),
-  );
-
   const uncompletedTasks = tasks.filter((task) => task.status !== "COMPLETED");
   const upcomingTasks: Task[] = getUpcomingTasks(uncompletedTasks);
 
@@ -38,21 +28,25 @@ function UpcomingTasks() {
         setShowAddTaskModal={setShowAddTaskModal}
       />
 
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs defaultValue="upcoming" className="w-full">
         <Card className="w-full max-h-120">
           <div className="flex items-center justify-between">
             <CardTitle>Tasks</CardTitle>
-            <TabsList>
-              <TabsTrigger value="all">All</TabsTrigger>
+            <TabsList className="mt-1 ">
               <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+              <TabsTrigger value="overdue">Overdue</TabsTrigger>
+              <TabsTrigger value="completed">Completed</TabsTrigger>
             </TabsList>
           </div>
           <div className="flex items-center justify-between">
             <TabsContent value="upcoming">
               <CardHeading className="text-xl">Upcoming Tasks</CardHeading>
             </TabsContent>
-            <TabsContent value="all">
-              <CardHeading className="text-xl">All Tasks</CardHeading>
+            <TabsContent value="overdue">
+              <CardHeading className="text-xl">Overdue Tasks</CardHeading>
+            </TabsContent>
+            <TabsContent value="completed">
+              <CardHeading className="text-xl">Completed Tasks</CardHeading>
             </TabsContent>
             <Button
               size="icon-sm"
@@ -72,9 +66,16 @@ function UpcomingTasks() {
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="all">
+              <TabsContent value="overdue">
                 <div className="space-y-2">
-                  {allTasks.map((task) => (
+                  {overdueTasks.map((task) => (
+                    <TaskItem key={task.id} task={task} />
+                  ))}
+                </div>
+              </TabsContent>
+              <TabsContent value="completed">
+                <div className="space-y-2">
+                  {completedTasks.map((task) => (
                     <TaskItem key={task.id} task={task} />
                   ))}
                 </div>
@@ -87,4 +88,4 @@ function UpcomingTasks() {
   );
 }
 
-export default UpcomingTasks;
+export default TaskPanel;

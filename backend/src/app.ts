@@ -6,9 +6,9 @@ import cors from "cors";
 import session from "express-session";
 import { clerkMiddleware } from "@clerk/express";
 import { rateLimit } from "express-rate-limit";
-import tasks from "./routes/tasks";
-import subjects from "./routes/subjects";
-import subtasks from "./routes/subtasks";
+import tasks from "./routes/task.route";
+import subjects from "./routes/subject.route";
+import subtasks from "./routes/subtask.route";
 
 const app = express();
 

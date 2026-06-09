@@ -13,6 +13,17 @@ export async function getSubjects(token: string) {
   return data.subjects;
 }
 
+export async function getSubject(token: string, subjectId: string) {
+  const res = await fetch(`${serverUrl}/subjects/${subjectId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  return data.subject;
+}
+
 export async function createSubject(token: string, subject: subjectDTO) {
   const res = await fetch(`${serverUrl}/subjects`, {
     method: "POST",

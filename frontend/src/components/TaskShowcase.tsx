@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -80,10 +80,7 @@ interface TaskShowcaseProps {
 
 const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
   const { data: task } = useTask(taskId);
-  const [taskCopy, setTaskCopy] = useState({
-    name: task?.name || "",
-    description: task?.description || "",
-  });
+  const [taskCopy, setTaskCopy] = useState<Task | null>(null);
   const [openAddSubTaskModal, setOpenSubTaskModal] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
@@ -102,7 +99,14 @@ const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
     500,
   );
 
-  if (!task || !taskCopy.name || !taskCopy.description) {
+  useEffect(() => {
+    function assignTaskCopy() {
+      setTaskCopy(task as Task);
+    }
+    assignTaskCopy();
+  }, [task]);
+
+  if (!task || !taskCopy) {
     return (
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
         <DialogContent>Loading...</DialogContent>

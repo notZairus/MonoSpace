@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteSubject } from "../api/subject";
+import { deleteSubject } from "../api/subject.api";
 import { useAuth } from "@clerk/react";
 
 export function useDeleteSubject() {

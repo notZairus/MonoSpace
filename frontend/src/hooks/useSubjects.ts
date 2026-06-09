@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { type Subject } from "../schemas/subject.schema";
 import { useAuth } from "@clerk/react";
-import { getSubjects } from "../api/subject";
-
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import { getSubject, getSubjects } from "../api/subject.api";
 
 export function useSubjects() {
   const { getToken } = useAuth();
@@ -26,15 +24,7 @@ export function useSubject(subjectId: string) {
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {
       const token = await getToken();
-
-      const res = await fetch(`${serverUrl}/subjects/${subjectId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      return data.subject;
+      return getSubject(token as string, subjectId);
     },
   });
 }

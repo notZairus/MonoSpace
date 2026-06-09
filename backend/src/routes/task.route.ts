@@ -42,6 +42,8 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.get("/:taskId", async (req: Request, res: Response) => {
+  console.log("get single task");
+
   const { userId } = getAuth(req);
   if (!userId) res.status(403).send({ message: "Forbidden" });
 
@@ -51,6 +53,7 @@ router.get("/:taskId", async (req: Request, res: Response) => {
     const task = await prisma.task.findFirst({
       where: {
         id: taskId as string,
+        userId: userId as string,
       },
       include: {
         subjects: true,

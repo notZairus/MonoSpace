@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
-import { toggleCompleteTask } from "../api/task";
+import { toggleCompleteTask } from "../api/task.api";
 import type { Task } from "../schemas/task.schema";
 
 export function useToggleCompleteTask() {

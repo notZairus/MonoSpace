@@ -8,7 +8,7 @@ import {
   CardHeading,
   CardTitle,
 } from "../components/ui/card";
-import UpcomingTasks from "../components/UpcomingTasks";
+import TaskPanel from "../components/TaskPanel";
 
 function Dashboard() {
   return (
@@ -16,20 +16,17 @@ function Dashboard() {
       <div className="mx-auto">
         <DashboardHeader />
         <div className="flex flex-col w-full gap-8 mt-8 items-center sm:items-start sm:flex-row sm:flex-wrap">
-          <div className="flex-1 w-full min-w-xs">
+          <div className="flex-1 w-full min-w-sm">
             <TodayTask />
           </div>
-          <div className="flex-1 w-full min-w-xs">
-            <UpcomingTasks />
+          <div className="flex-1 w-full min-w-sm">
+            <TaskPanel />
           </div>
-          <div className="flex-1 w-full min-w-xs">
-            <OverdueTasks />
-          </div>
-          <div className="flex-1 sm:max-w-xs w-full">
+          <div className="flex-1 min-w-sm sm:max-w-sm w-full">
             <Subjects />
           </div>
 
-          <div className="flex-1 w-full sm:max-w-xs">
+          <div className="flex-1 w-full max-w-xl min-w-sm">
             <Card className="w-full bg-primary shadow-lg text-white max-h-108">
               <CardTitle>Pomodoro</CardTitle>
               <div className="flex items-center justify-between">

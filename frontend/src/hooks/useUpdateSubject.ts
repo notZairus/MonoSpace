@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
 import type { subjectDTO } from "../schemas/subject.schema";
-import { updateSubject } from "../api/subject";
+import { updateSubject } from "../api/subject.api";
 
 export function useUpdateSubject() {
   const { getToken } = useAuth();

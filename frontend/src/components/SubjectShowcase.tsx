@@ -156,7 +156,7 @@ const SubjectShowcase = ({
                       subject.tasks.map((task: Task) => (
                         <TaskItemLong task={task} />
                       ))}
-                    ;
+
                     {subject.tasks?.length === 0 && (
                       <div className="p-4 w-full text-center text-muted-foreground/70 italic text-sm">
                         No tasks assigned to this subject yet.

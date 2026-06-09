@@ -46,12 +46,12 @@ function TodayTask() {
             {todayTasks.length > 0 && (
               <>
                 <p className="-mt-1 sm:mt-1 text-xl sm:text-3xl text-center font-heading font-semibold tracking-tight">
-                  {`${
+                  {`${Math.floor(
                     (todayTasks.filter((task) => task.status === "COMPLETED")
                       .length /
                       todayTasks.length) *
-                    100
-                  }%`}
+                      100,
+                  )}%`}
                 </p>
                 <p className="tracking-wider sm:leading-3.5 text-[10px] sm:text-[10px] text-center">
                   TODAYS WORK IS DONE

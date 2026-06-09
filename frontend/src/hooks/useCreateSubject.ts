@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type subjectDTO } from "../schemas/subject.schema";
 import { useAuth } from "@clerk/react";
-import { createSubject } from "../api/subject";
+import { createSubject } from "../api/subject.api";
 
 export function useCreateSubject() {
   const { getToken } = useAuth();
