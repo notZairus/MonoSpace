@@ -56,7 +56,7 @@ const TaskItem = ({
             <div className="flex items-center gap-2 min-w-0">
               <h3
                 className={cn(
-                  "text-sm font-medium text-foreground truncate wrap-break-word max-w-48",
+                  "text-sm font-medium text-foreground truncate wrap-break-word max-w-36",
                   variant === "primary" && "text-white",
                 )}
               >

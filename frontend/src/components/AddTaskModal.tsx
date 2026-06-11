@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -48,10 +48,10 @@ const getTomorrowDefault = () => {
 
 function AddTaskModal({
   open,
-  setShowAddTaskModal,
+  setOpen,
 }: {
   open: boolean;
-  setShowAddTaskModal: (open: boolean) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const {
     register,
@@ -102,11 +102,11 @@ function AddTaskModal({
   const onSubmit = (data: TaskDTO) => {
     createTask.mutate(data);
     reset();
-    setShowAddTaskModal(false);
+    setOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setShowAddTaskModal}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-lg p-0 overflow-hidden rounded-2xl border bg-background shadow-xl">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -291,7 +291,7 @@ function AddTaskModal({
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => setShowAddTaskModal(false)}
+              onClick={() => setOpen(false)}
               className="text-xs font-medium text-muted-foreground hover:text-foreground"
             >
               Cancel

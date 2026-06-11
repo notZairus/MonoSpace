@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +16,7 @@ import { useUpdateSubject } from "../hooks/useUpdateSubject";
 import { useDeleteSubject } from "../hooks/useDeleteSubject";
 import TaskItemLong from "./TaskItemLong";
 import { useSubject } from "../hooks/useSubjects";
+import { type Subject } from "../schemas/subject.schema";
 
 interface SubjectShowcaseProps {
   open: boolean;
@@ -29,10 +30,18 @@ const SubjectShowcase = ({
   subjectId,
 }: SubjectShowcaseProps) => {
   const { data: subject } = useSubject(subjectId);
+  const [subjectCopy, setSubjectCopy] = useState<Subject | null>(null);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
   const updateSubject = useUpdateSubject();
   const deleteSubject = useDeleteSubject();
+
+  useEffect(() => {
+    function syncSubject() {
+      setSubjectCopy(subject as Subject);
+    }
+    syncSubject();
+  }, [subject]);
 
   const debouncedHandleUpdate = useDebouncedCallback(
     (subjectId: string, updatedFields: Partial<subjectDTO>) => {
@@ -44,7 +53,7 @@ const SubjectShowcase = ({
     300,
   );
 
-  if (!subject) {
+  if (!subject || !subjectCopy) {
     return (
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
         <DialogContent>Loading...</DialogContent>
@@ -56,10 +65,6 @@ const SubjectShowcase = ({
     deleteSubject.mutate(subject.id);
     setOpenConfirmDelete(false);
     setOpen(false);
-  };
-
-  const emitUpdate = (field: Partial<subjectDTO>) => {
-    debouncedHandleUpdate(subject.id, field);
   };
 
   return (
@@ -108,11 +113,21 @@ const SubjectShowcase = ({
             <div className="flex items-center gap-3.5 justify-between">
               <div className="flex items-center gap-3.5 flex-1 min-w-0">
                 <div className="flex-1">
-                  <DialogTitle className="sr-only">{subject.name}</DialogTitle>
+                  <DialogTitle className="sr-only">
+                    {subjectCopy.name}
+                  </DialogTitle>
+                  <button className="opacity-0" aria-hidden="true" />
                   <input
                     type="text"
-                    value={subject.name}
-                    onChange={(e) => emitUpdate({ name: e.target.value })}
+                    value={subjectCopy.name}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      setSubjectCopy({
+                        ...subjectCopy,
+                        name: newValue,
+                      });
+                      debouncedHandleUpdate(subjectCopy.id, { name: newValue });
+                    }}
                     placeholder="Subject name..."
                     className="w-full bg-transparent border-0 p-0 text-xl font-semibold tracking-tight leading-snug focus:outline-none focus:ring-0 placeholder:text-muted-foreground/40 transition-colors text-foreground"
                   />
@@ -154,7 +169,7 @@ const SubjectShowcase = ({
                   <div className="divide-y divide-border/30 overflow-hidden">
                     {subject.tasks &&
                       subject.tasks.map((task: Task) => (
-                        <TaskItemLong task={task} />
+                        <TaskItemLong key={task.id} task={task} />
                       ))}
 
                     {subject.tasks?.length === 0 && (

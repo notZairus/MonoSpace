@@ -1,9 +1,14 @@
-import { Card, CardContent, CardHeading, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { useEffect, useState } from "react";
+import effingSound from "../assets/pomodoro-sound.wav";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { useEffect, useState } from "react";
-import effingSound from "../assets/pomodoro-sound.wav";
 
 type SessionType = "Work" | "Short Break" | "Long Break";
 
@@ -119,84 +124,87 @@ function PomodoroCard() {
   }
 
   return (
-    <Card className="w-full bg-primary shadow-lg text-white max-h-108 cursor-pointer">
-      <CardTitle>Pomodoro</CardTitle>
-      <div className="flex items-center justify-between">
-        <CardHeading className="text-xl">Pomodoro Timer</CardHeading>
-      </div>
-      <CardContent className="flex flex-col gap-2 px-0">
-        {!started && (
-          <div className="space-y-2">
-            <div className="flex items-end justify-between">
-              <Label className="text-sm  w-36">Focus Session</Label>
-              <Input
-                id="work-duration"
-                type="number"
-                value={workDuration}
-                onChange={(e) => setWorkDuration(Number(e.target.value))}
-                step={1}
-                max={60}
-                min={10}
-                className="w-16 text-center"
-              />
+    <Card className="h-full w-full">
+      <CardHeader>
+        <CardTitle>POMODORO</CardTitle>
+      </CardHeader>
+      <CardContent className="w-full h-full flex items-center justify-center">
+        <div className="w-8/10 h-38  flex items flex-col -center justify-center">
+          {started && (
+            <div className="text-center text-4xl font-bold">
+              {Math.floor(timer / 60)
+                .toString()
+                .padStart(2, "0")}
+              :{(timer % 60).toString().padStart(2, "0")}
             </div>
-            <div className="flex items-end justify-between">
-              <Label className="text-sm  w-36">Short Break</Label>
-              <Input
-                id="short-break-duration"
-                type="number"
-                value={shortBreakDuration}
-                onChange={(e) => setShortBreakDuration(Number(e.target.value))}
-                step={1}
-                max={60}
-                min={5}
-                className="w-16 text-center"
-              />
-            </div>
-            <div className="flex items-end justify-between">
-              <Label className="text-sm  w-36">Long Break</Label>
-              <Input
-                id="long-break-duration"
-                type="number"
-                value={longBreakDuration}
-                onChange={(e) => setLongBreakDuration(Number(e.target.value))}
-                step={1}
-                max={60}
-                min={10}
-                className="w-16 text-center"
-              />
-            </div>
-          </div>
-        )}
-
-        {started && (
-          <div className="text-center text-4xl font-bold">
-            {Math.floor(timer / 60)
-              .toString()
-              .padStart(2, "0")}
-            :{(timer % 60).toString().padStart(2, "0")}
-          </div>
-        )}
-
-        <div className="mt-4 space-y-2">
-          <Button
-            variant="secondary"
-            className="bg-accent w-full"
-            onClick={started ? pause : start}
-          >
-            {started
-              ? (paused ? "Resume" : "Pause") + " " + currentSession
-              : "Start Pomodoro"}
-          </Button>
-          {started && paused && (
-            <Button
-              variant="destructive"
-              className="w-full hover:bg-black/30 transition-all"
-              onClick={reset}
-            >
-              Reset Pomodoro
-            </Button>
           )}
+
+          {!started && (
+            <div className="space-y-2">
+              <div className="flex items-end justify-between">
+                <Label className="text-sm  w-36">Focus Session</Label>
+                <Input
+                  id="work-duration"
+                  type="number"
+                  value={workDuration}
+                  onChange={(e) => setWorkDuration(Number(e.target.value))}
+                  step={1}
+                  max={60}
+                  min={10}
+                  className="w-16 text-center"
+                />
+              </div>
+              <div className="flex items-end justify-between">
+                <Label className="text-sm  w-36">Short Break</Label>
+                <Input
+                  id="short-break-duration"
+                  type="number"
+                  value={shortBreakDuration}
+                  onChange={(e) =>
+                    setShortBreakDuration(Number(e.target.value))
+                  }
+                  step={1}
+                  max={60}
+                  min={5}
+                  className="w-16 text-center"
+                />
+              </div>
+              <div className="flex items-end justify-between">
+                <Label className="text-sm  w-36">Long Break</Label>
+                <Input
+                  id="long-break-duration"
+                  type="number"
+                  value={longBreakDuration}
+                  onChange={(e) => setLongBreakDuration(Number(e.target.value))}
+                  step={1}
+                  max={60}
+                  min={10}
+                  className="w-16 text-center"
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="mt-4 space-y-2 w-full">
+            <Button
+              variant="default"
+              className="w-full"
+              onClick={started ? pause : start}
+            >
+              {started
+                ? (paused ? "Resume" : "Pause") + " " + currentSession
+                : "Start Pomodoro"}
+            </Button>
+            {started && paused && (
+              <Button
+                variant="destructive"
+                className="w-full hover:bg-black/30 transition-all"
+                onClick={reset}
+              >
+                Reset Pomodoro
+              </Button>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>
