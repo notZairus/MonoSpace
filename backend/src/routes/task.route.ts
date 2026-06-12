@@ -14,7 +14,7 @@ const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
-  if (!userId) res.status(403).send({ message: "Forbidden" });
+  if (!userId) return res.status(403).send({ message: "Forbidden" });
 
   const { status } = req.query;
 
@@ -43,7 +43,7 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:taskId", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
-  if (!userId) res.status(403).send({ message: "Forbidden" });
+  if (!userId) return res.status(403).send({ message: "Forbidden" });
 
   const { taskId } = req.params;
 
@@ -104,6 +104,9 @@ router.post("/", async (req: Request, res: Response) => {
           },
         })),
       },
+    },
+    include: {
+      subjects: true,
     },
   });
 

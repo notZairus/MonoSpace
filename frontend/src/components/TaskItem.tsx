@@ -37,7 +37,7 @@ const TaskItem = ({
 
       <div
         className={cn(
-          "rounded-lg border w-full border-border bg-background/80 px-3 py-2",
+          "rounded-3xl border w-full border-border bg-background/80 px-3 py-2",
           "w-full flex gap-1 min-h-20 cursor-pointer",
           variant === "primary" && "bg-white/10 border-0 shadow-md",
         )}
@@ -56,7 +56,7 @@ const TaskItem = ({
             <div className="flex items-center gap-2 min-w-0">
               <h3
                 className={cn(
-                  "text-sm font-medium text-foreground truncate wrap-break-word max-w-36",
+                  "text-sm font-medium text-foreground truncate wrap-break-word max-w-24",
                   variant === "primary" && "text-white",
                 )}
               >

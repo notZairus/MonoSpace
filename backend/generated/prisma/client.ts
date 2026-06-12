@@ -50,6 +50,11 @@ export type Task = Prisma.TaskModel
  */
 export type Subtask = Prisma.SubtaskModel
 /**
+ * Model Note
+ * 
+ */
+export type Note = Prisma.NoteModel
+/**
  * Model Subject
  * 
  */

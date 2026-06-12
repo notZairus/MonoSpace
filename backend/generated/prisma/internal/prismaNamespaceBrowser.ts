@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Task: 'Task',
   Subtask: 'Subtask',
+  Note: 'Note',
   Subject: 'Subject'
 } as const
 
@@ -87,6 +88,7 @@ export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof Task
 
 export const SubtaskScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   name: 'name',
   description: 'description',
   color: 'color',
@@ -97,6 +99,16 @@ export const SubtaskScalarFieldEnum = {
 } as const
 
 export type SubtaskScalarFieldEnum = (typeof SubtaskScalarFieldEnum)[keyof typeof SubtaskScalarFieldEnum]
+
+
+export const NoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  content: 'content'
+} as const
+
+export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof NoteScalarFieldEnum]
 
 
 export const SubjectScalarFieldEnum = {

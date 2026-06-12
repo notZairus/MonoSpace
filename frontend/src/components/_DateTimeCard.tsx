@@ -40,7 +40,7 @@ function DateTimeCard() {
                 day: "numeric",
               })}
             </p>
-            <p className="text-5xl tracking-wider text-center font-black">
+            <p className="text-5xl font-heading tracking-wider text-center">
               {dateTime.toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",

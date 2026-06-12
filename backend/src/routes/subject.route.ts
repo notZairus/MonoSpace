@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/:subjectId", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
-  if (!userId) res.status(403).send({ message: "Forbidden" });
+  if (!userId) return res.status(403).send({ message: "Forbidden" });
 
   const { subjectId } = req.params;
 
@@ -21,6 +21,7 @@ router.get("/:subjectId", async (req: Request, res: Response) => {
       id: subjectId as string,
     },
     include: {
+      notes: true,
       tasks: {
         include: {
           subjects: true,
@@ -35,13 +36,14 @@ router.get("/:subjectId", async (req: Request, res: Response) => {
 
 router.get("/", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
-  if (!userId) res.status(403).send({ message: "Forbidden" });
+  if (!userId) return res.status(403).send({ message: "Forbidden" });
 
   const subjects = await prisma.subject.findMany({
     where: {
       userId: userId as string,
     },
     include: {
+      notes: true,
       tasks: {
         include: {
           subjects: true,
@@ -56,7 +58,7 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post("/", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
-  if (!userId) res.status(403).send({ message: "Forbidden" });
+  if (!userId) return res.status(403).send({ message: "Forbidden" });
 
   const result = createSubjectSchema.safeParse(req.body);
 
@@ -80,7 +82,7 @@ router.post("/", async (req: Request, res: Response) => {
 
 router.patch("/:subjectId", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
-  if (!userId) res.status(403).send({ message: "Forbidden" });
+  if (!userId) return res.status(403).send({ message: "Forbidden" });
 
   const result = updateSubjectSchema.safeParse(req.body);
 
@@ -111,7 +113,7 @@ router.patch("/:subjectId", async (req: Request, res: Response) => {
 
 router.delete("/:subjectId", async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
-  if (!userId) res.status(403).send({ message: "Forbidden" });
+  if (!userId) return res.status(403).send({ message: "Forbidden" });
 
   const { subjectId } = req.params;
 

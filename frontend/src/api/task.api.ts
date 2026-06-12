@@ -32,7 +32,7 @@ export async function getTask(token: string, taskId: string) {
 }
 
 export async function createTask(token: string, data: TaskDTO) {
-  await fetch(`${serverUrl}/tasks`, {
+  const res = await fetch(`${serverUrl}/tasks`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -40,6 +40,9 @@ export async function createTask(token: string, data: TaskDTO) {
     },
     body: JSON.stringify(data),
   });
+
+  const resData = await res.json();
+  return resData.task;
 }
 
 export async function toggleCompleteTask(token: string, id: string) {

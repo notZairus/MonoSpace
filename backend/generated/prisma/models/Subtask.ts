@@ -26,6 +26,7 @@ export type AggregateSubtask = {
 
 export type SubtaskMinAggregateOutputType = {
   id: string | null
+  userId: string | null
   name: string | null
   description: string | null
   color: $Enums.TaskColor | null
@@ -37,6 +38,7 @@ export type SubtaskMinAggregateOutputType = {
 
 export type SubtaskMaxAggregateOutputType = {
   id: string | null
+  userId: string | null
   name: string | null
   description: string | null
   color: $Enums.TaskColor | null
@@ -48,6 +50,7 @@ export type SubtaskMaxAggregateOutputType = {
 
 export type SubtaskCountAggregateOutputType = {
   id: number
+  userId: number
   name: number
   description: number
   color: number
@@ -61,6 +64,7 @@ export type SubtaskCountAggregateOutputType = {
 
 export type SubtaskMinAggregateInputType = {
   id?: true
+  userId?: true
   name?: true
   description?: true
   color?: true
@@ -72,6 +76,7 @@ export type SubtaskMinAggregateInputType = {
 
 export type SubtaskMaxAggregateInputType = {
   id?: true
+  userId?: true
   name?: true
   description?: true
   color?: true
@@ -83,6 +88,7 @@ export type SubtaskMaxAggregateInputType = {
 
 export type SubtaskCountAggregateInputType = {
   id?: true
+  userId?: true
   name?: true
   description?: true
   color?: true
@@ -167,6 +173,7 @@ export type SubtaskGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type SubtaskGroupByOutputType = {
   id: string
+  userId: string
   name: string
   description: string | null
   color: $Enums.TaskColor
@@ -199,6 +206,7 @@ export type SubtaskWhereInput = {
   OR?: Prisma.SubtaskWhereInput[]
   NOT?: Prisma.SubtaskWhereInput | Prisma.SubtaskWhereInput[]
   id?: Prisma.StringFilter<"Subtask"> | string
+  userId?: Prisma.StringFilter<"Subtask"> | string
   name?: Prisma.StringFilter<"Subtask"> | string
   description?: Prisma.StringNullableFilter<"Subtask"> | string | null
   color?: Prisma.EnumTaskColorFilter<"Subtask"> | $Enums.TaskColor
@@ -211,6 +219,7 @@ export type SubtaskWhereInput = {
 
 export type SubtaskOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   color?: Prisma.SortOrder
@@ -226,6 +235,7 @@ export type SubtaskWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SubtaskWhereInput | Prisma.SubtaskWhereInput[]
   OR?: Prisma.SubtaskWhereInput[]
   NOT?: Prisma.SubtaskWhereInput | Prisma.SubtaskWhereInput[]
+  userId?: Prisma.StringFilter<"Subtask"> | string
   name?: Prisma.StringFilter<"Subtask"> | string
   description?: Prisma.StringNullableFilter<"Subtask"> | string | null
   color?: Prisma.EnumTaskColorFilter<"Subtask"> | $Enums.TaskColor
@@ -238,6 +248,7 @@ export type SubtaskWhereUniqueInput = Prisma.AtLeast<{
 
 export type SubtaskOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   color?: Prisma.SortOrder
@@ -255,6 +266,7 @@ export type SubtaskScalarWhereWithAggregatesInput = {
   OR?: Prisma.SubtaskScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SubtaskScalarWhereWithAggregatesInput | Prisma.SubtaskScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Subtask"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"Subtask"> | string
   name?: Prisma.StringWithAggregatesFilter<"Subtask"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Subtask"> | string | null
   color?: Prisma.EnumTaskColorWithAggregatesFilter<"Subtask"> | $Enums.TaskColor
@@ -266,6 +278,7 @@ export type SubtaskScalarWhereWithAggregatesInput = {
 
 export type SubtaskCreateInput = {
   id?: string
+  userId: string
   name: string
   description?: string | null
   color: $Enums.TaskColor
@@ -277,6 +290,7 @@ export type SubtaskCreateInput = {
 
 export type SubtaskUncheckedCreateInput = {
   id?: string
+  userId: string
   name: string
   description?: string | null
   color: $Enums.TaskColor
@@ -288,6 +302,7 @@ export type SubtaskUncheckedCreateInput = {
 
 export type SubtaskUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.EnumTaskColorFieldUpdateOperationsInput | $Enums.TaskColor
@@ -299,6 +314,7 @@ export type SubtaskUpdateInput = {
 
 export type SubtaskUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.EnumTaskColorFieldUpdateOperationsInput | $Enums.TaskColor
@@ -310,6 +326,7 @@ export type SubtaskUncheckedUpdateInput = {
 
 export type SubtaskCreateManyInput = {
   id?: string
+  userId: string
   name: string
   description?: string | null
   color: $Enums.TaskColor
@@ -321,6 +338,7 @@ export type SubtaskCreateManyInput = {
 
 export type SubtaskUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.EnumTaskColorFieldUpdateOperationsInput | $Enums.TaskColor
@@ -331,6 +349,7 @@ export type SubtaskUpdateManyMutationInput = {
 
 export type SubtaskUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.EnumTaskColorFieldUpdateOperationsInput | $Enums.TaskColor
@@ -352,6 +371,7 @@ export type SubtaskOrderByRelationAggregateInput = {
 
 export type SubtaskCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   color?: Prisma.SortOrder
@@ -363,6 +383,7 @@ export type SubtaskCountOrderByAggregateInput = {
 
 export type SubtaskMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   color?: Prisma.SortOrder
@@ -374,6 +395,7 @@ export type SubtaskMaxOrderByAggregateInput = {
 
 export type SubtaskMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   color?: Prisma.SortOrder
@@ -427,6 +449,7 @@ export type SubtaskUncheckedUpdateManyWithoutParentNestedInput = {
 
 export type SubtaskCreateWithoutParentInput = {
   id?: string
+  userId: string
   name: string
   description?: string | null
   color: $Enums.TaskColor
@@ -437,6 +460,7 @@ export type SubtaskCreateWithoutParentInput = {
 
 export type SubtaskUncheckedCreateWithoutParentInput = {
   id?: string
+  userId: string
   name: string
   description?: string | null
   color: $Enums.TaskColor
@@ -475,6 +499,7 @@ export type SubtaskScalarWhereInput = {
   OR?: Prisma.SubtaskScalarWhereInput[]
   NOT?: Prisma.SubtaskScalarWhereInput | Prisma.SubtaskScalarWhereInput[]
   id?: Prisma.StringFilter<"Subtask"> | string
+  userId?: Prisma.StringFilter<"Subtask"> | string
   name?: Prisma.StringFilter<"Subtask"> | string
   description?: Prisma.StringNullableFilter<"Subtask"> | string | null
   color?: Prisma.EnumTaskColorFilter<"Subtask"> | $Enums.TaskColor
@@ -486,6 +511,7 @@ export type SubtaskScalarWhereInput = {
 
 export type SubtaskCreateManyParentInput = {
   id?: string
+  userId: string
   name: string
   description?: string | null
   color: $Enums.TaskColor
@@ -496,6 +522,7 @@ export type SubtaskCreateManyParentInput = {
 
 export type SubtaskUpdateWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.EnumTaskColorFieldUpdateOperationsInput | $Enums.TaskColor
@@ -506,6 +533,7 @@ export type SubtaskUpdateWithoutParentInput = {
 
 export type SubtaskUncheckedUpdateWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.EnumTaskColorFieldUpdateOperationsInput | $Enums.TaskColor
@@ -516,6 +544,7 @@ export type SubtaskUncheckedUpdateWithoutParentInput = {
 
 export type SubtaskUncheckedUpdateManyWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.EnumTaskColorFieldUpdateOperationsInput | $Enums.TaskColor
@@ -528,6 +557,7 @@ export type SubtaskUncheckedUpdateManyWithoutParentInput = {
 
 export type SubtaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   name?: boolean
   description?: boolean
   color?: boolean
@@ -540,6 +570,7 @@ export type SubtaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type SubtaskSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   name?: boolean
   description?: boolean
   color?: boolean
@@ -552,6 +583,7 @@ export type SubtaskSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type SubtaskSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  userId?: boolean
   name?: boolean
   description?: boolean
   color?: boolean
@@ -564,6 +596,7 @@ export type SubtaskSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type SubtaskSelectScalar = {
   id?: boolean
+  userId?: boolean
   name?: boolean
   description?: boolean
   color?: boolean
@@ -573,7 +606,7 @@ export type SubtaskSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SubtaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "color" | "status" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["subtask"]>
+export type SubtaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "description" | "color" | "status" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["subtask"]>
 export type SubtaskInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.TaskDefaultArgs<ExtArgs>
 }
@@ -591,6 +624,7 @@ export type $SubtaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    userId: string
     name: string
     description: string | null
     color: $Enums.TaskColor
@@ -1023,6 +1057,7 @@ export interface Prisma__SubtaskClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface SubtaskFieldRefs {
   readonly id: Prisma.FieldRef<"Subtask", 'String'>
+  readonly userId: Prisma.FieldRef<"Subtask", 'String'>
   readonly name: Prisma.FieldRef<"Subtask", 'String'>
   readonly description: Prisma.FieldRef<"Subtask", 'String'>
   readonly color: Prisma.FieldRef<"Subtask", 'TaskColor'>

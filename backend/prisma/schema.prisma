@@ -42,6 +42,7 @@ model Task {
 
 model Subtask {
   id String @id @default(cuid())
+  userId String
   name String
   description String?
   color TaskColor
@@ -54,11 +55,21 @@ model Subtask {
   @@index([parentId])
 }
 
+
+model Note {
+  id String @id @default(cuid())
+  userId String
+  title String
+  subjects Subject[] @relation("SubjectNoteRelation")
+  content String
+}
+
 model Subject {
   id String @id @default(cuid())
   userId String
   name String
   tasks Task[] @relation("SubjectTaskRelation")
+  notes Note[] @relation("SubjectNoteRelation")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

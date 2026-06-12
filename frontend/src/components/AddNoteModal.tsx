@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { X } from "lucide-react";
 import { useDocumentTextExtraction } from "../hooks/useDocumentTextExtraction";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
+import { useCreateNote } from "../hooks/useCreateNote";
 
 function AddNoteModal({
   open,
@@ -35,6 +36,7 @@ function AddNoteModal({
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm<NoteDTO>({
     resolver: zodResolver(createNoteSchema),
     defaultValues: {
@@ -44,6 +46,7 @@ function AddNoteModal({
     },
   });
   const documentExtraction = useDocumentTextExtraction();
+  const createNote = useCreateNote();
 
   const [subjectInput, setSubjectInput] = useState("");
 
@@ -83,8 +86,9 @@ function AddNoteModal({
   };
 
   function onSubmit(data: NoteDTO) {
-    // submit logic
-    console.log(data);
+    createNote.mutate(data);
+    reset();
+    setOpen(false);
   }
 
   async function handleExtractTextFromDocument(file: File) {

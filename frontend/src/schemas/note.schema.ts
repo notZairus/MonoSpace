@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Subject } from "./subject.schema";
 
 export const createNoteSchema = z.object({
   title: z.string().trim().min(3),
@@ -7,3 +8,9 @@ export const createNoteSchema = z.object({
 });
 
 export type NoteDTO = z.infer<typeof createNoteSchema>;
+
+export type Note = Omit<NoteDTO, "subjects"> & {
+  id: string;
+  userId?: string;
+  subjects: Subject[];
+};

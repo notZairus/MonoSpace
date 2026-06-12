@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { Task } from "./task.schema";
+import type { Task } from "./task.schema";
+import type { Note } from "./note.schema";
 
 export const createSubjectSchema = z.object({
   name: z.string().trim().min(4),
@@ -11,6 +12,7 @@ export type Subject = subjectDTO & {
   id: string;
   userId: string;
   tasks: Task[];
+  notes: Note[];
 };
 
 export const updateSubjectSchema = z.object({
