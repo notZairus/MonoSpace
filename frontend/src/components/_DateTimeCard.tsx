@@ -26,7 +26,7 @@ function DateTimeCard() {
   }, [minute, query]);
 
   return (
-    <Card className="h-full bg-primary/70 text-white shadow-lg">
+    <Card className="h-full bg-primary text-white shadow-lg">
       <CardHeader>
         <CardTitle className="text-center">STUDYBASE</CardTitle>
       </CardHeader>

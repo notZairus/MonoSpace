@@ -25,38 +25,40 @@ function NoteCard() {
             +
           </Button>
         </CardHeader>
-        <CardContent className="h-full flex gap-4">
-          <div className="w-40 border-r pr-2">
+        <CardContent className="h-full pr-2 flex gap-4">
+          <div className="w-40 border-r">
             <p>Subjects: </p>
-            <ScrollArea className="mt-2 w-full h-[calc(100dvh-503px)] rounded-md">
+            <ScrollArea className="mt-2 pr-2 w-full h-[calc(100dvh-503px)] rounded-md">
               <ScrollBar />
               <div className="space-y-1 w-full">
-                <div
+                <Button
+                  variant="outline"
                   className={cn(
-                    "py-2 px-4 rounded-full bg-white border w-full cursor-pointer",
+                    "py-2 px-4 rounded-full bg-white border w-full cursor-pointer hover:bg-sidebar-accent hover:text-black",
                     {
-                      "bg-primary font-bold text-white":
+                      "bg-primary font-semibold text-white hover:bg-primary hover:text-white":
                         selectedSubject === "all",
                     },
                   )}
                   onClick={() => setSelectedSubject("all")}
                 >
                   All
-                </div>
+                </Button>
                 {subjects?.map((subject) => (
-                  <div
+                  <Button
                     key={subject.id}
+                    variant="outline"
                     className={cn(
-                      "py-2 px-4 rounded-full bg-white border w-full cursor-pointer",
+                      "py-2 px-4 rounded-full bg-white border w-full cursor-pointer hover:bg-sidebar-accent hover:text-black",
                       {
-                        "bg-primary font-bold text-white":
+                        "bg-primary font-semibold text-white hover:bg-primary hover:text-white":
                           selectedSubject === subject.name,
                       },
                     )}
                     onClick={() => setSelectedSubject(subject.name)}
                   >
                     {subject.name}
-                  </div>
+                  </Button>
                 ))}
               </div>
             </ScrollArea>
