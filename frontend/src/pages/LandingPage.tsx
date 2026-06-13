@@ -4,11 +4,10 @@ import {
   CalendarDays,
   Check,
   FileText,
-  Search,
   Sparkles,
-  Target,
   Menu,
   X,
+  Plus,
 } from "lucide-react";
 import { useState } from "react";
 import { Show, UserButton } from "@clerk/react";
@@ -192,7 +191,7 @@ function LandingPage() {
       <main>
         <section
           id="home"
-          className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-16"
+          className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-16"
         >
           <div className="max-w-2xl">
             <h1 className="font-heading text-5xl tracking-tight text-foreground sm:text-6xl lg:text-7xl lg:leading-[0.92]">
@@ -231,90 +230,177 @@ function LandingPage() {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="rounded-3xl border border-border bg-card p-5 shadow-sm">
-              <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 scale-80 gap-4 rounded-[2.5rem] bg-[#f0f0f2] p-5 shadow-inner dark:bg-neutral-900/40">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col justify-between rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-80">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-                    Today&apos;s focus
-                  </p>
-                  <p className="mt-2 font-heading text-2xl tracking-tight">
-                    Keep your study plan visible.
-                  </p>
-                </div>
-                <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <Sparkles className="size-5" />
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
+                      TASKS
+                    </span>
+                    <div className="flex size-5 items-center justify-center rounded-full bg-[#000a80] text-white">
+                      <Plus className="size-3" />
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex gap-1.5 overflow-x-auto pb-1 text-[10px] text-neutral-400">
+                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 font-medium text-neutral-700">
+                      Today
+                    </span>
+                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 font-medium text-neutral-700">
+                      Upcoming
+                    </span>
+                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 font-medium text-neutral-700">
+                      Overdue
+                    </span>
+                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 font-medium text-neutral-700">
+                      Completed
+                    </span>
+                  </div>
+
+                  <div className="mt-16 text-center">
+                    <p className="text-xs text-neutral-400 font-medium">
+                      No tasks for today!
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-5 grid gap-4 sm:grid-cols-3">
-                {[
-                  ["Notes processed", "24"],
-                  ["Tasks due soon", "5"],
-                  ["Focus score", "91%"],
-                ].map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="rounded-2xl border border-border bg-background p-4"
-                  >
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                      {label}
-                    </p>
-                    <p className="mt-4 font-heading text-3xl tracking-tight text-foreground">
-                      {value}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 grid gap-4 md:grid-cols-[0.95fr_1.05fr]">
-                <div className="rounded-2xl border border-border bg-muted p-4">
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    <Search className="size-3.5" />
-                    Search notes
-                  </div>
-                  <div className="mt-4 rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground">
-                    gradient descent
-                  </div>
-                  <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground">
-                    <Target className="size-3.5 text-primary" />
-                    Found in 4 notes
+              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-40 flex flex-col justify-between">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 block mb-3">
+                    NOTES
+                  </span>
+                  <p className="text-[10px] font-bold text-neutral-700 mb-1.5">
+                    Subjects:
+                  </p>
+                  <div className="space-y-1 max-w-30">
+                    <div className="rounded-full bg-[#000a80] text-white text-[10px] font-medium px-3 py-1 text-center">
+                      All
+                    </div>
+                    <div className="rounded-full border border-neutral-100 text-neutral-600 text-[10px] font-medium px-3 py-1 text-center bg-white">
+                      SE101
+                    </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="rounded-2xl border border-border bg-background p-4">
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    <CalendarDays className="size-3.5 text-primary" />
-                    Upcoming
+            <div className="flex flex-col gap-4">
+              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-55 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
+                      SUBJECTS
+                    </span>
+                    <div className="flex size-5 items-center justify-center rounded-full bg-[#000a80] text-white">
+                      <Plus className="size-3" />
+                    </div>
                   </div>
-                  <ul className="mt-4 space-y-3 text-sm">
-                    <li className="flex items-center justify-between gap-3 rounded-xl border border-border bg-muted px-3 py-2">
-                      <span className="flex items-center gap-2">
-                        <span className="grid size-4 place-items-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
-                          ✓
-                        </span>
-                        Read Ch. 4
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {[
+                      "A",
+                      "ANT",
+                      "ES101",
+                      "Hello",
+                      "Math",
+                      "SE101",
+                      "THS1AAAAA",
+                      "dsadsdas",
+                      "fsaxc",
+                      "puta",
+                      "tologo bo?",
+                    ].map((sub) => (
+                      <span
+                        key={sub}
+                        className={cn(
+                          "rounded-full border border-neutral-200 px-2.5 py-1 text-[10px] font-medium transition-colors bg-white text-neutral-600",
+                        )}
+                      >
+                        {sub}
                       </span>
-                    </li>
-                    <li className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-2">
-                      <span className="flex items-center gap-2">
-                        <span className="size-4 rounded-full border border-border" />
-                        Stats problem set
-                      </span>
-                      <span className="text-xs font-semibold text-muted-foreground">
-                        Tomorrow
-                      </span>
-                    </li>
-                    <li className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-2">
-                      <span className="flex items-center gap-2">
-                        <span className="size-4 rounded-full border border-border" />
-                        Midterm prep
-                      </span>
-                      <span className="text-xs font-semibold text-muted-foreground">
-                        Fri
-                      </span>
-                    </li>
-                  </ul>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[1.8rem] bg-[#000a80] p-6 shadow-sm text-white flex flex-col justify-between items-center text-center min-h-65">
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] opacity-80 mt-1">
+                  STUDYBASE
+                </span>
+
+                <div className="my-auto">
+                  <p className="text-[13px] font-medium opacity-90">
+                    Sat, June 13
+                  </p>
+                  <p className="font-serif text-4xl tracking-wide mt-1">
+                    05:19 PM
+                  </p>
+                </div>
+
+                <p className="text-[10px] leading-relaxed opacity-80 max-w-50 border-t border-white/10 pt-3 w-full">
+                  "Ang di mag-mahal sa sariling wika, ay mas mabaho pa sa
+                  bagoong."
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-45 flex flex-col justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
+                  PROFILE
+                </span>
+                <div className="flex items-center gap-3 mt-auto">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-purple-600 text-sm font-bold text-white">
+                    Z
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-neutral-800 truncate">
+                      Zairus
+                    </p>
+                    <p className="text-[10px] text-neutral-400 truncate">
+                      zairussocials@gmail.com
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-35">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
+                  EMPTY FOR NOW
+                </span>
+              </div>
+
+              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm flex flex-col justify-between items-center text-center min-h-40">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 self-start">
+                  POMODORO
+                </span>
+
+                <div className="my-auto">
+                  <p className="text-3xl font-bold tracking-tight text-neutral-800">
+                    24:39
+                  </p>
+                </div>
+
+                <button className="w-full rounded-full bg-[#000a80] py-2 text-xs font-medium text-white transition hover:opacity-90">
+                  Pause Work
+                </button>
+              </div>
+            </div>
+
+            <div className="md:col-span-3 rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm -mt-2 min-h-3o">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] font-bold text-neutral-700">Notes:</p>
+                <div className="flex size-5 items-center justify-center rounded-full bg-[#000a80] text-white">
+                  <Plus className="size-3" />
+                </div>
+              </div>
+              <div className="mt-2">
+                <div className="inline-block rounded-xl border border-neutral-100 bg-white p-2 shadow-sm min-w-25">
+                  <p className="text-xs font-bold text-neutral-700 leading-tight">
+                    Note 1
+                  </p>
+                  <p className="text-[9px] text-neutral-400 mt-0.5">SE101</p>
                 </div>
               </div>
             </div>
