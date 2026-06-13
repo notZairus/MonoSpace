@@ -62,6 +62,8 @@ model Note {
   title String
   subjects Subject[] @relation("SubjectNoteRelation")
   content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Subject {

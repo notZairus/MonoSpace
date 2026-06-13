@@ -10,6 +10,15 @@ export const createNoteSchema = z.object({
 export type NoteDTO = z.infer<typeof createNoteSchema>;
 
 export type Note = Omit<NoteDTO, "subjects"> & {
+  id: string;
   userId?: string;
   subjects: Subject[];
+  createdAt: Date;
+  updatedAt: Date;
 };
+
+export const updateNoteSchema = z.object({
+  title: z.string().trim().min(3).optional(),
+  subjects: z.array(z.string()).min(1).optional(),
+  content: z.string().optional(),
+});

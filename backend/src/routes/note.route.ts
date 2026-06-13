@@ -4,7 +4,7 @@ import fs from "fs";
 import { exec } from "child_process";
 import { makeCleanMarkdown } from "../lib/ai";
 import { getAuth } from "@clerk/express";
-import { createNoteSchema } from "../schemas/note.schema";
+import { createNoteSchema, updateNoteSchema } from "../schemas/note.schema";
 import { z } from "zod";
 import { prisma } from "../../prisma/client";
 
@@ -107,5 +107,66 @@ router.post(
     });
   },
 );
+
+router.patch("/:noteId", async (req, res) => {
+  const { userId } = getAuth(req);
+  if (!userId) return res.sendStatus(403);
+
+  const { noteId } = req.params;
+  if (!noteId) return res.sendStatus(400);
+
+  const result = updateNoteSchema.safeParse(req.body);
+
+  if (!result.success)
+    return res.status(400).json(z.treeifyError(result.error));
+
+  const { subjects, ...rest } = result.data;
+
+  const note = await prisma.note.update({
+    where: { id: noteId },
+    data: {
+      ...rest,
+      ...(subjects !== undefined && {
+        subjects: {
+          set: [],
+          connectOrCreate: subjects.map((sub) => ({
+            where: {
+              userId_name: {
+                userId,
+                name: sub,
+              },
+            },
+            create: { userId, name: sub },
+          })),
+        },
+      }),
+    },
+    include: {
+      subjects: true,
+    },
+  });
+
+  return res.status(200).send({
+    note: note,
+  });
+});
+
+router.delete("/:noteId", async (req, res) => {
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+
+  const { noteId } = req.params;
+
+  await prisma.note.delete({
+    where: {
+      id: noteId,
+    },
+  });
+
+  return res.status(200).send({ message: "successful" });
+});
 
 export default router;
