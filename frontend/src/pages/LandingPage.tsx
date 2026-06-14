@@ -7,10 +7,11 @@ import {
   Sparkles,
   Menu,
   X,
-  Plus,
 } from "lucide-react";
+import HeroImage from "../assets/Bibliophile.gif";
 import { useState } from "react";
 import { Show, UserButton } from "@clerk/react";
+import { useNavigate } from "react-router";
 
 import { Link } from "react-router";
 
@@ -20,7 +21,6 @@ import { cn } from "../lib/utils";
 const navItems = [
   { label: "Features", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Pricing", href: "#pricing" },
 ];
 
 const features = [
@@ -70,17 +70,19 @@ const steps = [
 
 function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <header
         className={cn(
-          "relative z-10 border-b border-border/80 bg-background/80 backdrop-blur",
+          "z-10 border-b border-border/80 bg-background/80 backdrop-blur fixed top-0 left-0 right-0",
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <a href="#home" className="flex items-center gap-3">
             <span className="font-heading text-2xl tracking-tight text-foreground">
-              StudyBase
+              MonoSpace
             </span>
           </a>
 
@@ -185,7 +187,7 @@ function LandingPage() {
         </div>
       </header>
 
-      <main>
+      <main className="mt-12">
         <section
           id="home"
           className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-16"
@@ -196,14 +198,14 @@ function LandingPage() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-              StudyBase keeps your lectures, summaries, and planner together in
+              MonoSpace keeps your lectures, summaries, and planner together in
               a calm interface so it is easier to review, stay organized, and
               actually finish the week on time.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button size="lg" className="text-white" asChild>
-                <a href="#pricing">
+                <a href="#ready">
                   Start for free
                   <ArrowRight className="size-4" />
                 </a>
@@ -226,181 +228,8 @@ function LandingPage() {
               </div>
             </div>
           </div>
-
-          <div className="sm:grid grid-cols-1 md:grid-cols-3 scale-80 gap-4 hidden rounded-[2.5rem] bg-[#f0f0f2] p-5 shadow-inner dark:bg-neutral-900/40">
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col justify-between rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-80">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-                      TASKS
-                    </span>
-                    <div className="flex size-5 items-center justify-center rounded-full bg-[#000a80] text-white">
-                      <Plus className="size-3" />
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex gap-1.5 overflow-x-auto pb-1 text-[10px] text-neutral-400">
-                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 font-medium text-neutral-700">
-                      Today
-                    </span>
-                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 font-medium text-neutral-700">
-                      Upcoming
-                    </span>
-                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 font-medium text-neutral-700">
-                      Overdue
-                    </span>
-                    <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 font-medium text-neutral-700">
-                      Completed
-                    </span>
-                  </div>
-
-                  <div className="mt-16 text-center">
-                    <p className="text-xs text-neutral-400 font-medium">
-                      No tasks for today!
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-40 flex flex-col justify-between">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 block mb-3">
-                    NOTES
-                  </span>
-                  <p className="text-[10px] font-bold text-neutral-700 mb-1.5">
-                    Subjects:
-                  </p>
-                  <div className="space-y-1 max-w-30">
-                    <div className="rounded-full bg-[#000a80] text-white text-[10px] font-medium px-3 py-1 text-center">
-                      All
-                    </div>
-                    <div className="rounded-full border border-neutral-100 text-neutral-600 text-[10px] font-medium px-3 py-1 text-center bg-white">
-                      SE101
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-55 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-                      SUBJECTS
-                    </span>
-                    <div className="flex size-5 items-center justify-center rounded-full bg-[#000a80] text-white">
-                      <Plus className="size-3" />
-                    </div>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {[
-                      "A",
-                      "ANT",
-                      "ES101",
-                      "Hello",
-                      "Math",
-                      "SE101",
-                      "THS1AAAAA",
-                      "dsadsdas",
-                      "fsaxc",
-                      "puta",
-                      "tologo bo?",
-                    ].map((sub) => (
-                      <span
-                        key={sub}
-                        className={cn(
-                          "rounded-full border border-neutral-200 px-2.5 py-1 text-[10px] font-medium transition-colors bg-white text-neutral-600",
-                        )}
-                      >
-                        {sub}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-[1.8rem] bg-[#000a80] p-6 shadow-sm text-white flex flex-col justify-between items-center text-center min-h-65">
-                <span className="text-[10px] font-bold uppercase tracking-[0.4em] opacity-80 mt-1">
-                  STUDYBASE
-                </span>
-
-                <div className="my-auto">
-                  <p className="text-[13px] font-medium opacity-90">
-                    Sat, June 13
-                  </p>
-                  <p className="font-serif text-4xl tracking-wide mt-1">
-                    05:19 PM
-                  </p>
-                </div>
-
-                <p className="text-[10px] leading-relaxed opacity-80 max-w-50 border-t border-white/10 pt-3 w-full">
-                  "Ang di mag-mahal sa sariling wika, ay mas mabaho pa sa
-                  bagoong."
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-45 flex flex-col justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-                  PROFILE
-                </span>
-                <div className="flex items-center gap-3 mt-auto">
-                  <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-purple-600 text-sm font-bold text-white">
-                    Z
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-neutral-800 truncate">
-                      Zairus
-                    </p>
-                    <p className="text-[10px] text-neutral-400 truncate">
-                      zairussocials@gmail.com
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm min-h-35">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400">
-                  EMPTY FOR NOW
-                </span>
-              </div>
-
-              <div className="rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm flex flex-col justify-between items-center text-center min-h-40">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 self-start">
-                  POMODORO
-                </span>
-
-                <div className="my-auto">
-                  <p className="text-3xl font-bold tracking-tight text-neutral-800">
-                    24:39
-                  </p>
-                </div>
-
-                <button className="w-full rounded-full bg-[#000a80] py-2 text-xs font-medium text-white transition hover:opacity-90">
-                  Pause Work
-                </button>
-              </div>
-            </div>
-
-            <div className="md:col-span-3 rounded-[1.8rem] border border-black/5 bg-white p-5 shadow-sm -mt-2 min-h-3o">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-bold text-neutral-700">Notes:</p>
-                <div className="flex size-5 items-center justify-center rounded-full bg-[#000a80] text-white">
-                  <Plus className="size-3" />
-                </div>
-              </div>
-              <div className="mt-2">
-                <div className="inline-block rounded-xl border border-neutral-100 bg-white p-2 shadow-sm min-w-25">
-                  <p className="text-xs font-bold text-neutral-700 leading-tight">
-                    Note 1
-                  </p>
-                  <p className="text-[9px] text-neutral-400 mt-0.5">SE101</p>
-                </div>
-              </div>
-            </div>
+          <div className=" w-full">
+            <img className="w-full" src={HeroImage} alt="Hero" />
           </div>
         </section>
 
@@ -477,7 +306,7 @@ function LandingPage() {
         </section>
 
         <section
-          id="pricing"
+          id="ready"
           className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8"
         >
           <div className="rounded-[2rem] border border-border bg-primary p-8 shadow-sm sm:p-10">
@@ -499,12 +328,10 @@ function LandingPage() {
                 <Button
                   size="lg"
                   className="bg-foreground text-white hover:bg-foreground"
-                  asChild
+                  onClick={() => navigate("/register")}
                 >
-                  <a href="#home">
-                    Create account
-                    <ArrowRight className="size-4" />
-                  </a>
+                  Create account
+                  <ArrowRight className="size-4" />
                 </Button>
               </div>
             </div>
