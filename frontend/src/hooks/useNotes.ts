@@ -1,24 +1,17 @@
 import { useAuth } from "@clerk/react";
 import { useQuery } from "@tanstack/react-query";
+import { getNotes } from "../api/note.api";
 
 export function useNotes() {
   const { getToken } = useAuth();
 
   return useQuery({
     queryKey: ["notes"],
+    staleTime: 1000 * 60 * 5,
     queryFn: async () => {
       const token = await getToken();
-      console.log("umauyuyyy");
-
-      const res = await fetch("http://localhost:3000/api/notes", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      return data.notes;
+      const notes = await getNotes(token as string);
+      return notes;
     },
   });
 }

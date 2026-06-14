@@ -1,19 +1,16 @@
 import { Router } from "express";
 import type { Request, Response } from "express";
-import { getAuth } from "@clerk/express";
 import { prisma } from "../../prisma/client";
 import {
   createSubjectSchema,
   updateSubjectSchema,
 } from "../schemas/subject.schema";
 import z from "zod";
+import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
-router.get("/:subjectId", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
-
+router.get("/:subjectId", authenticate, async (req: Request, res: Response) => {
   const { subjectId } = req.params;
 
   const subject = await prisma.subject.findFirst({
@@ -34,9 +31,8 @@ router.get("/:subjectId", async (req: Request, res: Response) => {
   return res.status(200).send({ subject });
 });
 
-router.get("/", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
+router.get("/", authenticate, async (req: Request, res: Response) => {
+  const { userId } = req;
 
   const subjects = await prisma.subject.findMany({
     where: {
@@ -56,9 +52,8 @@ router.get("/", async (req: Request, res: Response) => {
   return res.status(200).send({ subjects });
 });
 
-router.post("/", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
+router.post("/", authenticate, async (req: Request, res: Response) => {
+  const { userId } = req;
 
   const result = createSubjectSchema.safeParse(req.body);
 
@@ -80,59 +75,56 @@ router.post("/", async (req: Request, res: Response) => {
   return res.status(200).send({ subject });
 });
 
-router.patch("/:subjectId", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
+router.patch(
+  "/:subjectId",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { userId } = req;
 
-  const result = updateSubjectSchema.safeParse(req.body);
+    const result = updateSubjectSchema.safeParse(req.body);
 
-  if (!result.success) {
-    return res.status(400).send({
-      errors: z.treeifyError(result.error),
-    });
-  }
+    if (!result.success) {
+      return res.status(400).send({
+        errors: z.treeifyError(result.error),
+      });
+    }
 
-  const { subjectId } = req.params;
+    const { subjectId } = req.params;
 
-  const data = result.data;
+    const data = result.data;
 
-  const subject = await prisma.subject.update({
-    where: {
-      id: subjectId as string,
-      userId: userId as string,
-    },
-    data: {
-      ...data,
-    },
-  });
-
-  return res.status(200).send({
-    subject,
-  });
-});
-
-router.delete("/:subjectId", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
-
-  const { subjectId } = req.params;
-
-  await prisma.subject.delete({
-    where: {
-      id: subjectId as string,
-    },
-  });
-
-  await prisma.task.deleteMany({
-    where: {
-      userId: userId as string,
-      subjects: {
-        none: {},
+    const subject = await prisma.subject.update({
+      where: {
+        id: subjectId as string,
+        userId: userId as string,
       },
-    },
-  });
+      data: {
+        ...data,
+      },
+    });
 
-  return res.status(200).send({ message: "successful" });
-});
+    return res.status(200).send({
+      subject,
+    });
+  },
+);
+
+router.delete(
+  "/:subjectId",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { userId } = req;
+
+    const { subjectId } = req.params;
+
+    await prisma.subject.delete({
+      where: {
+        id: subjectId as string,
+      },
+    });
+
+    return res.status(200).send({ message: "successful" });
+  },
+);
 
 export default router;

@@ -2,17 +2,15 @@ import { Request, Response, Router } from "express";
 import upload from "../lib/upload";
 import fs from "fs";
 import { exec } from "child_process";
-import { makeCleanMarkdown } from "../lib/ai";
-import { getAuth } from "@clerk/express";
 import { createNoteSchema, updateNoteSchema } from "../schemas/note.schema";
 import { z } from "zod";
 import { prisma } from "../../prisma/client";
+import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden " });
+router.get("/", authenticate, async (req, res) => {
+  const { userId } = req;
 
   const notes = await prisma.note.findMany({
     where: {
@@ -28,9 +26,8 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.post("/", async (req, res) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
+router.post("/", authenticate, async (req, res) => {
+  const { userId } = req;
 
   const result = createNoteSchema.safeParse(req.body);
   if (!result.success) {
@@ -41,19 +38,19 @@ router.post("/", async (req, res) => {
 
   const newNote = await prisma.note.create({
     data: {
-      userId: userId,
+      userId: userId as string,
       title: data.title,
       content: data.content as string,
       subjects: {
         connectOrCreate: data.subjects.map((sub) => ({
           where: {
             userId_name: {
-              userId: userId,
+              userId: userId as string,
               name: sub,
             },
           },
           create: {
-            userId,
+            userId: userId as string,
             name: sub,
           },
         })),
@@ -68,11 +65,9 @@ router.post("/", async (req, res) => {
 
 router.post(
   "/extract",
+  authenticate,
   upload.single("file"),
   async (req: Request, res: Response) => {
-    const { userId } = getAuth(req);
-    if (!userId) return res.status(403).send({ message: "Forbidden" });
-
     const fileToExtract = req.file;
 
     if (!fileToExtract) {
@@ -108,9 +103,8 @@ router.post(
   },
 );
 
-router.patch("/:noteId", async (req, res) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.sendStatus(403);
+router.patch("/:noteId", authenticate, async (req, res) => {
+  const { userId } = req;
 
   const { noteId } = req.params;
   if (!noteId) return res.sendStatus(400);
@@ -123,7 +117,7 @@ router.patch("/:noteId", async (req, res) => {
   const { subjects, ...rest } = result.data;
 
   const note = await prisma.note.update({
-    where: { id: noteId },
+    where: { id: noteId as string },
     data: {
       ...rest,
       ...(subjects !== undefined && {
@@ -132,11 +126,11 @@ router.patch("/:noteId", async (req, res) => {
           connectOrCreate: subjects.map((sub) => ({
             where: {
               userId_name: {
-                userId,
+                userId: userId as string,
                 name: sub,
               },
             },
-            create: { userId, name: sub },
+            create: { userId: userId as string, name: sub },
           })),
         },
       }),
@@ -151,18 +145,12 @@ router.patch("/:noteId", async (req, res) => {
   });
 });
 
-router.delete("/:noteId", async (req, res) => {
-  const { userId } = getAuth(req);
-
-  if (!userId) {
-    return res.status(403).send({ message: "Forbidden" });
-  }
-
+router.delete("/:noteId", authenticate, async (req, res) => {
   const { noteId } = req.params;
 
   await prisma.note.delete({
     where: {
-      id: noteId,
+      id: noteId as string,
     },
   });
 

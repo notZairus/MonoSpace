@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
 import type { Note, NoteDTO } from "../schemas/note.schema";
+import { updateNote } from "../api/note.api";
 
 export function useUpdateNote() {
   const { getToken } = useAuth();
@@ -15,24 +16,10 @@ export function useUpdateNote() {
       data: Partial<NoteDTO>;
     }) => {
       const token = await getToken();
-
-      const res = await fetch(`http://localhost:3000/api/notes/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      const resData = await res.json();
-      return resData.note;
+      const note = await updateNote(token as string, id, data);
+      return note;
     },
     onSuccess: (data: Note) => {
-      console.log("running po?");
-
-      console.log(data);
-
       query.invalidateQueries({
         queryKey: ["notes"],
       });

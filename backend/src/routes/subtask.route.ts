@@ -1,15 +1,13 @@
 import { Router } from "express";
 import { createSubTaskSchema } from "../schemas/subtask.schema";
-import { getAuth } from "@clerk/express";
 import z from "zod";
 import { prisma } from "../../prisma/client";
+import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
-
+router.post("/", authenticate, async (req, res) => {
+  const { userId } = req;
   const result = createSubTaskSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -20,6 +18,7 @@ router.post("/", async (req, res) => {
 
   const subtask = await prisma.subtask.create({
     data: {
+      userId: userId as string,
       parentId: data.parentId,
       name: data.name,
       status: data.status,
@@ -34,16 +33,13 @@ router.post("/", async (req, res) => {
   });
 });
 
-router.patch(`/:subtaskId/status`, async (req, res) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
-
+router.patch(`/:subtaskId/status`, authenticate, async (req, res) => {
   const { subtaskId } = req.params;
   if (!subtaskId) return res.sendStatus(400);
 
   const targetSubtask = await prisma.subtask.findFirst({
     where: {
-      id: subtaskId,
+      id: subtaskId as string,
     },
   });
 
@@ -51,7 +47,7 @@ router.patch(`/:subtaskId/status`, async (req, res) => {
 
   const updated = await prisma.subtask.update({
     where: {
-      id: subtaskId,
+      id: subtaskId as string,
     },
     data: {
       status: targetSubtask.status === "COMPLETED" ? "PENDING" : "COMPLETED",

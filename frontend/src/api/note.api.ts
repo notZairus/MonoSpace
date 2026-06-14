@@ -6,7 +6,7 @@ export async function extractTextFromDocument(token: string, file: File) {
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await fetch("http://localhost:3000/api/notes/extract", {
+  const res = await fetch(`${serverUrl}/notes/extract`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -19,7 +19,7 @@ export async function extractTextFromDocument(token: string, file: File) {
 }
 
 export async function createNote(token: string, noteData: NoteDTO) {
-  const res = await fetch("http://localhost:3000/api/notes", {
+  const res = await fetch(`${serverUrl}/notes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -40,4 +40,34 @@ export async function deleteNote(token: string, id: string) {
       Authorization: `Bearer ${token}`,
     },
   });
+}
+
+export async function getNotes(token: string) {
+  const res = await fetch(`${serverUrl}/notes`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  return data.notes;
+}
+
+export async function updateNote(
+  token: string,
+  id: string,
+  data: Partial<NoteDTO>,
+) {
+  const res = await fetch(`${serverUrl}/notes/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const resData = await res.json();
+  return resData.note;
 }

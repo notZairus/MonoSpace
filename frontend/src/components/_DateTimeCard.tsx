@@ -28,7 +28,7 @@ function DateTimeCard() {
   return (
     <Card className="h-full bg-primary text-white shadow-lg">
       <CardHeader>
-        <CardTitle className="text-center">STUDYBASE</CardTitle>
+        <CardTitle className="text-center">MONOSPACE</CardTitle>
       </CardHeader>
       <CardContent className="flex justify-center h-full">
         <div className="flex flex-col items-center justify-center h-full gap-4">

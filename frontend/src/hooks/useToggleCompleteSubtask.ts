@@ -1,5 +1,6 @@
 import { useAuth } from "@clerk/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { completeSubtask } from "../api/subtask.api";
 
 export function useToggleCompleteSubtask() {
   const query = useQueryClient();
@@ -8,18 +9,7 @@ export function useToggleCompleteSubtask() {
   return useMutation({
     mutationFn: async (id: string) => {
       const token = await getToken();
-      const res = await fetch(
-        `http://localhost:3000/api/subtasks/${id}/status`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      const data = await res.json();
+      const data = await completeSubtask(token as string, id);
       return data;
     },
     onSuccess: (data) => {

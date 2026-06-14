@@ -5,16 +5,15 @@ import {
   updateTaskSchema,
 } from "../schemas/task.schema";
 import { z } from "zod";
-import { getAuth } from "@clerk/express";
 import { prisma } from "../../prisma/client";
+import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
 // GET ///////////////////////////////////////////////
 
-router.get("/", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
+router.get("/", authenticate, async (req: Request, res: Response) => {
+  const { userId } = req;
 
   const { status } = req.query;
 
@@ -41,9 +40,8 @@ router.get("/", async (req: Request, res: Response) => {
   return res.status(200).send({ tasks });
 });
 
-router.get("/:taskId", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(403).send({ message: "Forbidden" });
+router.get("/:taskId", authenticate, async (req: Request, res: Response) => {
+  const { userId } = req;
 
   const { taskId } = req.params;
 
@@ -65,14 +63,8 @@ router.get("/:taskId", async (req: Request, res: Response) => {
 
 // POST //////////////////////////////////////////////
 
-router.post("/", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
-
-  if (!userId) {
-    return res.status(403).send({
-      message: "Forbidden",
-    });
-  }
+router.post("/", authenticate, async (req: Request, res: Response) => {
+  const { userId } = req;
 
   const result = createTaskSchema.safeParse(req.body);
 
@@ -84,7 +76,7 @@ router.post("/", async (req: Request, res: Response) => {
 
   const newTask = await prisma.task.create({
     data: {
-      userId: userId,
+      userId: userId as string,
       name: data.name,
       description: data.description,
       status: data.status,
@@ -94,12 +86,12 @@ router.post("/", async (req: Request, res: Response) => {
         connectOrCreate: data.subjects.map((sub) => ({
           where: {
             userId_name: {
-              userId,
+              userId: userId as string,
               name: sub,
             },
           },
           create: {
-            userId,
+            userId: userId as string,
             name: sub,
           },
         })),
@@ -118,53 +110,45 @@ router.post("/", async (req: Request, res: Response) => {
 
 // PATCH /////////////////////////////////////////////
 
-router.patch("/:taskId/status", async (req: Request, res: Response) => {
-  const { userId } = getAuth(req);
+router.patch(
+  "/:taskId/status",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const { taskId } = req.params;
 
-  if (!userId) {
-    return res.status(403).send({
-      message: "Forbidden",
+    const targetTask = await prisma.task.findFirst({
+      where: { id: taskId as string },
     });
-  }
 
-  const { taskId } = req.params;
+    if (!targetTask) {
+      return res.sendStatus(404);
+    }
 
-  const targetTask = await prisma.task.findFirst({
-    where: { id: taskId as string },
-  });
+    await prisma.task.update({
+      where: {
+        id: taskId as string,
+      },
+      data: {
+        status: targetTask.status === "PENDING" ? "COMPLETED" : "PENDING",
+        completedAt: targetTask.status === "PENDING" ? new Date() : null,
+      },
+    });
 
-  if (!targetTask) {
-    return res.sendStatus(404);
-  }
+    const task = await prisma.task.findFirst({
+      where: {
+        id: taskId as string,
+      },
+      include: {
+        subjects: true,
+      },
+    });
 
-  await prisma.task.update({
-    where: {
-      id: taskId as string,
-    },
-    data: {
-      status: targetTask.status === "PENDING" ? "COMPLETED" : "PENDING",
-      completedAt: targetTask.status === "PENDING" ? new Date() : null,
-    },
-  });
+    return res.status(200).send(task);
+  },
+);
 
-  const task = await prisma.task.findFirst({
-    where: {
-      id: taskId as string,
-    },
-    include: {
-      subjects: true,
-    },
-  });
-
-  return res.status(200).send(task);
-});
-
-router.patch("/:taskId", async (req, res) => {
-  const { userId } = getAuth(req);
-
-  if (!userId) {
-    return res.status(403).send({ message: "Forbidden" });
-  }
+router.patch("/:taskId", authenticate, async (req, res) => {
+  const { userId } = req;
 
   const { taskId } = req.params;
 
@@ -177,7 +161,7 @@ router.patch("/:taskId", async (req, res) => {
   const { subjects, ...rest } = result.data;
 
   const task = await prisma.task.update({
-    where: { id: taskId },
+    where: { id: taskId as string },
     data: {
       ...rest,
       ...(subjects !== undefined && {
@@ -186,11 +170,11 @@ router.patch("/:taskId", async (req, res) => {
           connectOrCreate: subjects.map((sub) => ({
             where: {
               userId_name: {
-                userId,
+                userId: userId as string,
                 name: sub,
               },
             },
-            create: { userId, name: sub },
+            create: { userId: userId as string, name: sub },
           })),
         },
       }),
@@ -203,18 +187,12 @@ router.patch("/:taskId", async (req, res) => {
 });
 
 // DELETE ////////////////////////////////////////////
-router.delete("/:taskId", async (req, res) => {
-  const { userId } = getAuth(req);
-
-  if (!userId) {
-    return res.status(403).send({ message: "Forbidden" });
-  }
-
+router.delete("/:taskId", authenticate, async (req, res) => {
   const { taskId } = req.params;
 
   await prisma.task.delete({
     where: {
-      id: taskId,
+      id: taskId as string,
     },
   });
 
