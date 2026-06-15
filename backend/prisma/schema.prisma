@@ -34,7 +34,7 @@ model Task {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   completedAt DateTime?
-  subjects Subject[] @relation("SubjectTaskRelation")
+  tags Tag[] @relation("TagTaskRelation")
   subtasks Subtask[] @relation("TaskSubtaskRelation")
 
   @@index([userId])
@@ -55,23 +55,22 @@ model Subtask {
   @@index([parentId])
 }
 
-
 model Note {
   id String @id @default(cuid())
   userId String
   title String
-  subjects Subject[] @relation("SubjectNoteRelation")
+  tags Tag[] @relation("TagNoteRelation")
   content String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Subject {
+model Tag {
   id String @id @default(cuid())
   userId String
   name String
-  tasks Task[] @relation("SubjectTaskRelation")
-  notes Note[] @relation("SubjectNoteRelation")
+  tasks Task[] @relation("TagTaskRelation")
+  notes Note[] @relation("TagNoteRelation")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

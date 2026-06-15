@@ -11,5 +11,5 @@
 export type * from './models/Task'
 export type * from './models/Subtask'
 export type * from './models/Note'
-export type * from './models/Subject'
+export type * from './models/Tag'
 export type * from './commonInputTypes'

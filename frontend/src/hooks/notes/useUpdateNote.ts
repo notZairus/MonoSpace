@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
-import type { Note, NoteDTO } from "../schemas/note.schema";
-import { updateNote } from "../api/note.api";
+import type { Note, NoteDTO } from "../../schemas/note.schema";
+import { updateNote } from "../../api/note.api";
+import type { Tag } from "../../schemas/tags.schema";
 
 export function useUpdateNote() {
   const { getToken } = useAuth();
@@ -24,14 +25,14 @@ export function useUpdateNote() {
         queryKey: ["notes"],
       });
 
-      data.subjects.forEach((s) => {
+      data.tags.forEach((t: Tag) => {
         query.invalidateQueries({
-          queryKey: ["subject", "id", s.id],
+          queryKey: ["tag", "id", t.id],
         });
       });
 
       query.invalidateQueries({
-        queryKey: ["subjects"],
+        queryKey: ["tags"],
       });
     },
   });

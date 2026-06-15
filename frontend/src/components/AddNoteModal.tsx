@@ -12,13 +12,13 @@ import {
 import MDEditor from "@uiw/react-md-editor";
 import FileInput from "./FileInput";
 import { useForm } from "react-hook-form";
-import { AlertCircle, Tag, X, FileText } from "lucide-react";
+import { AlertCircle, Tag, FileText } from "lucide-react";
 import type { NoteDTO } from "../schemas/note.schema";
 import { createNoteSchema } from "../schemas/note.schema";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
-import { useDocumentTextExtraction } from "../hooks/useDocumentTextExtraction";
-import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import { useCreateNote } from "../hooks/useCreateNote";
+import { useDocumentTextExtraction } from "../hooks/notes/useDocumentTextExtraction";
+import { useCreateNote } from "../hooks/notes/useCreateNote";
+import TagInput from "./TagInput";
 
 function AddNoteModal({
   open,
@@ -40,17 +40,15 @@ function AddNoteModal({
     resolver: zodResolver(createNoteSchema),
     defaultValues: {
       title: "",
-      subjects: [],
+      tags: [],
       content: "",
     },
   });
   const documentExtraction = useDocumentTextExtraction();
   const createNote = useCreateNote();
 
-  const [subjectInput, setSubjectInput] = useState("");
-
   const title = watch("title");
-  const subjects = watch("subjects");
+  const tags = watch("tags");
   const content = watch("content");
 
   useEffect(() => {
@@ -61,18 +59,17 @@ function AddNoteModal({
     }
   }, []);
 
-  function handleAddSubject() {
-    const trimmedSubject = subjectInput.trim();
-    if (trimmedSubject && !subjects.includes(trimmedSubject)) {
-      setValue("subjects", [...subjects, trimmedSubject]);
-      setSubjectInput("");
+  function handleAddSubject(tag: string) {
+    const trimmedTag = tag.trim();
+    if (trimmedTag && !tags?.includes(trimmedTag)) {
+      setValue("tags", [...(tags as string[]), trimmedTag]);
     }
   }
 
-  function removeSubject(index: number) {
+  function handleRemoveSubject(tag: string) {
     setValue(
-      "subjects",
-      subjects.filter((_, i) => i !== index),
+      "tags",
+      tags?.filter((t) => t !== tag),
       { shouldValidate: true },
     );
   }
@@ -98,7 +95,7 @@ function AddNoteModal({
 
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={false}>
-      <DialogContent className="w-full max-w-[95vw] sm:max-w-4xl p-0 rounded-2xl overflow-hidden border bg-background shadow-xl">
+      <DialogContent className="w-full max-w-[95vw] sm:max-w-4xl p-0 rounded-2xl overflow-auto border bg-background shadow-xl">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col max-h-[90dvh] sm:max-h-[85vh]"
@@ -152,61 +149,26 @@ function AddNoteModal({
 
                 <div className="space-y-2.5">
                   <Label className="text-[11px] font-semibold tracking-wider text-muted-foreground/80 uppercase flex items-center gap-1.5">
-                    <Tag className="size-3" /> Tags / Subjects
+                    <Tag className="size-3" /> Tags
                   </Label>
-                  <Input
-                    placeholder="Press Enter to add…"
-                    value={subjectInput}
-                    onChange={(e) => setSubjectInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleAddSubject();
-                      }
-                    }}
-                    className="h-9 text-sm bg-muted/20 border-border/50 placeholder:text-muted-foreground/40 focus-visible:ring-1"
+                  <TagInput
+                    items={tags as string[]}
+                    addItem={handleAddSubject}
+                    removeItem={handleRemoveSubject}
+                    className="w-full"
                   />
 
-                  {errors.subjects && (
+                  {errors.tags && (
                     <p className="text-xs font-medium text-rose-500 flex items-center gap-1">
                       <AlertCircle className="size-3" />
-                      {errors.subjects.message}
+                      {errors.tags.message}
                     </p>
-                  )}
-
-                  {subjects.length === 0 && !errors.subjects && (
-                    <p className="text-xs text-muted-foreground/50">
-                      Press Enter to attach a subject tag
-                    </p>
-                  )}
-
-                  {subjects.length > 0 && (
-                    <ScrollArea className="w-full">
-                      <ScrollBar orientation="horizontal" />
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {subjects.map((subject, index) => (
-                          <span
-                            key={`${subject}-${index}`}
-                            className="inline-flex items-center gap-1.5 rounded-md bg-secondary text-secondary-foreground px-2 py-0.5 text-xs font-medium border border-border/40 transition-all"
-                          >
-                            <span>{subject}</span>
-                            <button
-                              type="button"
-                              onClick={() => removeSubject(index)}
-                              className="text-muted-foreground/60 hover:text-rose-500 rounded p-0.5 focus:outline-none"
-                            >
-                              <X className="size-3" />
-                            </button>
-                          </span>
-                        ))}
-                      </div>
-                    </ScrollArea>
                   )}
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row flex-1 min-h-0 overflow-hidden">
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
               <div className="flex-1 flex flex-col min-h-[200px] sm:min-h-0 border-b sm:border-b-0 sm:border-r border-border/40">
                 <div className="px-3 py-2 border-b border-border/30 bg-muted/10 shrink-0">
                   <span className="text-[10px] font-semibold tracking-widest text-muted-foreground/50 uppercase">

@@ -1,24 +1,37 @@
 import { z } from "zod";
-import type { Subject } from "./subject.schema";
+import type { Tag } from "./tags.schema";
 
 export const createNoteSchema = z.object({
-  title: z.string().trim().min(3),
-  subjects: z.array(z.string()).min(1),
+  title: z
+    .string({
+      error: "Title is required",
+    })
+    .trim()
+    .min(3, "Title must be at least 3 characters long"),
+
+  tags: z.array(z.string().trim().min(1, "Tag cannot be empty")).optional(),
+
   content: z.string().optional(),
 });
 
 export type NoteDTO = z.infer<typeof createNoteSchema>;
 
-export type Note = Omit<NoteDTO, "subjects"> & {
+export type Note = Omit<NoteDTO, "tags"> & {
   id: string;
   userId?: string;
-  subjects: Subject[];
+  tags: Tag[];
   createdAt: Date;
   updatedAt: Date;
 };
 
 export const updateNoteSchema = z.object({
-  title: z.string().trim().min(3).optional(),
-  subjects: z.array(z.string()).min(1).optional(),
+  title: z
+    .string()
+    .trim()
+    .min(3, "Title must be at least 3 characters long")
+    .optional(),
+
+  tags: z.array(z.string().trim().min(1, "Tag cannot be empty")).optional(),
+
   content: z.string().optional(),
 });

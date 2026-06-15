@@ -33,7 +33,7 @@ export type Subtask = Prisma.SubtaskModel
  */
 export type Note = Prisma.NoteModel
 /**
- * Model Subject
+ * Model Tag
  * 
  */
-export type Subject = Prisma.SubjectModel
+export type Tag = Prisma.TagModel

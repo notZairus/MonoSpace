@@ -17,7 +17,7 @@ import {
 } from "../schemas/subtask.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateSubtask } from "../hooks/useCreateSubtask";
+import { useCreateSubtask } from "../hooks/subtasks/useCreateSubtask";
 
 const priorityConfig = {
   red: {

@@ -7,55 +7,54 @@ import {
   DialogFooter,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Trash2, ListTodo, Plus } from "lucide-react";
-import { type subjectDTO } from "../schemas/subject.schema";
+import { Trash2, ListTodo, Plus, FileText } from "lucide-react";
+import type { TagDTO, Tag } from "../schemas/tags.schema";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import type { Task } from "../schemas/task.schema";
+import type { Note } from "../schemas/note.schema";
 import { useDebouncedCallback } from "use-debounce";
-import { useUpdateSubject } from "../hooks/useUpdateSubject";
-import { useDeleteSubject } from "../hooks/useDeleteSubject";
+import { useUpdateTag } from "../hooks/tags/useUpdateTag";
+import { useDeleteTag } from "../hooks/tags/useDeleteTag";
 import TaskItemLong from "./TaskItemLong";
-import { useSubject } from "../hooks/useSubjects";
-import { type Subject } from "../schemas/subject.schema";
+import NoteItem from "./NoteItem";
+import { useTag } from "../hooks/tags/useTags";
 import AddTaskModal from "./AddTaskModal";
+import AddNoteModal from "./AddNoteModal";
 
-interface SubjectShowcaseProps {
+interface TagShowcaseProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  subjectId: string;
+  tagId: string;
 }
 
-const SubjectShowcase = ({
-  open = false,
-  setOpen,
-  subjectId,
-}: SubjectShowcaseProps) => {
-  const { data: subject } = useSubject(subjectId);
-  const [subjectCopy, setSubjectCopy] = useState<Subject | null>(null);
+const TagShowcase = ({ open = false, setOpen, tagId }: TagShowcaseProps) => {
+  const { data: tag } = useTag(tagId);
+  const [tagCopy, setTagCopy] = useState<Tag | null>(null);
   const [openAddTaskModal, setOpenAddTaskModal] = useState(false);
+  const [openAddNoteModal, setOpenAddNoteModal] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
-  const updateSubject = useUpdateSubject();
-  const deleteSubject = useDeleteSubject();
+  const updateTag = useUpdateTag();
+  const deleteTag = useDeleteTag();
 
   useEffect(() => {
-    function syncSubject() {
-      setSubjectCopy(subject as Subject);
+    function syncTag() {
+      setTagCopy(tag as Tag);
     }
-    syncSubject();
-  }, [subject]);
+    syncTag();
+  }, [tag]);
 
   const debouncedHandleUpdate = useDebouncedCallback(
-    (subjectId: string, updatedFields: Partial<subjectDTO>) => {
-      updateSubject.mutate({
-        id: subjectId,
+    (tagId: string, updatedFields: Partial<TagDTO>) => {
+      updateTag.mutate({
+        id: tagId,
         field: updatedFields,
       });
     },
     300,
   );
 
-  if (!subject || !subjectCopy) {
+  if (!tag || !tagCopy) {
     return (
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
         <DialogContent>Loading...</DialogContent>
@@ -63,8 +62,8 @@ const SubjectShowcase = ({
     );
   }
 
-  const handleDeleteSubject = () => {
-    deleteSubject.mutate(subject.id);
+  const handleDeleteTag = () => {
+    deleteTag.mutate(tag.id);
     setOpenConfirmDelete(false);
     setOpen(false);
   };
@@ -72,19 +71,18 @@ const SubjectShowcase = ({
   return (
     <>
       <AddTaskModal open={openAddTaskModal} setOpen={setOpenAddTaskModal} />
+      <AddNoteModal open={openAddNoteModal} setOpen={setOpenAddNoteModal} />
 
       <Dialog open={openConfirmDelete} onOpenChange={setOpenConfirmDelete}>
         <DialogContent className="sm:max-w-md p-6 rounded-2xl border bg-background shadow-xl">
           <DialogTitle className="text-lg font-semibold tracking-tight">
-            Delete Subject
+            Delete Tag
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground mt-2">
             Are you sure you want to delete{" "}
-            <span className="font-medium text-foreground">
-              "{subject.name}"
-            </span>
-            ? This action cannot be undone and might affect tasks associated
-            with this subject.
+            <span className="font-medium text-foreground">"{tag.name}"</span>?
+            This action cannot be undone and might affect tasks associated with
+            this tag.
           </DialogDescription>
           <DialogFooter className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <Button
@@ -96,10 +94,10 @@ const SubjectShowcase = ({
             </Button>
             <Button
               variant="destructive"
-              onClick={handleDeleteSubject}
+              onClick={handleDeleteTag}
               className="rounded-xl"
             >
-              Delete Subject
+              Delete Tag
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -114,23 +112,21 @@ const SubjectShowcase = ({
             <div className="flex items-center gap-3.5 justify-between">
               <div className="flex items-center gap-3.5 flex-1 min-w-0">
                 <div className="flex-1">
-                  <DialogTitle className="sr-only">
-                    {subjectCopy.name}
-                  </DialogTitle>
+                  <DialogTitle className="sr-only">{tagCopy.name}</DialogTitle>
                   <button className="opacity-0" aria-hidden="true" />
                   <input
                     type="text"
-                    value={subjectCopy.name}
+                    value={tagCopy.name}
                     onChange={(e) => {
                       const newValue = e.target.value;
-                      setSubjectCopy({
-                        ...subjectCopy,
+                      setTagCopy({
+                        ...tagCopy,
                         name: newValue,
                       });
-                      debouncedHandleUpdate(subjectCopy.id, { name: newValue });
+                      debouncedHandleUpdate(tagCopy.id, { name: newValue });
                     }}
-                    placeholder="Subject name..."
-                    className="w-full bg-transparent border-0 p-0 text-xl  tracking-tight leading-snug focus:outline-none focus:ring-0 font-heading placeholder:text-muted-foreground/40 transition-colors text-foreground"
+                    placeholder="Tag name..."
+                    className="w-full bg-transparent border-0 p-0 text-xl tracking-tight leading-snug focus:outline-none focus:ring-0 font-heading placeholder:text-muted-foreground/40 transition-colors text-foreground"
                   />
                 </div>
               </div>
@@ -144,6 +140,7 @@ const SubjectShowcase = ({
               </button>
             </div>
 
+            {/* Tasks Section */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
@@ -153,11 +150,10 @@ const SubjectShowcase = ({
                   </h4>
                   <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground/90 border border-border/40">
                     {
-                      subject.tasks.filter(
-                        (t: Task) => t.status === "COMPLETED",
-                      ).length
+                      tag.tasks.filter((t: Task) => t.status === "COMPLETED")
+                        .length
                     }{" "}
-                    of {subject.tasks.length} completed
+                    of {tag.tasks.length} completed
                   </span>
                 </div>
 
@@ -174,14 +170,57 @@ const SubjectShowcase = ({
                 <ScrollArea className="h-44 rounded-xl border border-border/50 bg-card/30">
                   <ScrollBar />
                   <div className="divide-y divide-border/30 overflow-hidden">
-                    {subject.tasks &&
-                      subject.tasks.map((task: Task) => (
+                    {tag.tasks &&
+                      tag.tasks.map((task: Task) => (
                         <TaskItemLong key={task.id} task={task} />
                       ))}
 
-                    {subject.tasks?.length === 0 && (
+                    {tag.tasks?.length === 0 && (
                       <div className="p-4 w-full text-center text-muted-foreground/70 italic text-sm">
-                        No tasks assigned to this subject yet.
+                        No tasks assigned to this tag yet.
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
+            </div>
+
+            {/* Notes Section */}
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-2">
+                  <FileText className="size-3.5 text-muted-foreground/80" />
+                  <h4 className="text-[11px] font-semibold tracking-wider text-muted-foreground/80 uppercase">
+                    Associated Notes
+                  </h4>
+                  <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground/90 border border-border/40">
+                    {tag.notes.length}{" "}
+                    {tag.notes.length === 1 ? "note" : "notes"}
+                  </span>
+                </div>
+                <div>
+                  <button
+                    className="text-[11px] font-medium text-muted-foreground/60 hover:text-foreground flex items-center gap-1 transition-colors group px-1 py-0.5 rounded"
+                    onClick={() => setOpenAddNoteModal(true)}
+                  >
+                    <Plus className="size-3 group-hover:scale-110 transition-transform" />
+                    Add
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <ScrollArea className="h-44 rounded-xl border border-border/50 bg-card/30">
+                  <ScrollBar />
+                  <div className="divide-y divide-border/30 overflow-hidden">
+                    {tag.notes &&
+                      tag.notes.map((note: Note) => (
+                        <NoteItem key={note.id} note={note} />
+                      ))}
+
+                    {tag.notes?.length === 0 && (
+                      <div className="p-4 w-full text-center text-muted-foreground/70 italic text-sm">
+                        No notes assigned to this tag yet.
                       </div>
                     )}
                   </div>
@@ -195,4 +234,4 @@ const SubjectShowcase = ({
   );
 };
 
-export default SubjectShowcase;
+export default TagShowcase;

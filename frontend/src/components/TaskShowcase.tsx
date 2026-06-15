@@ -14,12 +14,11 @@ import {
   Circle,
   Tag,
   Plus,
-  X,
   ChevronDown,
   Trash2, // Imported Trash icon for delete
 } from "lucide-react";
 import { type Task, type TaskDTO } from "../schemas/task.schema";
-import { useToggleCompleteTask } from "../hooks/useToggleComplete";
+import { useToggleCompleteTask } from "../hooks/tasks/useToggleComplete";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Calendar } from "./ui/calendar";
@@ -29,15 +28,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { useUpdateTask } from "../hooks/useUpdateTask";
+import { useUpdateTask } from "../hooks/tasks/useUpdateTask";
 import { useDebouncedCallback } from "use-debounce";
-import { useSubjects } from "../hooks/useSubjects";
-import { useDeleteTask } from "../hooks/useDeleteTask";
+import { useDeleteTask } from "../hooks/tasks/useDeleteTask";
 import AddSubTaskModal from "./AddSubTaskModal";
 import { format } from "date-fns-tz";
 import { Input } from "./ui/input";
-import { useTask } from "../hooks/useTasks";
+import { useTask } from "../hooks/tasks/useTasks";
 import SubtaskItem from "./SubtaskItem";
+import type { Tag as TagType } from "../schemas/tags.schema";
+import TagInput from "./TagInput";
 
 const colorConfig: Record<
   Task["color"],
@@ -82,7 +82,6 @@ const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
 
-  const { data: allAvailableSubjects } = useSubjects();
   const debouncedUpdateMutate = useDebouncedCallback(
     (taskId: string, updatedFields: Partial<TaskDTO>) => {
       updateTask.mutate({
@@ -110,7 +109,7 @@ const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
 
   const color = colorConfig[task.color];
   const isCompleted = task.status === "COMPLETED";
-  const subjs = task.subjects?.map((s) => s.name);
+  const tags = task.tags?.map((t: TagType) => t.name);
 
   const handleToggleComplete = () => {
     toggleComplete.mutate(task.id);
@@ -130,15 +129,15 @@ const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
     debouncedUpdateMutate(task.id, fields);
   };
 
-  const handleAddSubject = (subj: string) => {
-    const existing = subjs || [];
-    if (existing.some((s) => s === subj)) return;
-    emitUpdate({ subjects: [...existing, subj] });
+  const handleAddTag = (tag: string) => {
+    const existing = tags || [];
+    if (existing.some((s) => s === tag)) return;
+    emitUpdate({ tags: [...existing, tag] });
   };
 
-  const handleRemoveSubject = (subjectName: string) => {
-    const existing = subjs || [];
-    emitUpdate({ subjects: existing.filter((s) => s !== subjectName) });
+  const handleRemoveTag = (tagName: string) => {
+    const existing = tags || [];
+    emitUpdate({ tags: existing.filter((s) => s !== tagName) });
   };
 
   return (
@@ -359,60 +358,21 @@ const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
               <div className="flex items-start justify-between p-3.5 gap-4">
                 <span className="text-muted-foreground font-medium text-xs pt-1.5 flex items-center gap-1.5">
                   <Tag className="size-3 text-muted-foreground/70" />
-                  Subjects
+                  Tags
                 </span>
 
-                <div className="flex flex-wrap justify-end gap-1.5 max-w-[75%] items-center">
-                  {subjs.map((s) => (
-                    <span
-                      key={s}
-                      className="inline-flex items-center gap-1 text-xs pl-2 pr-1 py-0.5 rounded-md bg-secondary text-secondary-foreground font-medium border border-border/40"
-                    >
-                      {s}
-                      {task.subjects.length > 1 && (
-                        <button
-                          onClick={() => handleRemoveSubject(s)}
-                          className="text-muted-foreground/60 hover:text-foreground hover:bg-background/60 p-0.5 rounded transition-all focus:outline-none"
-                        >
-                          <X className="size-2.5" />
-                        </button>
-                      )}
-                    </span>
-                  ))}
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-md border border-dashed border-border text-muted-foreground/70 hover:text-foreground hover:border-muted-foreground/40 transition-all focus:outline-none">
-                        <Plus className="size-2.5" />
-                        Add
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      align="end"
-                      className="max-h-50 overflow-y-auto rounded-xl text-xs min-w-37.5"
-                    >
-                      {allAvailableSubjects &&
-                      allAvailableSubjects?.length === 0 ? (
-                        <div className="p-2 text-center text-muted-foreground italic">
-                          No options available
-                        </div>
-                      ) : (
-                        allAvailableSubjects &&
-                        allAvailableSubjects?.map((subject) => (
-                          <DropdownMenuItem
-                            key={subject.id}
-                            onClick={() => handleAddSubject(subject.name)}
-                            disabled={task.subjects?.some(
-                              (s) => s.name === subject.name,
-                            )}
-                            className="rounded-lg py-1.5 px-2.5 cursor-pointer disabled:opacity-40"
-                          >
-                            {subject.name}
-                          </DropdownMenuItem>
-                        ))
-                      )}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                <div className="flex flex-wrap justify-end gap-1.5 max-w-[75%] items-center h-16 overflow-auto border rounded-xl">
+                  <TagInput
+                    className="max-w-56 border-0"
+                    items={taskCopy.tags.map((tag: TagType) => tag.name) || []}
+                    addItem={(newItem) => {
+                      handleAddTag(newItem);
+                    }}
+                    removeItem={(item) => {
+                      handleRemoveTag(item);
+                    }}
+                    placeholder="Add tag"
+                  />
                 </div>
               </div>
             </div>

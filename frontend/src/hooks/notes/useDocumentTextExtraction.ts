@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { extractTextFromDocument } from "../api/note.api";
+import { extractTextFromDocument } from "../../api/note.api";
 import { useAuth } from "@clerk/react";
 
 export function useDocumentTextExtraction() {

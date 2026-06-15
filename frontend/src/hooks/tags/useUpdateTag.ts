@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
-import type { subjectDTO } from "../schemas/subject.schema";
-import { updateSubject } from "../api/subject.api";
+import type { TagDTO } from "../../schemas/tags.schema";
+import { updateTag } from "../../api/tags.api";
 
-export function useUpdateSubject() {
+export function useUpdateTag() {
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
@@ -13,18 +13,14 @@ export function useUpdateSubject() {
       field,
     }: {
       id: string;
-      field: Partial<subjectDTO>;
+      field: Partial<TagDTO>;
     }) => {
       const token = await getToken();
-      await updateSubject(
-        token as string,
-        id as string,
-        field as Partial<subjectDTO>,
-      );
+      await updateTag(token as string, id as string, field as Partial<TagDTO>);
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({
-        queryKey: ["subjects"],
+        queryKey: ["tags"],
       });
       queryClient.invalidateQueries({
         queryKey: ["tasks"],

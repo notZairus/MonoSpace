@@ -6,6 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TestingPage from "./pages/TestingPage";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 
@@ -23,6 +24,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/testing" element={<TestingPage />} />
 
         <Route
           path="/login"

@@ -1,10 +1,10 @@
 import { Card, CardHeader, CardTitle } from "../components/ui/card";
-import TaskCard from "../components/_TaskCard";
-import SubjectCard from "../components/_SubjectCard";
-import UserCard from "../components/_UserCard";
-import DateTimeCard from "../components/_DateTimeCard";
-import PomodoroCard from "../components/_PomodoroCard";
-import NoteCard from "../components/_NoteCard";
+import TaskCard from "../components/TaskCard";
+import TagsCard from "../components/TagsCard";
+import UserCard from "../components/UserCard";
+import DateTimeCard from "../components/DateTimeCard";
+import PomodoroCard from "../components/PomodoroCard";
+import NoteCard from "../components/NoteCard";
 
 function Dashboard() {
   return (
@@ -26,7 +26,7 @@ function Dashboard() {
 
         {/* SUBJECTS */}
         <div className="sm:row-span-1 h-full">
-          <SubjectCard />
+          <TagsCard />
         </div>
 
         {/* PROFILE */}

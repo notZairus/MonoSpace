@@ -1,4 +1,4 @@
-import { useTasks } from "../hooks/useTasks";
+import { useTasks } from "../hooks/tasks/useTasks";
 import type { Task } from "../schemas/task.schema";
 import { getUpcomingTasks } from "../lib/utils";
 import {
@@ -70,7 +70,7 @@ function TaskCard() {
               <TabsContent value="today" className="space-y-2">
                 {!todayTasks.length && (
                   <p className="text-muted-foreground text-center">
-                    No tasks for today!
+                    No tasks for today.
                   </p>
                 )}
                 {todayTasks.map((task) => (
@@ -81,7 +81,7 @@ function TaskCard() {
               <TabsContent value="upcoming" className="space-y-2">
                 {!upcomingTasks.length && (
                   <p className="text-muted-foreground text-center">
-                    No upcoming tasks!
+                    No upcoming tasks.
                   </p>
                 )}
                 {upcomingTasks.map((task) => (
@@ -92,7 +92,7 @@ function TaskCard() {
               <TabsContent value="overdue" className="space-y-2">
                 {!overdueTasks?.length && (
                   <p className="text-muted-foreground text-center">
-                    No overdue tasks!
+                    No overdue tasks.
                   </p>
                 )}
                 {overdueTasks?.map((task) => (
@@ -103,7 +103,7 @@ function TaskCard() {
               <TabsContent value="completed" className="space-y-2">
                 {!completedTasks?.length && (
                   <p className="text-muted-foreground text-center">
-                    No completed tasks!
+                    No completed tasks.
                   </p>
                 )}
                 {completedTasks?.map((task) => (

@@ -7,10 +7,9 @@ import {
 import { z } from "zod";
 import { prisma } from "../../prisma/client";
 import { authenticate } from "../middleware/authenticate";
+import { deleteOrphanedTags } from "../lib/resources";
 
 const router = Router();
-
-// GET ///////////////////////////////////////////////
 
 router.get("/", authenticate, async (req: Request, res: Response) => {
   const { userId } = req;
@@ -32,7 +31,7 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
   const tasks = await prisma.task.findMany({
     where,
     include: {
-      subjects: true,
+      tags: true,
       subtasks: true,
     },
   });
@@ -52,7 +51,7 @@ router.get("/:taskId", authenticate, async (req: Request, res: Response) => {
         userId: userId as string,
       },
       include: {
-        subjects: true,
+        tags: true,
         subtasks: true,
       },
     });
@@ -60,8 +59,6 @@ router.get("/:taskId", authenticate, async (req: Request, res: Response) => {
     return res.status(200).send({ task });
   }
 });
-
-// POST //////////////////////////////////////////////
 
 router.post("/", authenticate, async (req: Request, res: Response) => {
   const { userId } = req;
@@ -82,23 +79,23 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
       status: data.status,
       deadline: data.deadline ? new Date(data.deadline) : undefined,
       color: data.color,
-      subjects: {
-        connectOrCreate: data.subjects.map((sub) => ({
+      tags: {
+        connectOrCreate: data?.tags?.map((tag) => ({
           where: {
             userId_name: {
               userId: userId as string,
-              name: sub,
+              name: tag,
             },
           },
           create: {
             userId: userId as string,
-            name: sub,
+            name: tag,
           },
         })),
       },
     },
     include: {
-      subjects: true,
+      tags: true,
     },
   });
 
@@ -107,8 +104,6 @@ router.post("/", authenticate, async (req: Request, res: Response) => {
     task: newTask,
   });
 });
-
-// PATCH /////////////////////////////////////////////
 
 router.patch(
   "/:taskId/status",
@@ -139,7 +134,7 @@ router.patch(
         id: taskId as string,
       },
       include: {
-        subjects: true,
+        tags: true,
       },
     });
 
@@ -158,16 +153,16 @@ router.patch("/:taskId", authenticate, async (req, res) => {
     return res.status(400).json(z.treeifyError(result.error));
   }
 
-  const { subjects, ...rest } = result.data;
+  const { tags, ...rest } = result.data;
 
   const task = await prisma.task.update({
     where: { id: taskId as string },
     data: {
       ...rest,
-      ...(subjects !== undefined && {
-        subjects: {
+      ...(tags !== undefined && {
+        tags: {
           set: [],
-          connectOrCreate: subjects.map((sub) => ({
+          connectOrCreate: tags.map((sub) => ({
             where: {
               userId_name: {
                 userId: userId as string,
@@ -181,12 +176,13 @@ router.patch("/:taskId", authenticate, async (req, res) => {
     },
   });
 
+  await deleteOrphanedTags(req.userId as string);
+
   return res.status(200).send({
     task: task,
   });
 });
 
-// DELETE ////////////////////////////////////////////
 router.delete("/:taskId", authenticate, async (req, res) => {
   const { taskId } = req.params;
 
@@ -195,6 +191,8 @@ router.delete("/:taskId", authenticate, async (req, res) => {
       id: taskId as string,
     },
   });
+
+  await deleteOrphanedTags(req.userId as string);
 
   return res.status(200).send({ message: "successful" });
 });

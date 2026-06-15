@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
-import type { NoteDTO } from "../schemas/note.schema";
-import { createNote } from "../api/note.api";
+import type { NoteDTO } from "../../schemas/note.schema";
+import { createNote } from "../../api/note.api";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function useCreateNote() {
@@ -19,7 +19,7 @@ export function useCreateNote() {
         queryKey: ["notes"],
       });
       query.invalidateQueries({
-        queryKey: ["subjects"],
+        queryKey: ["tags"],
       });
     },
   });

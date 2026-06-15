@@ -17,12 +17,13 @@ import {
 import MDEditor from "@uiw/react-md-editor";
 import { Pencil, PencilOff, Tag, Trash2, X } from "lucide-react";
 import type { Note, NoteDTO } from "../schemas/note.schema";
-import { useUpdateNote } from "../hooks/useUpdateNote";
-import { useDeleteNote } from "../hooks/useDeleteNote";
+import { useUpdateNote } from "../hooks/notes/useUpdateNote";
+import { useDeleteNote } from "../hooks/notes/useDeleteNote";
 import { useDebouncedCallback } from "use-debounce";
 import { Textarea } from "./ui/textarea";
-import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import type { Tag as TagType } from "../schemas/tags.schema";
+import TagInput from "./TagInput";
 
 function NoteShowcase({
   open,
@@ -34,12 +35,11 @@ function NoteShowcase({
   note: Note;
 }) {
   const [allowEdit, setAllowEdit] = useState(false);
-  const [subjectInput, setSubjectInput] = useState("");
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [note, setNote] = useState<NoteDTO & { id: string; createdAt?: Date }>({
     title: noteProp.title,
     content: noteProp.content,
-    subjects: noteProp.subjects.map((s) => s.name),
+    tags: noteProp?.tags?.map((t: TagType) => t.name),
     id: noteProp.id,
     createdAt: noteProp.createdAt,
   });
@@ -69,18 +69,17 @@ function NoteShowcase({
     debouncedUpdateNote(note.id, field);
   }
 
-  function handleAddSubject() {
-    const trimmed = subjectInput.trim();
-    if (trimmed && !note.subjects.includes(trimmed)) {
-      const updated = [...note.subjects, trimmed];
-      emitUpdate({ subjects: updated });
-      setSubjectInput("");
+  function handleAddTag(newTag: string) {
+    const trimmed = newTag.trim();
+    if (trimmed && !note.tags?.includes(trimmed)) {
+      const updated = [...(note.tags as string[]), trimmed];
+      emitUpdate({ tags: updated });
     }
   }
 
-  function handleRemoveSubject(subject: string) {
-    const filtered = note.subjects.filter((s) => s !== subject);
-    emitUpdate({ subjects: filtered });
+  function handleRemoveTag(tag: string) {
+    const filtered = note.tags?.filter((t) => t !== tag);
+    emitUpdate({ tags: filtered });
   }
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -99,7 +98,6 @@ function NoteShowcase({
   function handleClose() {
     setOpen(false);
     setAllowEdit(false);
-    setSubjectInput("");
   }
 
   return (
@@ -139,7 +137,7 @@ function NoteShowcase({
 
       <Dialog open={open} onOpenChange={handleClose} modal={false}>
         <DialogContent
-          className="w-full max-w-[95vw] sm:max-w-4xl p-0 rounded-2xl overflow-hidden border bg-background shadow-xl"
+          className="w-full max-w-[95vw] sm:max-w-4xl p-0 rounded-2xl overflow-auto border bg-background shadow-xl"
           showCloseButton={false}
         >
           <div className="flex flex-col h-[90dvh] sm:h-[85vh]">
@@ -232,53 +230,20 @@ function NoteShowcase({
 
                   <div className="space-y-2.5">
                     <Label className="text-[11px] font-semibold tracking-wider text-muted-foreground/80 uppercase flex items-center gap-1.5">
-                      <Tag className="size-3" /> Tags / Subjects
+                      <Tag className="size-3" /> Tags
                     </Label>
-                    <Input
-                      placeholder="Press Enter to add…"
-                      value={subjectInput}
-                      onChange={(e) => setSubjectInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          handleAddSubject();
-                        }
-                      }}
-                      className="h-9 text-sm bg-muted/20 border-border/50 placeholder:text-muted-foreground/40 focus-visible:ring-1"
+                    <TagInput
+                      items={note.tags as string[]}
+                      addItem={handleAddTag}
+                      removeItem={handleRemoveTag}
+                      placeholder="Add a tag and press Enter"
+                      className="w-full"
                     />
-
-                    {note.subjects.length === 0 && (
-                      <p className="text-xs text-muted-foreground/50">
-                        Press Enter to attach a subject tag
-                      </p>
-                    )}
-
-                    {note.subjects.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {note.subjects.map((subject) => (
-                          <span
-                            key={subject}
-                            className="inline-flex items-center gap-1.5 rounded-md bg-secondary text-secondary-foreground px-2 py-0.5 text-xs font-medium border border-border/40 transition-all"
-                          >
-                            <span>{subject}</span>
-                            {note.subjects.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveSubject(subject)}
-                                className="text-muted-foreground/60 hover:text-rose-500 rounded p-0.5 focus:outline-none"
-                              >
-                                <X className="size-3" />
-                              </button>
-                            )}
-                          </span>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row flex-1 min-h-0 overflow-hidden">
+              <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
                 {allowEdit && (
                   <div className="flex flex-col flex-1 min-h-50 sm:min-h-0 border-b sm:border-b-0 sm:border-r border-border/40">
                     <div className="px-3 py-2 border-b border-border/30 bg-muted/10 shrink-0">
@@ -286,13 +251,22 @@ function NoteShowcase({
                         Editor
                       </span>
                     </div>
+                    {/* <textarea // this text area is overflowing to the right when i type long sentence without spaces, need to fix it
+                      ref={textareaRef}
+                      value={note.content}
+                      onKeyDown={onKeyDown}
+                      onChange={(e) => emitUpdate({ content: e.target.value })}
+                      placeholder="Start writing in Markdown…"
+                      className="flex-1 w-full max-w-full p-4 text-sm leading-relaxed wrap-break-word outline-none resize-none bg-background text-foreground placeholder:text-muted-foreground/40"
+                    /> */}
+
                     <textarea
                       ref={textareaRef}
                       value={note.content}
                       onKeyDown={onKeyDown}
                       onChange={(e) => emitUpdate({ content: e.target.value })}
                       placeholder="Start writing in Markdown…"
-                      className="flex-1 w-full p-4 text-sm leading-relaxed wrap-break-word outline-none resize-none bg-background text-foreground placeholder:text-muted-foreground/40"
+                      className="flex-1 w-full min-w-0 max-w-full p-4 text-sm leading-relaxed wrap-break-word overflow-x-hidden overflow-y-auto outline-none resize-none bg-background text-foreground placeholder:text-muted-foreground/40"
                     />
                   </div>
                 )}

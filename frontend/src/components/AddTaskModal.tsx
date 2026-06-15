@@ -22,7 +22,8 @@ import {
 import { type TaskDTO, createTaskSchema } from "../schemas/task.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateTask } from "../hooks/useCreateTask";
+import { useCreateTask } from "../hooks/tasks/useCreateTask";
+import TagInput from "./TagInput";
 
 const priorityConfig = {
   red: {
@@ -67,34 +68,33 @@ function AddTaskModal({
       name: "",
       description: "",
       status: "PENDING",
-      subjects: [],
+      tags: [],
       color: "red",
       deadline: getTomorrowDefault(), // Default to tomorrow
     },
   });
 
   const createTask = useCreateTask();
-  const [subjectInput, setSubjectInput] = useState("");
+  const [tagInput, setTagInput] = useState("");
 
   // Directly watching hook-form state removes duplicate sync arrays
-  const watchedSubjects = watch("subjects") || [];
+  const watchedTags = watch("tags") || [];
   const watchedDeadline = watch("deadline");
   const watchedStatus = watch("status");
   const watchedColor = watch("color");
 
-  const handleAddSubject = () => {
-    const value = subjectInput.trim();
-    if (!value || watchedSubjects.includes(value)) return;
-    setValue("subjects", [...getValues("subjects"), value], {
+  const handleAddTag = (tag: string) => {
+    if (!tag || watchedTags.includes(tag)) return;
+    setValue("tags", [...(getValues("tags") as string[]), tag], {
       shouldValidate: true,
     });
-    setSubjectInput("");
+    setTagInput("");
   };
 
-  const removeSubject = (index: number) => {
+  const handleRemoveTag = (tag: string) => {
     setValue(
-      "subjects",
-      getValues("subjects").filter((_, i) => i !== index),
+      "tags",
+      (getValues("tags") as string[]).filter((t) => t !== tag),
       { shouldValidate: true },
     );
   };
@@ -124,7 +124,6 @@ function AddTaskModal({
                 id="name"
                 autoFocus
                 placeholder="Task title..."
-                className="border-0 px-4 text-lg font-semibold tracking-tight focus-visible:ring-0 placeholder:text-muted-foreground/50 text-foreground"
                 {...register("name")}
               />
               {errors.name && (
@@ -135,12 +134,14 @@ function AddTaskModal({
             </div>
 
             <div className="space-y-1">
-              <Textarea
-                id="description"
-                placeholder="Add description or notes..."
-                className="min-h-17.5 resize-none border-0 px-4 text-sm focus-visible:ring-0 placeholder:text-muted-foreground/50 text-muted-foreground/90 leading-relaxed"
-                {...register("description")}
-              />
+              <div className="relative bg-muted/20 rounded-xl border border-border/60 focus-within:border-muted-foreground/30 focus-within:bg-muted/30 transition-all">
+                <textarea
+                  id="description"
+                  {...register("description")}
+                  placeholder="Add a detailed description..."
+                  className="w-full max-h-36 bg-transparent border-0 p-3 text-[14px] text-muted-foreground/90 leading-relaxed placeholder:text-muted-foreground/40 focus:outline-none focus:ring-0 resize-y"
+                />
+              </div>
               {errors.description && (
                 <p className="text-xs font-medium text-rose-500 flex items-center gap-1">
                   <AlertCircle className="size-3" />{" "}
@@ -233,44 +234,17 @@ function AddTaskModal({
 
             <div className="space-y-2.5 pt-1">
               <Label className="text-[11px] font-semibold tracking-wider text-muted-foreground/80 uppercase flex items-center gap-1.5">
-                <Tag className="size-3" /> Tags / Subjects
+                <Tag className="size-3" /> Tags
               </Label>
-              <Input
-                placeholder="Press Enter to attach a subject tag..."
-                value={subjectInput}
-                onChange={(e) => setSubjectInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleAddSubject();
-                  }
-                }}
-                className="h-9 text-sm bg-muted/20 border-border/50 placeholder:text-muted-foreground/40 focus-visible:ring-1"
+              <TagInput
+                items={watchedTags}
+                addItem={handleAddTag}
+                removeItem={handleRemoveTag}
+                placeholder="Add a tag and press Enter"
+                className="w-full rounded-lg"
               />
-
-              {watchedSubjects.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {watchedSubjects.map((subject, index) => (
-                    <span
-                      key={`${subject}-${index}`}
-                      className="inline-flex items-center gap-1.5 rounded-md bg-secondary text-secondary-foreground px-2 py-0.5 text-xs font-medium border border-border/40 transition-all"
-                    >
-                      <span>{subject}</span>
-                      <button
-                        type="button"
-                        onClick={() => removeSubject(index)}
-                        className="text-muted-foreground/60 hover:text-rose-500 rounded p-0.5 focus:outline-none"
-                      >
-                        <X className="size-3" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-              {errors.subjects && (
-                <p className="text-xs text-rose-500">
-                  {errors.subjects.message}
-                </p>
+              {errors.tags && (
+                <p className="text-xs text-rose-500">{errors.tags.message}</p>
               )}
             </div>
           </div>

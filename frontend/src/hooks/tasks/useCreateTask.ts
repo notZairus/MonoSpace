@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Task, TaskDTO } from "../schemas/task.schema";
+import type { Task, TaskDTO } from "../../schemas/task.schema";
 import { useAuth } from "@clerk/react";
-import { createTask } from "../api/task.api";
+import { createTask } from "../../api/task.api";
+import type { Tag } from "../../schemas/tags.schema";
 
 export function useCreateTask() {
   const { getToken } = useAuth();
@@ -13,9 +14,9 @@ export function useCreateTask() {
       return await createTask(token as string, task);
     },
     onSuccess: (data: Task) => {
-      data.subjects.forEach((sub) => {
+      data.tags.forEach((tag: Tag) => {
         queryClient.invalidateQueries({
-          queryKey: ["subject", "id", sub.id],
+          queryKey: ["tag", "id", tag.id],
         });
       });
 
@@ -24,7 +25,7 @@ export function useCreateTask() {
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["subjects"],
+        queryKey: ["tags"],
       });
     },
   });

@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
 import { useNotes } from "./useNotes";
-import type { Note } from "../schemas/note.schema";
-import { deleteNote } from "../api/note.api";
+import type { Note } from "../../schemas/note.schema";
+import { deleteNote } from "../../api/note.api";
+import type { Tag } from "../../schemas/tags.schema";
 
 export function useDeleteNote() {
   const { getToken } = useAuth();
@@ -17,9 +18,9 @@ export function useDeleteNote() {
     onSuccess: (_, id) => {
       const note = (notes as Note[]).find((n) => n.id === id);
 
-      note?.subjects.forEach((sub) => {
+      note?.tags.forEach((tag: Tag) => {
         queryClient.invalidateQueries({
-          queryKey: ["subject", "id", sub.id],
+          queryKey: ["tag", "id", tag.id],
         });
       });
 
@@ -28,7 +29,7 @@ export function useDeleteNote() {
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["subjects"],
+        queryKey: ["tags"],
       });
     },
   });

@@ -222,7 +222,7 @@ export type TaskWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  subjects?: Prisma.SubjectListRelationFilter
+  tags?: Prisma.TagListRelationFilter
   subtasks?: Prisma.SubtaskListRelationFilter
 }
 
@@ -237,7 +237,7 @@ export type TaskOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  subjects?: Prisma.SubjectOrderByRelationAggregateInput
+  tags?: Prisma.TagOrderByRelationAggregateInput
   subtasks?: Prisma.SubtaskOrderByRelationAggregateInput
 }
 
@@ -255,7 +255,7 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  subjects?: Prisma.SubjectListRelationFilter
+  tags?: Prisma.TagListRelationFilter
   subtasks?: Prisma.SubtaskListRelationFilter
 }, "id">
 
@@ -302,7 +302,7 @@ export type TaskCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   completedAt?: Date | string | null
-  subjects?: Prisma.SubjectCreateNestedManyWithoutTasksInput
+  tags?: Prisma.TagCreateNestedManyWithoutTasksInput
   subtasks?: Prisma.SubtaskCreateNestedManyWithoutParentInput
 }
 
@@ -317,7 +317,7 @@ export type TaskUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   completedAt?: Date | string | null
-  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTasksInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutTasksInput
   subtasks?: Prisma.SubtaskUncheckedCreateNestedManyWithoutParentInput
 }
 
@@ -332,7 +332,7 @@ export type TaskUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  subjects?: Prisma.SubjectUpdateManyWithoutTasksNestedInput
+  tags?: Prisma.TagUpdateManyWithoutTasksNestedInput
   subtasks?: Prisma.SubtaskUpdateManyWithoutParentNestedInput
 }
 
@@ -347,7 +347,7 @@ export type TaskUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTasksNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutTasksNestedInput
   subtasks?: Prisma.SubtaskUncheckedUpdateManyWithoutParentNestedInput
 }
 
@@ -482,41 +482,41 @@ export type TaskUpdateOneRequiredWithoutSubtasksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TaskUpdateToOneWithWhereWithoutSubtasksInput, Prisma.TaskUpdateWithoutSubtasksInput>, Prisma.TaskUncheckedUpdateWithoutSubtasksInput>
 }
 
-export type TaskCreateNestedManyWithoutSubjectsInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutSubjectsInput, Prisma.TaskUncheckedCreateWithoutSubjectsInput> | Prisma.TaskCreateWithoutSubjectsInput[] | Prisma.TaskUncheckedCreateWithoutSubjectsInput[]
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutSubjectsInput | Prisma.TaskCreateOrConnectWithoutSubjectsInput[]
+export type TaskCreateNestedManyWithoutTagsInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutTagsInput, Prisma.TaskUncheckedCreateWithoutTagsInput> | Prisma.TaskCreateWithoutTagsInput[] | Prisma.TaskUncheckedCreateWithoutTagsInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutTagsInput | Prisma.TaskCreateOrConnectWithoutTagsInput[]
   connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
 }
 
-export type TaskUncheckedCreateNestedManyWithoutSubjectsInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutSubjectsInput, Prisma.TaskUncheckedCreateWithoutSubjectsInput> | Prisma.TaskCreateWithoutSubjectsInput[] | Prisma.TaskUncheckedCreateWithoutSubjectsInput[]
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutSubjectsInput | Prisma.TaskCreateOrConnectWithoutSubjectsInput[]
+export type TaskUncheckedCreateNestedManyWithoutTagsInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutTagsInput, Prisma.TaskUncheckedCreateWithoutTagsInput> | Prisma.TaskCreateWithoutTagsInput[] | Prisma.TaskUncheckedCreateWithoutTagsInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutTagsInput | Prisma.TaskCreateOrConnectWithoutTagsInput[]
   connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
 }
 
-export type TaskUpdateManyWithoutSubjectsNestedInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutSubjectsInput, Prisma.TaskUncheckedCreateWithoutSubjectsInput> | Prisma.TaskCreateWithoutSubjectsInput[] | Prisma.TaskUncheckedCreateWithoutSubjectsInput[]
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutSubjectsInput | Prisma.TaskCreateOrConnectWithoutSubjectsInput[]
-  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutSubjectsInput | Prisma.TaskUpsertWithWhereUniqueWithoutSubjectsInput[]
+export type TaskUpdateManyWithoutTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutTagsInput, Prisma.TaskUncheckedCreateWithoutTagsInput> | Prisma.TaskCreateWithoutTagsInput[] | Prisma.TaskUncheckedCreateWithoutTagsInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutTagsInput | Prisma.TaskCreateOrConnectWithoutTagsInput[]
+  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutTagsInput | Prisma.TaskUpsertWithWhereUniqueWithoutTagsInput[]
   set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
-  update?: Prisma.TaskUpdateWithWhereUniqueWithoutSubjectsInput | Prisma.TaskUpdateWithWhereUniqueWithoutSubjectsInput[]
-  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutSubjectsInput | Prisma.TaskUpdateManyWithWhereWithoutSubjectsInput[]
+  update?: Prisma.TaskUpdateWithWhereUniqueWithoutTagsInput | Prisma.TaskUpdateWithWhereUniqueWithoutTagsInput[]
+  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutTagsInput | Prisma.TaskUpdateManyWithWhereWithoutTagsInput[]
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
 }
 
-export type TaskUncheckedUpdateManyWithoutSubjectsNestedInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutSubjectsInput, Prisma.TaskUncheckedCreateWithoutSubjectsInput> | Prisma.TaskCreateWithoutSubjectsInput[] | Prisma.TaskUncheckedCreateWithoutSubjectsInput[]
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutSubjectsInput | Prisma.TaskCreateOrConnectWithoutSubjectsInput[]
-  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutSubjectsInput | Prisma.TaskUpsertWithWhereUniqueWithoutSubjectsInput[]
+export type TaskUncheckedUpdateManyWithoutTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutTagsInput, Prisma.TaskUncheckedCreateWithoutTagsInput> | Prisma.TaskCreateWithoutTagsInput[] | Prisma.TaskUncheckedCreateWithoutTagsInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutTagsInput | Prisma.TaskCreateOrConnectWithoutTagsInput[]
+  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutTagsInput | Prisma.TaskUpsertWithWhereUniqueWithoutTagsInput[]
   set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
-  update?: Prisma.TaskUpdateWithWhereUniqueWithoutSubjectsInput | Prisma.TaskUpdateWithWhereUniqueWithoutSubjectsInput[]
-  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutSubjectsInput | Prisma.TaskUpdateManyWithWhereWithoutSubjectsInput[]
+  update?: Prisma.TaskUpdateWithWhereUniqueWithoutTagsInput | Prisma.TaskUpdateWithWhereUniqueWithoutTagsInput[]
+  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutTagsInput | Prisma.TaskUpdateManyWithWhereWithoutTagsInput[]
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
 }
 
@@ -531,7 +531,7 @@ export type TaskCreateWithoutSubtasksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   completedAt?: Date | string | null
-  subjects?: Prisma.SubjectCreateNestedManyWithoutTasksInput
+  tags?: Prisma.TagCreateNestedManyWithoutTasksInput
 }
 
 export type TaskUncheckedCreateWithoutSubtasksInput = {
@@ -545,7 +545,7 @@ export type TaskUncheckedCreateWithoutSubtasksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   completedAt?: Date | string | null
-  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutTasksInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutTasksInput
 }
 
 export type TaskCreateOrConnectWithoutSubtasksInput = {
@@ -575,7 +575,7 @@ export type TaskUpdateWithoutSubtasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  subjects?: Prisma.SubjectUpdateManyWithoutTasksNestedInput
+  tags?: Prisma.TagUpdateManyWithoutTasksNestedInput
 }
 
 export type TaskUncheckedUpdateWithoutSubtasksInput = {
@@ -589,10 +589,10 @@ export type TaskUncheckedUpdateWithoutSubtasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutTasksNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutTasksNestedInput
 }
 
-export type TaskCreateWithoutSubjectsInput = {
+export type TaskCreateWithoutTagsInput = {
   id?: string
   userId: string
   name: string
@@ -606,7 +606,7 @@ export type TaskCreateWithoutSubjectsInput = {
   subtasks?: Prisma.SubtaskCreateNestedManyWithoutParentInput
 }
 
-export type TaskUncheckedCreateWithoutSubjectsInput = {
+export type TaskUncheckedCreateWithoutTagsInput = {
   id?: string
   userId: string
   name: string
@@ -620,25 +620,25 @@ export type TaskUncheckedCreateWithoutSubjectsInput = {
   subtasks?: Prisma.SubtaskUncheckedCreateNestedManyWithoutParentInput
 }
 
-export type TaskCreateOrConnectWithoutSubjectsInput = {
+export type TaskCreateOrConnectWithoutTagsInput = {
   where: Prisma.TaskWhereUniqueInput
-  create: Prisma.XOR<Prisma.TaskCreateWithoutSubjectsInput, Prisma.TaskUncheckedCreateWithoutSubjectsInput>
+  create: Prisma.XOR<Prisma.TaskCreateWithoutTagsInput, Prisma.TaskUncheckedCreateWithoutTagsInput>
 }
 
-export type TaskUpsertWithWhereUniqueWithoutSubjectsInput = {
+export type TaskUpsertWithWhereUniqueWithoutTagsInput = {
   where: Prisma.TaskWhereUniqueInput
-  update: Prisma.XOR<Prisma.TaskUpdateWithoutSubjectsInput, Prisma.TaskUncheckedUpdateWithoutSubjectsInput>
-  create: Prisma.XOR<Prisma.TaskCreateWithoutSubjectsInput, Prisma.TaskUncheckedCreateWithoutSubjectsInput>
+  update: Prisma.XOR<Prisma.TaskUpdateWithoutTagsInput, Prisma.TaskUncheckedUpdateWithoutTagsInput>
+  create: Prisma.XOR<Prisma.TaskCreateWithoutTagsInput, Prisma.TaskUncheckedCreateWithoutTagsInput>
 }
 
-export type TaskUpdateWithWhereUniqueWithoutSubjectsInput = {
+export type TaskUpdateWithWhereUniqueWithoutTagsInput = {
   where: Prisma.TaskWhereUniqueInput
-  data: Prisma.XOR<Prisma.TaskUpdateWithoutSubjectsInput, Prisma.TaskUncheckedUpdateWithoutSubjectsInput>
+  data: Prisma.XOR<Prisma.TaskUpdateWithoutTagsInput, Prisma.TaskUncheckedUpdateWithoutTagsInput>
 }
 
-export type TaskUpdateManyWithWhereWithoutSubjectsInput = {
+export type TaskUpdateManyWithWhereWithoutTagsInput = {
   where: Prisma.TaskScalarWhereInput
-  data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutSubjectsInput>
+  data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutTagsInput>
 }
 
 export type TaskScalarWhereInput = {
@@ -657,7 +657,7 @@ export type TaskScalarWhereInput = {
   completedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
 }
 
-export type TaskUpdateWithoutSubjectsInput = {
+export type TaskUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -671,7 +671,7 @@ export type TaskUpdateWithoutSubjectsInput = {
   subtasks?: Prisma.SubtaskUpdateManyWithoutParentNestedInput
 }
 
-export type TaskUncheckedUpdateWithoutSubjectsInput = {
+export type TaskUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -685,7 +685,7 @@ export type TaskUncheckedUpdateWithoutSubjectsInput = {
   subtasks?: Prisma.SubtaskUncheckedUpdateManyWithoutParentNestedInput
 }
 
-export type TaskUncheckedUpdateManyWithoutSubjectsInput = {
+export type TaskUncheckedUpdateManyWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -704,12 +704,12 @@ export type TaskUncheckedUpdateManyWithoutSubjectsInput = {
  */
 
 export type TaskCountOutputType = {
-  subjects: number
+  tags: number
   subtasks: number
 }
 
 export type TaskCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  subjects?: boolean | TaskCountOutputTypeCountSubjectsArgs
+  tags?: boolean | TaskCountOutputTypeCountTagsArgs
   subtasks?: boolean | TaskCountOutputTypeCountSubtasksArgs
 }
 
@@ -726,8 +726,8 @@ export type TaskCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * TaskCountOutputType without action
  */
-export type TaskCountOutputTypeCountSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SubjectWhereInput
+export type TaskCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TagWhereInput
 }
 
 /**
@@ -749,7 +749,7 @@ export type TaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   completedAt?: boolean
-  subjects?: boolean | Prisma.Task$subjectsArgs<ExtArgs>
+  tags?: boolean | Prisma.Task$tagsArgs<ExtArgs>
   subtasks?: boolean | Prisma.Task$subtasksArgs<ExtArgs>
   _count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["task"]>
@@ -795,7 +795,7 @@ export type TaskSelectScalar = {
 
 export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "description" | "deadline" | "color" | "status" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["task"]>
 export type TaskInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  subjects?: boolean | Prisma.Task$subjectsArgs<ExtArgs>
+  tags?: boolean | Prisma.Task$tagsArgs<ExtArgs>
   subtasks?: boolean | Prisma.Task$subtasksArgs<ExtArgs>
   _count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -805,7 +805,7 @@ export type TaskIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Task"
   objects: {
-    subjects: Prisma.$SubjectPayload<ExtArgs>[]
+    tags: Prisma.$TagPayload<ExtArgs>[]
     subtasks: Prisma.$SubtaskPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1213,7 +1213,7 @@ readonly fields: TaskFieldRefs;
  */
 export interface Prisma__TaskClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  subjects<T extends Prisma.Task$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tags<T extends Prisma.Task$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subtasks<T extends Prisma.Task$subtasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$subtasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubtaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1645,27 +1645,27 @@ export type TaskDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Task.subjects
+ * Task.tags
  */
-export type Task$subjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Task$tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Subject
+   * Select specific fields to fetch from the Tag
    */
-  select?: Prisma.SubjectSelect<ExtArgs> | null
+  select?: Prisma.TagSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Subject
+   * Omit specific fields from the Tag
    */
-  omit?: Prisma.SubjectOmit<ExtArgs> | null
+  omit?: Prisma.TagOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.SubjectInclude<ExtArgs> | null
-  where?: Prisma.SubjectWhereInput
-  orderBy?: Prisma.SubjectOrderByWithRelationInput | Prisma.SubjectOrderByWithRelationInput[]
-  cursor?: Prisma.SubjectWhereUniqueInput
+  include?: Prisma.TagInclude<ExtArgs> | null
+  where?: Prisma.TagWhereInput
+  orderBy?: Prisma.TagOrderByWithRelationInput | Prisma.TagOrderByWithRelationInput[]
+  cursor?: Prisma.TagWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.SubjectScalarFieldEnum | Prisma.SubjectScalarFieldEnum[]
+  distinct?: Prisma.TagScalarFieldEnum | Prisma.TagScalarFieldEnum[]
 }
 
 /**

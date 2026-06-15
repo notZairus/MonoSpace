@@ -1,6 +1,6 @@
 import { CheckCircle2, Circle } from "lucide-react";
 import type { Task } from "../schemas/task.schema";
-import { useToggleCompleteTask } from "../hooks/useToggleComplete";
+import { useToggleCompleteTask } from "../hooks/tasks/useToggleComplete";
 import TaskShowcase from "./TaskShowcase";
 import { useState } from "react";
 

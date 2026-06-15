@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/react";
-import { toggleCompleteTask } from "../api/task.api";
-import type { Task } from "../schemas/task.schema";
+import { toggleCompleteTask } from "../../api/task.api";
+import type { Task } from "../../schemas/task.schema";
+import type { Tag } from "../../schemas/tags.schema";
 
 export function useToggleCompleteTask() {
   const { getToken } = useAuth();
@@ -23,12 +24,12 @@ export function useToggleCompleteTask() {
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["subjects"],
+        queryKey: ["tags"],
       });
 
-      data.subjects?.forEach((s) => {
+      data.tags?.forEach((tag: Tag) => {
         queryClient.invalidateQueries({
-          queryKey: ["subject", "id", s.id],
+          queryKey: ["tag", "id", tag.id],
         });
       });
     },

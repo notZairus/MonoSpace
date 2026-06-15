@@ -7,7 +7,7 @@ import session from "express-session";
 import { clerkMiddleware } from "@clerk/express";
 import { rateLimit } from "express-rate-limit";
 import tasks from "./routes/task.route";
-import subjects from "./routes/subject.route";
+import tags from "./routes/tag.route";
 import subtasks from "./routes/subtask.route";
 import notes from "./routes/note.route";
 
@@ -45,7 +45,7 @@ app.get("/api", (req, res) => {
   res.status(200).send("hello from api!!");
 });
 
-app.use("/api/subjects", subjects);
+app.use("/api/tags", tags);
 app.use("/api/tasks", tasks);
 app.use("/api/subtasks", subtasks);
 app.use("/api/notes", notes);

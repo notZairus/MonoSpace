@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { completeSubtask } from "../api/subtask.api";
+import { completeSubtask } from "../../api/subtask.api";
 
 export function useToggleCompleteSubtask() {
   const query = useQueryClient();

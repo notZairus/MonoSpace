@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/react";
 import { useQuery } from "@tanstack/react-query";
-import { getNotes } from "../api/note.api";
+import { getNotes } from "../../api/note.api";
 
 export function useNotes() {
   const { getToken } = useAuth();

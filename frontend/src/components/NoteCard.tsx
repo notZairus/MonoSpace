@@ -1,19 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { Button } from "./ui/button";
-import { useSubjects } from "../hooks/useSubjects";
+import { useTags } from "../hooks/tags/useTags";
 import AddNoteModal from "./AddNoteModal";
 import { useState } from "react";
-import { useNotes } from "../hooks/useNotes";
+import { useNotes } from "../hooks/notes/useNotes";
 import type { Note } from "../schemas/note.schema";
 import { cn } from "../lib/utils";
 import NoteItem from "./NoteItem";
+import type { Tag } from "../schemas/tags.schema";
 
 function NoteCard() {
-  const { data: subjects } = useSubjects();
+  const { data: tags } = useTags();
   const [showAddNoteModal, setShowAddNoteModal] = useState(false);
   const { data: notes } = useNotes();
-  const [selectedSubject, setSelectedSubject] = useState<string>("all");
+  const [selectedTag, setSelectedTag] = useState<string>("all");
 
   return (
     <>
@@ -28,8 +29,8 @@ function NoteCard() {
         </CardHeader>
         <CardContent className="h-full pr-2 flex flex-col sm:flex-row gap-4">
           <div className="w-fulll sm:w-40 sm:border-r ">
-            <p>Subjects: </p>
-            <ScrollArea className="mt-2 pr-2 w-full h-[calc(100dvh-503px)]rounded-md">
+            <p>Tags: </p>
+            <ScrollArea className="mt-2 pr-2 w-full h-[calc(100dvh-485px)] rounded-md">
               <ScrollBar />
               <div className="space-y-1 w-full">
                 <Button
@@ -38,30 +39,30 @@ function NoteCard() {
                     "py-2 px-4 rounded-full bg-white border w-full cursor-pointer hover:bg-sidebar-accent hover:text-black",
                     {
                       "bg-primary font-semibold text-white hover:bg-primary hover:text-white":
-                        selectedSubject === "all",
+                        selectedTag === "all",
                     },
                   )}
-                  onClick={() => setSelectedSubject("all")}
+                  onClick={() => setSelectedTag("all")}
                 >
                   All
                 </Button>
-                {subjects &&
-                  subjects
-                    ?.filter((s) => s?.notes?.length > 0)
-                    .map((subject) => (
+                {tags &&
+                  tags
+                    ?.filter((t) => t?.notes?.length > 0)
+                    .map((tag) => (
                       <Button
-                        key={subject.id}
+                        key={tag.id}
                         variant="outline"
                         className={cn(
                           "py-2 px-4 rounded-full bg-white border w-full cursor-pointer hover:bg-sidebar-accent hover:text-black",
                           {
                             "bg-primary font-semibold text-white hover:bg-primary hover:text-white":
-                              selectedSubject === subject.name,
+                              selectedTag === tag.name,
                           },
                         )}
-                        onClick={() => setSelectedSubject(subject.name)}
+                        onClick={() => setSelectedTag(tag.name)}
                       >
-                        {subject.name}
+                        {tag.name}
                       </Button>
                     ))}
               </div>
@@ -79,14 +80,14 @@ function NoteCard() {
                   </p>
                 )}
 
-                {selectedSubject === "all" &&
+                {selectedTag === "all" &&
                   notes?.map((note: Note) => (
                     <NoteItem key={note.id} note={note} />
                   ))}
-                {selectedSubject !== "all" &&
+                {selectedTag !== "all" &&
                   notes
                     ?.filter((n: Note) =>
-                      n.subjects.some((s) => s.name === selectedSubject),
+                      n.tags.some((t: Tag) => t.name === selectedTag),
                     )
                     .map((note: Note) => (
                       <NoteItem key={note.id} note={note} />

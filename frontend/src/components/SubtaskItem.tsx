@@ -2,7 +2,7 @@ import { type Subtask } from "../schemas/subtask.schema";
 import { type Task } from "../schemas/task.schema";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { CheckCircle2, Circle } from "lucide-react";
-import { useToggleCompleteSubtask } from "../hooks/useToggleCompleteSubtask";
+import { useToggleCompleteSubtask } from "../hooks/subtasks/useToggleCompleteSubtask";
 
 const colorConfig: Record<
   Task["color"],

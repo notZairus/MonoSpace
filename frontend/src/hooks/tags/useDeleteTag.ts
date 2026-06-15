@@ -1,35 +1,37 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteSubject } from "../api/subject.api";
+import { deleteTag } from "../../api/tags.api";
 import { useAuth } from "@clerk/react";
-import { useSubjects } from "./useSubjects";
+import { useTags } from "./useTags";
+import type { Task } from "../../schemas/task.schema";
+import type { Note } from "../../schemas/note.schema";
 
-export function useDeleteSubject() {
+export function useDeleteTag() {
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
-  const { data: subjects } = useSubjects();
+  const { data: tags } = useTags();
 
   return useMutation({
     mutationFn: async (id: string) => {
       const token = await getToken();
-      await deleteSubject(token as string, id);
+      await deleteTag(token as string, id);
     },
     onSuccess: (_, id) => {
-      const subject = subjects?.find((s) => s.id === id);
+      const tag = tags?.find((s) => s.id === id);
 
-      subject?.tasks.forEach((t) => {
+      tag?.tasks.forEach((t: Task) => {
         queryClient.invalidateQueries({
           queryKey: ["task", "id", t.id],
         });
       });
 
-      subject?.notes.forEach((n) => {
+      tag?.notes.forEach((n: Note) => {
         queryClient.invalidateQueries({
           queryKey: ["note", "id", n.id],
         });
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["subjects"],
+        queryKey: ["tags"],
       });
 
       queryClient.invalidateQueries({

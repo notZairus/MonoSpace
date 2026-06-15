@@ -4,13 +4,10 @@ import { AlertCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import {
-  createSubjectSchema,
-  type subjectDTO,
-} from "../schemas/subject.schema";
-import { useCreateSubject } from "../hooks/useCreateSubject";
+import { createTagSchema, type TagDTO } from "../schemas/tags.schema";
+import { useCreateTag } from "../hooks/tags/useCreateTag";
 
-function AddSubjectModal({
+function AddTagModal({
   open,
   setOpen,
 }: {
@@ -23,16 +20,15 @@ function AddSubjectModal({
     formState: { errors },
     reset,
   } = useForm({
-    resolver: zodResolver(createSubjectSchema),
+    resolver: zodResolver(createTagSchema),
     defaultValues: {
       name: "",
     },
   });
-  const createSubject = useCreateSubject();
+  const createTag = useCreateTag();
 
-  const onSubmit = (subject: subjectDTO) => {
-    createSubject.mutate(subject);
-    console.log(subject);
+  const onSubmit = (tag: TagDTO) => {
+    createTag.mutate(tag);
     reset();
     setOpen(false);
   };
@@ -46,7 +42,7 @@ function AddSubjectModal({
         >
           <DialogHeader className="px-6 pt-5 pb-3 border-b border-border/40 bg-muted/20">
             <DialogTitle className="text-md font-semibold tracking-tight text-foreground/90">
-              Create New Subject
+              Create New Tag
             </DialogTitle>
           </DialogHeader>
 
@@ -54,7 +50,7 @@ function AddSubjectModal({
             <div className="space-y-1">
               <Input
                 id="name"
-                placeholder="Subject name..."
+                placeholder="Tag name..."
                 className="border-0 px-4 text-lg font-semibold tracking-tight focus-visible:ring-0 placeholder:text-muted-foreground/50 text-foreground"
                 {...register("name")}
               />
@@ -79,10 +75,10 @@ function AddSubjectModal({
             <Button
               type="submit"
               size="sm"
-              disabled={createSubject.isPending}
+              disabled={createTag.isPending}
               className="text-xs font-medium px-4 text-white shadow-sm"
             >
-              {createSubject.isPending ? "Creating..." : "Create Subject"}
+              {createTag.isPending ? "Creating..." : "Create Tag"}
             </Button>
           </div>
         </form>
@@ -91,4 +87,4 @@ function AddSubjectModal({
   );
 }
 
-export default AddSubjectModal;
+export default AddTagModal;

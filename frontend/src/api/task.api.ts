@@ -13,21 +13,19 @@ export async function get(token: string, status: string = "all") {
   return data.tasks;
 }
 
-export async function getTask(token: string, taskId: string) {
-  const res = await fetch(`${serverUrl}/tasks/${taskId}`, {
+export async function getTask(token: string, id: string) {
+  const res = await fetch(`${serverUrl}/tasks/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  // 2. Good practice: Throw an error if the network request fails
   if (!res.ok) {
     throw new Error(`Failed to fetch task: ${res.statusText}`);
   }
 
   const data = await res.json();
 
-  // 3. Ensure this matches your exact backend response structure
   return data.task;
 }
 

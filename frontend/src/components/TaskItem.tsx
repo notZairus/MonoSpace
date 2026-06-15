@@ -2,6 +2,7 @@ import type { Task } from "../schemas/task.schema";
 import { cn } from "../lib/utils";
 import TaskShowcase from "./TaskShowcase";
 import { useState } from "react";
+import type { Tag } from "../schemas/tags.schema";
 
 const statusStyles = {
   PENDING: "bg-slate-100 text-slate-700 ring-slate-200",
@@ -91,7 +92,7 @@ const TaskItem = ({
                 variant === "primary" && "text-white/60",
               )}
             >
-              {task.subjects.map((sub) => sub.name).join(", ")}
+              {task.tags.map((tag: Tag) => tag.name).join(", ")}
             </span>
             <span
               className={cn(

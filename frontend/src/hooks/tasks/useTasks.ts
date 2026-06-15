@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { type Task } from "../schemas/task.schema";
+import { type Task } from "../../schemas/task.schema";
 import { useAuth } from "@clerk/react";
-import { get, getTask } from "../api/task.api";
+import { get, getTask } from "../../api/task.api";
 
 export function useTasks(status: string = "all") {
   const { getToken } = useAuth();

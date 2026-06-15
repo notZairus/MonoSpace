@@ -54,7 +54,7 @@ export const ModelName = {
   Task: 'Task',
   Subtask: 'Subtask',
   Note: 'Note',
-  Subject: 'Subject'
+  Tag: 'Tag'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -113,7 +113,7 @@ export const NoteScalarFieldEnum = {
 export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof NoteScalarFieldEnum]
 
 
-export const SubjectScalarFieldEnum = {
+export const TagScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   name: 'name',
@@ -121,7 +121,7 @@ export const SubjectScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { SubtaskDTO } from "../schemas/subtask.schema";
+import type { SubtaskDTO } from "../../schemas/subtask.schema";
 import { useAuth } from "@clerk/react";
-import { createSubtask } from "../api/subtask.api";
+import { createSubtask } from "../../api/subtask.api";
 
 export function useCreateSubtask() {
   const { getToken } = useAuth();

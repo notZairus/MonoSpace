@@ -6,6 +6,8 @@ import { createNoteSchema, updateNoteSchema } from "../schemas/note.schema";
 import { z } from "zod";
 import { prisma } from "../../prisma/client";
 import { authenticate } from "../middleware/authenticate";
+import { makeCleanMarkdown } from "../lib/ai";
+import { deleteOrphanedTags } from "../lib/resources";
 
 const router = Router();
 
@@ -17,7 +19,7 @@ router.get("/", authenticate, async (req, res) => {
       userId: userId,
     },
     include: {
-      subjects: true,
+      tags: true,
     },
   });
 
@@ -41,17 +43,17 @@ router.post("/", authenticate, async (req, res) => {
       userId: userId as string,
       title: data.title,
       content: data.content as string,
-      subjects: {
-        connectOrCreate: data.subjects.map((sub) => ({
+      tags: {
+        connectOrCreate: data.tags?.map((tag) => ({
           where: {
             userId_name: {
               userId: userId as string,
-              name: sub,
+              name: tag,
             },
           },
           create: {
             userId: userId as string,
-            name: sub,
+            name: tag,
           },
         })),
       },
@@ -91,14 +93,11 @@ router.post(
     });
 
     const extractedText = output.trimStart().trimEnd().split("   ").join("");
+    const aiOutput = await makeCleanMarkdown(extractedText);
 
-    // const aiOutput = await makeCleanMarkdown(extractedText);
-    // console.log(aiOutput);
-
-    // TODO: temporary because i ran out of ai limits
     return res.json({
       title: "Note Title",
-      content: extractedText,
+      content: aiOutput,
     });
   },
 );
@@ -114,30 +113,37 @@ router.patch("/:noteId", authenticate, async (req, res) => {
   if (!result.success)
     return res.status(400).json(z.treeifyError(result.error));
 
-  const { subjects, ...rest } = result.data;
+  const { tags, ...rest } = result.data;
 
-  const note = await prisma.note.update({
+  await prisma.note.update({
     where: { id: noteId as string },
     data: {
       ...rest,
-      ...(subjects !== undefined && {
-        subjects: {
+      ...(tags !== undefined && {
+        tags: {
           set: [],
-          connectOrCreate: subjects.map((sub) => ({
+          connectOrCreate: tags.map((tag) => ({
             where: {
               userId_name: {
                 userId: userId as string,
-                name: sub,
+                name: tag,
               },
             },
-            create: { userId: userId as string, name: sub },
+            create: { userId: userId as string, name: tag },
           })),
         },
       }),
     },
     include: {
-      subjects: true,
+      tags: true,
     },
+  });
+
+  await deleteOrphanedTags(req.userId as string);
+
+  const note = await prisma.note.findFirst({
+    where: { id: noteId as string },
+    include: { tags: true },
   });
 
   return res.status(200).send({
@@ -153,6 +159,8 @@ router.delete("/:noteId", authenticate, async (req, res) => {
       id: noteId as string,
     },
   });
+
+  await deleteOrphanedTags(req.userId as string);
 
   return res.status(200).send({ message: "successful" });
 });
