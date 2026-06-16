@@ -105,10 +105,19 @@ function TaskCard() {
             <ScrollArea className="w-full h-80 sm:h-[calc(100dvh-16rem)] rounded-lg">
               <ScrollBar />
 
-              <div className="space-y-1">
-                {taskToRender[activeTab]?.map((task) => (
-                  <TaskItem key={task.id} task={task} />
-                ))}
+              <div className="space-y-1 ">
+                {taskToRender[activeTab] &&
+                taskToRender[activeTab].length > 0 ? (
+                  taskToRender[activeTab]?.map((task) => (
+                    <TaskItem key={task.id} task={task} />
+                  ))
+                ) : (
+                  <div className="flex items-center justify-center ">
+                    <p className="text-muted-foreground text-sm">
+                      No tasks found on {activeTab.toUpperCase()}.
+                    </p>
+                  </div>
+                )}
               </div>
             </ScrollArea>
           </CardContent>
