@@ -17,32 +17,23 @@ import { useUpdateTag } from "../hooks/tags/useUpdateTag";
 import { useDeleteTag } from "../hooks/tags/useDeleteTag";
 import TaskItemLong from "./TaskItemLong";
 import NoteItem from "./NoteItem";
-import { useTag } from "../hooks/tags/useTags";
 import AddTaskModal from "./AddTaskModal";
 import AddNoteModal from "./AddNoteModal";
 
 interface TagShowcaseProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  tagId: string;
+  tag: Tag;
 }
 
-const TagShowcase = ({ open = false, setOpen, tagId }: TagShowcaseProps) => {
-  const { data: tag } = useTag(tagId);
-  const [tagCopy, setTagCopy] = useState<Tag | null>(null);
+const TagShowcase = ({ open = false, setOpen, tag }: TagShowcaseProps) => {
+  const [tagCopy, setTagCopy] = useState<Tag | null>(tag);
   const [openAddTaskModal, setOpenAddTaskModal] = useState(false);
   const [openAddNoteModal, setOpenAddNoteModal] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
   const updateTag = useUpdateTag();
   const deleteTag = useDeleteTag();
-
-  useEffect(() => {
-    function syncTag() {
-      setTagCopy(tag as Tag);
-    }
-    syncTag();
-  }, [tag]);
 
   const debouncedHandleUpdate = useDebouncedCallback(
     (tagId: string, updatedFields: Partial<TagDTO>) => {

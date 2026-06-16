@@ -8,7 +8,7 @@ function TagItem({ tag }: { tag: Tag }) {
   return (
     <>
       <TagShowcase
-        tagId={tag.id}
+        tag={tag}
         open={openTagShowcase}
         setOpen={setOpenTagShowcase}
       />

@@ -51,14 +51,26 @@ function TaskItemLong({ task }: { task: Task }) {
 
   return (
     <>
-      <TaskShowcase open={openTask} setOpen={setOpenTask} taskId={task.id} />
+      {openTask && (
+        <TaskShowcase open={openTask} setOpen={setOpenTask} task={task} />
+      )}
+
       <div
         className={`flex items-center justify-between p-3 gap-3 hover:bg-muted/20 transition-colors group/row cursor-pointer`}
       >
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+        <div
+          className="flex items-center gap-2.5 min-w-0 flex-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenTask(true);
+          }}
+        >
           <div
             className="shrink-0 focus:outline-none"
-            onClick={handleToggleCompleteTask(task.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggleCompleteTask(task.id)();
+            }}
           >
             {taskCompleted ? (
               <CheckCircle2 className="size-4 text-emerald-500 fill-emerald-50 dark:fill-emerald-950/20" />
@@ -67,10 +79,7 @@ function TaskItemLong({ task }: { task: Task }) {
             )}
           </div>
 
-          <div
-            className="flex flex-col min-w-0"
-            onClick={() => setOpenTask(true)}
-          >
+          <div className="flex flex-col min-w-0">
             <span
               className={`text-sm tracking-tight truncate transition-colors ${
                 taskCompleted

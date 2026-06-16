@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -34,7 +34,6 @@ import { useDeleteTask } from "../hooks/tasks/useDeleteTask";
 import AddSubTaskModal from "./AddSubTaskModal";
 import { format } from "date-fns-tz";
 import { Input } from "./ui/input";
-import { useTask } from "../hooks/tasks/useTasks";
 import SubtaskItem from "./SubtaskItem";
 import type { Tag as TagType } from "../schemas/tags.schema";
 import TagInput from "./TagInput";
@@ -69,12 +68,11 @@ const colorConfig: Record<
 interface TaskShowcaseProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  taskId: string;
+  task: Task;
 }
 
-const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
-  const { data: task } = useTask(taskId);
-  const [taskCopy, setTaskCopy] = useState<Task | null>(null);
+const TaskShowcase = ({ open = false, setOpen, task }: TaskShowcaseProps) => {
+  const [taskCopy, setTaskCopy] = useState<Task | null>(task);
   const [openAddSubTaskModal, setOpenSubTaskModal] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
@@ -91,13 +89,6 @@ const TaskShowcase = ({ open = false, setOpen, taskId }: TaskShowcaseProps) => {
     },
     300,
   );
-
-  useEffect(() => {
-    function assignTaskCopy() {
-      setTaskCopy(task as Task);
-    }
-    assignTaskCopy();
-  }, [task]);
 
   if (!task || !taskCopy) {
     return (
