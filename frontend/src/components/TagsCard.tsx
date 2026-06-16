@@ -7,6 +7,7 @@ import AddTagModal from "./AddTagModal";
 import SubjectItem from "./TagItem";
 import type { Tag } from "../schemas/tags.schema";
 import { Skeleton } from "./ui/skeleton";
+import { TagIcon } from "lucide-react";
 
 function TagsCard() {
   const { data: tags, isLoading } = useTags();
@@ -44,19 +45,24 @@ function TagsCard() {
           </div>
         </CardHeader>
         <CardContent className="flex-1 overflow-hidden">
-          <ScrollArea className="h-40 sm:h-[calc(100dvh-28.5rem)] rounded-lg">
-            <ScrollBar />
-            <div className="space-y-2 flex flex-wrap items-start gap-x-2">
-              {tags?.length === 0 && (
-                <p className="text-muted-foreground text-center w-full">
-                  No tags found.
-                </p>
-              )}
-              {tags?.map((tag: Tag) => (
-                <SubjectItem tag={tag} />
-              ))}
+          {tags?.length === 0 ? (
+            <div className="w-full h-full flex flex-col items-center justify-center">
+              <TagIcon
+                strokeWidth={1}
+                className="h-16 w-16 text-muted-foreground/50 mb-2"
+              />
+              <p className="text-muted-foreground">No tags found.</p>
             </div>
-          </ScrollArea>
+          ) : (
+            <ScrollArea className="h-40 sm:h-[calc(100dvh-28.5rem)] rounded-lg">
+              <ScrollBar />
+              <div className="space-y-2 flex flex-wrap items-start gap-x-2">
+                {tags?.map((tag: Tag) => (
+                  <SubjectItem tag={tag} />
+                ))}
+              </div>
+            </ScrollArea>
+          )}
         </CardContent>
       </Card>
     </>

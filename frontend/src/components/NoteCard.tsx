@@ -10,6 +10,7 @@ import { cn } from "../lib/utils";
 import NoteItem from "./NoteItem";
 import type { Tag } from "../schemas/tags.schema";
 import { Skeleton } from "./ui/skeleton";
+import { FileText } from "lucide-react";
 
 function NoteCard() {
   const { data: tags, isLoading } = useTags();
@@ -47,73 +48,85 @@ function NoteCard() {
           </Button>
         </CardHeader>
         <CardContent className="h-full pr-2 flex flex-col sm:flex-row gap-4">
-          <div className="w-fulll sm:w-40 sm:border-r ">
-            <p>Tags: </p>
-            <ScrollArea className="mt-2 pr-2 w-full h-[calc(100dvh-485px)] rounded-md">
-              <ScrollBar />
-              <div className="space-y-1 w-full">
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "py-2 px-4 rounded-full bg-white border w-full cursor-pointer hover:bg-sidebar-accent hover:text-black",
-                    {
-                      "bg-primary font-semibold text-white hover:bg-primary hover:text-white":
-                        selectedTag === "all",
-                    },
-                  )}
-                  onClick={() => setSelectedTag("all")}
-                >
-                  All
-                </Button>
-                {tags &&
-                  tags
-                    ?.filter((t) => t?.notes?.length > 0)
-                    .map((tag) => (
-                      <Button
-                        key={tag.id}
-                        variant="outline"
-                        className={cn(
-                          "py-2 px-4 rounded-full bg-white border w-full cursor-pointer hover:bg-sidebar-accent hover:text-black",
-                          {
-                            "bg-primary font-semibold text-white hover:bg-primary hover:text-white":
-                              selectedTag === tag.name,
-                          },
-                        )}
-                        onClick={() => setSelectedTag(tag.name)}
-                      >
-                        {tag.name}
-                      </Button>
-                    ))}
+          {notes?.length === 0 ? (
+            <div className="flex w-full flex-col items-center justify-center h-full gap-y-2">
+              <FileText
+                strokeWidth={1}
+                className="h-16 w-16 text-muted-foreground/50 mb-2"
+              />
+              <p className="text-muted-foreground text-sm">No notes found.</p>
+            </div>
+          ) : (
+            <>
+              <div className="w-fulll sm:w-40 sm:border-r ">
+                <p>Tags: </p>
+                <ScrollArea className="mt-2 pr-2 w-full h-[calc(100dvh-485px)] rounded-md">
+                  <ScrollBar />
+                  <div className="space-y-1 w-full">
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "py-2 px-4 rounded-full bg-white border w-full cursor-pointer hover:bg-sidebar-accent hover:text-black",
+                        {
+                          "bg-primary font-semibold text-white hover:bg-primary hover:text-white":
+                            selectedTag === "all",
+                        },
+                      )}
+                      onClick={() => setSelectedTag("all")}
+                    >
+                      All
+                    </Button>
+                    {tags &&
+                      tags
+                        ?.filter((t) => t?.notes?.length > 0)
+                        .map((tag) => (
+                          <Button
+                            key={tag.id}
+                            variant="outline"
+                            className={cn(
+                              "py-2 px-4 rounded-full bg-white border w-full cursor-pointer hover:bg-sidebar-accent hover:text-black",
+                              {
+                                "bg-primary font-semibold text-white hover:bg-primary hover:text-white":
+                                  selectedTag === tag.name,
+                              },
+                            )}
+                            onClick={() => setSelectedTag(tag.name)}
+                          >
+                            {tag.name}
+                          </Button>
+                        ))}
+                  </div>
+                </ScrollArea>
               </div>
-            </ScrollArea>
-          </div>
 
-          <div className="w-full sm:w-40 flex-1">
-            <p>Notes: </p>
-            <ScrollArea className="mt-2 w-full h-40 sm:h-[calc(100dvh-503px)]  rounded-md">
-              <ScrollBar />
-              <div className=" w-full flex items-start flex-wrap gap-1">
-                {notes && notes.length === 0 && (
-                  <p className="w-full text-muted-foreground text-center text-sm mt-4">
-                    No notes found.
-                  </p>
-                )}
+              <div className="w-full sm:w-40 flex-1">
+                <p>Notes: </p>
+                <ScrollArea className="mt-2 w-full h-40 sm:h-[calc(100dvh-503px)]  rounded-md">
+                  <ScrollBar />
+                  <div className=" w-full flex items-start flex-wrap gap-1">
+                    {notes && notes.length === 0 && (
+                      <p className="w-full text-muted-foreground text-center text-sm mt-4">
+                        No notes found.
+                      </p>
+                    )}
 
-                {selectedTag === "all" &&
-                  notes?.map((note: Note) => (
-                    <NoteItem key={note.id} note={note} />
-                  ))}
-                {selectedTag !== "all" &&
-                  notes
-                    ?.filter((n: Note) =>
-                      n.tags.some((t: Tag) => t.name === selectedTag),
-                    )
-                    .map((note: Note) => (
-                      <NoteItem key={note.id} note={note} />
-                    ))}
+                    {selectedTag === "all" &&
+                      notes?.map((note: Note) => (
+                        <NoteItem key={note.id} note={note} />
+                      ))}
+                    {selectedTag !== "all" &&
+                      notes
+                        ?.filter((n: Note) =>
+                          n.tags.some((t: Tag) => t.name === selectedTag),
+                        )
+                        .map((note: Note) => (
+                          <NoteItem key={note.id} note={note} />
+                        ))}
+                  </div>
+                </ScrollArea>
               </div>
-            </ScrollArea>
-          </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </>

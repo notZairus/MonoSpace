@@ -14,6 +14,7 @@ import AddTaskModal from "./AddTaskModal";
 import { useState } from "react";
 import TaskItem from "./TaskItem";
 import { Skeleton } from "./ui/skeleton";
+import { CircleCheck } from "lucide-react";
 
 type TabsValue = "all" | "today" | "upcoming" | "overdue" | "completed";
 
@@ -102,24 +103,26 @@ function TaskCard() {
           </TabsList>
 
           <CardContent className="w-full h-full">
-            <ScrollArea className="w-full h-80 sm:h-[calc(100dvh-16rem)] rounded-lg">
-              <ScrollBar />
-
-              <div className="space-y-1 ">
-                {taskToRender[activeTab] &&
-                taskToRender[activeTab].length > 0 ? (
-                  taskToRender[activeTab]?.map((task) => (
-                    <TaskItem key={task.id} task={task} />
-                  ))
-                ) : (
-                  <div className="flex items-center justify-center ">
-                    <p className="text-muted-foreground text-sm">
-                      No tasks found on {activeTab.toUpperCase()}.
-                    </p>
-                  </div>
-                )}
+            {taskToRender[activeTab] && taskToRender[activeTab].length <= 0 ? (
+              <div className="flex flex-col items-center justify-center h-full gap-y-2">
+                <CircleCheck
+                  strokeWidth={1}
+                  className="h-16 w-16 text-muted-foreground/50 mb-2"
+                />
+                <p className="text-muted-foreground text-sm">
+                  No tasks found on {activeTab.toUpperCase()}.
+                </p>
               </div>
-            </ScrollArea>
+            ) : (
+              <ScrollArea className="w-full h-80 sm:h-[calc(100dvh-16rem)] rounded-lg">
+                <ScrollBar />
+                <div className="space-y-1">
+                  {taskToRender[activeTab]?.map((task) => (
+                    <TaskItem key={task.id} task={task} />
+                  ))}
+                </div>
+              </ScrollArea>
+            )}
           </CardContent>
         </Card>
       </Tabs>
