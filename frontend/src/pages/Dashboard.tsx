@@ -10,13 +10,14 @@ function Dashboard() {
   return (
     <div className="w-full bg-primary/5">
       <div className="min-h-screen sm:max-w-5xl mx-auto sm:py-8 py-4 px-2 gap-4 w-full grid sm:grid-cols-3 sm:grid-rows-3">
-        <div className="sm:hidden sm:row-span-1 h-full">
-          <UserCard />
+        {/* DATE AND TIME */}
+        <div className="sm:col-span-2 sm:row-span-1 h-full">
+          <DateTimeCard />
         </div>
 
-        {/* DATE AND TIME */}
-        <div className="sm:hidden sm:row-span-1 h-full">
-          <DateTimeCard />
+        {/* PROFILE */}
+        <div className="sm:row-span-1 h-full">
+          <UserCard />
         </div>
 
         {/* TASKS */}
@@ -29,24 +30,14 @@ function Dashboard() {
           <TagsCard />
         </div>
 
-        {/* PROFILE */}
-        <div className="hidden sm:block sm:row-span-1 h-full">
-          <UserCard />
-        </div>
-
-        {/* DATE AND TIME */}
-        <div className="hidden sm:block sm:col-span-2 sm:row-span-1 h-full">
-          <DateTimeCard />
+        {/* POMODORO */}
+        <div className="sm:col-span-1">
+          <PomodoroCard />
         </div>
 
         {/* NOTES */}
         <div className="sm:col-span-2">
           <NoteCard />
-        </div>
-
-        {/* POMODORO */}
-        <div className="sm:col-span-1">
-          <PomodoroCard />
         </div>
       </div>
     </div>
