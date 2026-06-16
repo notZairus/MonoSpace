@@ -1,6 +1,5 @@
-import { Card, CardHeader, CardTitle } from "../components/ui/card";
 import TaskCard from "../components/TaskCard";
-import TagsCard from "../components/TagsCard";
+import TagCard from "../components/TagCard";
 import UserCard from "../components/UserCard";
 import DateTimeCard from "../components/DateTimeCard";
 import PomodoroCard from "../components/PomodoroCard";
@@ -27,7 +26,7 @@ function Dashboard() {
 
         {/* SUBJECTS */}
         <div className="sm:row-span-1 h-full">
-          <TagsCard />
+          <TagCard />
         </div>
 
         {/* POMODORO */}
