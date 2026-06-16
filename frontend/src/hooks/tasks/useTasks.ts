@@ -11,7 +11,7 @@ export function useTasks(status: string = "all") {
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {
       const token = await getToken();
-      return get(token as string, status);
+      return await get(token as string, status);
     },
   });
 }

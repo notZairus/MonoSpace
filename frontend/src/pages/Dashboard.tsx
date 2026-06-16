@@ -35,15 +35,9 @@ function Dashboard() {
         </div>
 
         {/* DATE AND TIME */}
-        <div className="hidden sm:block sm:row-span-1 h-full">
+        <div className="hidden sm:block sm:col-span-2 sm:row-span-1 h-full">
           <DateTimeCard />
         </div>
-
-        <Card className="">
-          <CardHeader>
-            <CardTitle>EMPTY FOR NOW</CardTitle>
-          </CardHeader>
-        </Card>
 
         {/* NOTES */}
         <div className="sm:col-span-2">

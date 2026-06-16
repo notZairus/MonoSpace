@@ -6,9 +6,29 @@ import { useState } from "react";
 import AddTagModal from "./AddTagModal";
 import SubjectItem from "./TagItem";
 import type { Tag } from "../schemas/tags.schema";
+import { Skeleton } from "./ui/skeleton";
 
 function TagsCard() {
+  const { data: tags, isLoading } = useTags();
   const [openAddTagModal, setOpenAddTagModal] = useState<boolean>(false);
+
+  if (isLoading) {
+    return (
+      <Card className="bg-card h-full">
+        <CardHeader>
+          <div className="flex justify-between">
+            <CardTitle>
+              <Skeleton className="h-6 w-32" />
+            </CardTitle>
+            <Skeleton className="h-8 w-8" />
+          </div>
+        </CardHeader>
+        <CardContent className="w-full h-full flex items-center justify-center">
+          <Skeleton className="h-full w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <>
@@ -27,12 +47,12 @@ function TagsCard() {
           <ScrollArea className="h-40 sm:h-[calc(100dvh-28.5rem)] rounded-lg">
             <ScrollBar />
             <div className="space-y-2 flex flex-wrap items-start gap-x-2">
-              {useTags().data?.length === 0 && (
+              {tags?.length === 0 && (
                 <p className="text-muted-foreground text-center w-full">
                   No tags found.
                 </p>
               )}
-              {useTags().data?.map((tag: Tag) => (
+              {tags?.map((tag: Tag) => (
                 <SubjectItem tag={tag} />
               ))}
             </div>

@@ -45,14 +45,16 @@ const TaskItem = ({
         onClick={() => setShowTask(true)}
       >
         <div
-          className={`shrink-0 aspect-square w-2 min-h-20 rounded-full ${taskColorStyles[task.color]}`}
+          className={`shrink-0 aspect-square w-2  rounded-full ${taskColorStyles[task.color]}`}
         />
 
         <div
           key={task.id}
-          className={cn("w-full border-border p-2 flex-1 flex flex-col")}
+          className={cn(
+            "w-full border-border p-2 flex-1 flex flex-col justify-between",
+          )}
         >
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 ">
             <div className="flex items-center gap-2 min-w-0">
               <h3
                 className={cn(
@@ -74,16 +76,18 @@ const TaskItem = ({
             </span>
           </div>
 
-          <div className="mb-2 flex-1">
-            <p
-              className={cn(
-                "text-xs text-muted-foreground truncate wrap-break-word flex-1 max-w-56",
-                variant === "primary" && "text-white/80",
-              )}
-            >
-              {task.description}
-            </p>
-          </div>
+          {task.description && (
+            <div className="mb-2 flex-1">
+              <p
+                className={cn(
+                  "text-xs text-muted-foreground truncate wrap-break-word flex-1 max-w-56",
+                  variant === "primary" && "text-white/80",
+                )}
+              >
+                {task.description}
+              </p>
+            </div>
+          )}
 
           <div className="flex items-center justify-between mt-1 gap-2 ">
             <span

@@ -9,12 +9,31 @@ import type { Note } from "../schemas/note.schema";
 import { cn } from "../lib/utils";
 import NoteItem from "./NoteItem";
 import type { Tag } from "../schemas/tags.schema";
+import { Skeleton } from "./ui/skeleton";
 
 function NoteCard() {
-  const { data: tags } = useTags();
+  const { data: tags, isLoading } = useTags();
   const [showAddNoteModal, setShowAddNoteModal] = useState(false);
   const { data: notes } = useNotes();
   const [selectedTag, setSelectedTag] = useState<string>("all");
+
+  if (isLoading) {
+    return (
+      <Card className="bg-card h-full">
+        <CardHeader>
+          <div className="flex justify-between">
+            <CardTitle>
+              <Skeleton className="h-6 w-32" />
+            </CardTitle>
+            <Skeleton className="h-8 w-8" />
+          </div>
+        </CardHeader>
+        <CardContent className="w-full h-full flex items-center justify-center">
+          <Skeleton className="h-full w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <>

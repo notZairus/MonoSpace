@@ -10,7 +10,7 @@ const NoteItem = ({ note }: { note: Note }) => {
   return (
     <>
       <div
-        className="group flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-muted/40 transition-colors duration-150 w-full rounded-xl"
+        className="group flex items-start gap-3 px-4 py-3 border border-border cursor-pointer hover:bg-muted/40 transition-colors duration-150 w-full rounded-xl"
         onClick={() => setOpenNote(true)}
       >
         {/* Icon */}

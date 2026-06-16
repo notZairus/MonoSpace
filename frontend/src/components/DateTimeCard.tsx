@@ -48,8 +48,9 @@ function DateTimeCard() {
             </p>
           </div>
           <div>
-            <p className="text-center ">
-              Ang di mag mahal sa sariling wika, ay mas mabaho pa sa bagoong.
+            <p className="text-center h-8">
+              Ang di mag mahal sa sariling wika, ay mas mabaho pa sa lumang
+              tuyo.
             </p>
           </div>
         </div>

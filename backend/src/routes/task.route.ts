@@ -18,14 +18,14 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
 
   const where: any = { userId };
 
-  if (status === "overdue") {
+  if (status === "upcoming") {
+    const today = new Date();
+    where.deadline = { gte: today };
+  } else if (status === "overdue") {
     where.deadline = { lt: new Date() };
     where.completedAt = null;
   } else if (status === "completed") {
     where.completedAt = { not: null };
-  } else {
-    const today = new Date();
-    where.deadline = { gte: today };
   }
 
   const tasks = await prisma.task.findMany({

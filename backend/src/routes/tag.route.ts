@@ -15,7 +15,11 @@ router.get("/:tagId", authenticate, async (req: Request, res: Response) => {
       id: tagId as string,
     },
     include: {
-      notes: true,
+      notes: {
+        include: {
+          tags: true,
+        },
+      },
       tasks: {
         include: {
           tags: true,
@@ -36,7 +40,11 @@ router.get("/", authenticate, async (req: Request, res: Response) => {
       userId: userId as string,
     },
     include: {
-      notes: true,
+      notes: {
+        include: {
+          tags: true,
+        },
+      },
       tasks: {
         include: {
           tags: true,

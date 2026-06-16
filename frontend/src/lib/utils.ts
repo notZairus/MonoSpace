@@ -8,6 +8,7 @@ export function getUpcomingTasks(tasks: Task[], now = new Date()) {
   const cutoff = new Date(now.getTime() + 7 * MS_IN_DAY);
 
   return tasks
+    .filter((task) => task.status !== "COMPLETED")
     .filter((task): task is Task & { deadline: string } => {
       if (!task.deadline) return false;
       const taskDeadline = new Date(task.deadline);
