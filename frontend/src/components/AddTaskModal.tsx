@@ -1,9 +1,8 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Textarea } from "./ui/textarea";
 import {
   Select,
   SelectContent,
@@ -15,7 +14,6 @@ import {
   CalendarDays,
   Tag,
   AlertCircle,
-  X,
   CheckCircle2,
   Circle,
 } from "lucide-react";
@@ -75,7 +73,6 @@ function AddTaskModal({
   });
 
   const createTask = useCreateTask();
-  const [tagInput, setTagInput] = useState("");
 
   // Directly watching hook-form state removes duplicate sync arrays
   const watchedTags = watch("tags") || [];
@@ -88,7 +85,6 @@ function AddTaskModal({
     setValue("tags", [...(getValues("tags") as string[]), tag], {
       shouldValidate: true,
     });
-    setTagInput("");
   };
 
   const handleRemoveTag = (tag: string) => {
@@ -113,7 +109,7 @@ function AddTaskModal({
           className="flex flex-col max-h-[85vh]"
         >
           <DialogHeader className="px-6 pt-5 pb-3 border-b border-border/40 bg-muted/20">
-            <DialogTitle className="text-md font-semibold tracking-tight text-foreground/90">
+            <DialogTitle className="text-lg tracking-tight text-foreground/90">
               Create New Task
             </DialogTitle>
           </DialogHeader>

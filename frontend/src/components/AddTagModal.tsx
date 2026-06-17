@@ -41,7 +41,7 @@ function AddTagModal({
           className="flex flex-col max-h-[85vh]"
         >
           <DialogHeader className="px-6 pt-5 pb-3 border-b border-border/40 bg-muted/20">
-            <DialogTitle className="text-md font-semibold tracking-tight text-foreground/90">
+            <DialogTitle className="text-lg tracking-tight text-foreground/90">
               Create New Tag
             </DialogTitle>
           </DialogHeader>

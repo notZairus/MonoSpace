@@ -1,10 +1,7 @@
 import "./index.css";
 import { lazy } from "react";
-import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import { Routes, Route } from "react-router";
 import LandingPage from "./pages/LandingPage";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TestingPage from "./pages/TestingPage";
 
@@ -26,23 +23,6 @@ function App() {
         />
 
         <Route path="/testing" element={<TestingPage />} />
-
-        <Route
-          path="/login"
-          element={
-            <UnauthenticatedRoute>
-              <Login />
-            </UnauthenticatedRoute>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <UnauthenticatedRoute>
-              <Register />
-            </UnauthenticatedRoute>
-          }
-        />
 
         <Route
           path="*"

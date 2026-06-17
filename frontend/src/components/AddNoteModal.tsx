@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -101,8 +101,8 @@ function AddNoteModal({
           className="flex flex-col max-h-[90dvh] sm:max-h-[85vh]"
         >
           <DialogHeader className="px-6 pt-5 pb-3 border-b border-border/40 bg-muted/20 shrink-0">
-            <DialogTitle className="text-md font-semibold tracking-tight text-foreground/90">
-              Add Note
+            <DialogTitle className="text-lg tracking-tight text-foreground/90">
+              Create New Note
             </DialogTitle>
           </DialogHeader>
 
