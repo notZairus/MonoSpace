@@ -17,6 +17,7 @@ import { Link } from "react-router";
 import { Button } from "../components/ui/button";
 import { cn } from "../lib/utils";
 import { Dialog, DialogContent } from "../components/ui/dialog";
+import { motion, useReducedMotion } from "motion/react";
 
 const navItems = [
   { label: "Features", href: "#features" },
@@ -72,6 +73,7 @@ function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const navigate = useNavigate();
 
@@ -114,7 +116,10 @@ function LandingPage() {
       </Dialog>
 
       <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
-        <header
+        <motion.header
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
           className={cn(
             "z-10 border-b border-border/80 bg-background/80 backdrop-blur fixed top-0 left-0 right-0",
           )}
@@ -247,14 +252,19 @@ function LandingPage() {
               </Show>
             </div>
           </div>
-        </header>
+        </motion.header>
 
         <main className="mt-12">
           <section
             id="home"
             className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-16"
           >
-            <div className="max-w-2xl">
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, x: -40 }}
+              animate={reduceMotion ? {} : { opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="max-w-2xl"
+            >
               <h1 className="font-heading text-5xl tracking-tight text-foreground sm:text-6xl lg:text-7xl lg:leading-[0.92]">
                 Study smarter with one place for notes, tasks, and deadlines.
               </h1>
@@ -289,7 +299,7 @@ function LandingPage() {
                   Mobile-friendly workflow
                 </div>
               </div>
-            </div>
+            </motion.div>
             <div className=" w-full">
               <img className="w-full" src={HeroImage} alt="Hero" />
             </div>
@@ -311,11 +321,16 @@ function LandingPage() {
               </div>
 
               <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-                {features.map((feature) => {
+                {features.map((feature, i) => {
                   const Icon = feature.icon;
+
                   return (
-                    <article
+                    <motion.article
                       key={feature.title}
+                      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                      whileInView={reduceMotion ? {} : { opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: i * 0.1 }}
                       className="rounded-3xl border border-border bg-card p-6 shadow-sm"
                     >
                       <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -327,7 +342,7 @@ function LandingPage() {
                       <p className="mt-3 text-sm leading-7 text-muted-foreground">
                         {feature.description}
                       </p>
-                    </article>
+                    </motion.article>
                   );
                 })}
               </div>
@@ -348,9 +363,13 @@ function LandingPage() {
             </div>
 
             <div className="mt-12 grid gap-5 lg:grid-cols-3">
-              {steps.map((step) => (
-                <article
+              {steps.map((step, i) => (
+                <motion.article
                   key={step.number}
+                  initial={reduceMotion ? false : { opacity: 0, y: 30 }}
+                  whileInView={reduceMotion ? {} : { opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.15 }}
                   className="rounded-3xl border border-border bg-card p-6 shadow-sm"
                 >
                   <p className="font-heading text-5xl tracking-tight text-primary/80">
@@ -362,7 +381,7 @@ function LandingPage() {
                   <p className="mt-3 text-sm leading-7 text-muted-foreground">
                     {step.text}
                   </p>
-                </article>
+                </motion.article>
               ))}
             </div>
           </section>
@@ -371,7 +390,13 @@ function LandingPage() {
             id="ready"
             className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8"
           >
-            <div className="rounded-[2rem] border border-border bg-primary p-8 shadow-sm sm:p-10">
+            <motion.div
+              initial={reduceMotion ? false : { scale: 0.98, opacity: 0 }}
+              whileInView={reduceMotion ? {} : { scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="rounded-[2rem] border border-border bg-primary p-8 shadow-sm sm:p-10"
+            >
               <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white">
@@ -398,7 +423,7 @@ function LandingPage() {
                   </Button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </section>
         </main>
       </div>

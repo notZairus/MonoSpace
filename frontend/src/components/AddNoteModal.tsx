@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { useDocumentTextExtraction } from "../hooks/notes/useDocumentTextExtraction";
 import { useCreateNote } from "../hooks/notes/useCreateNote";
 import TagInput from "./TagInput";
+import { Watch } from "react-loader-spinner";
 
 function AddNoteModal({
   open,
@@ -113,15 +114,21 @@ function AddNoteModal({
                   <Label className="text-[11px] font-semibold tracking-wider text-muted-foreground/80 uppercase flex items-center gap-1.5">
                     <FileText className="size-3" /> Import Document
                   </Label>
-                  {documentExtraction.isPending ? (
-                    <div className="rounded-xl border border-border/60 bg-card/40 px-3 py-3 text-xs text-primary text-center">
-                      Extracting…
+                  {!documentExtraction.isSuccess &&
+                  documentExtraction.isPending ? (
+                    <div className="rounded-xl border border-border/60 bg-card/40 px-3 py-3 text-xs flex items-center justify-center gap-2">
+                      <Watch
+                        visible={true}
+                        height="16"
+                        width="16"
+                        radius="48"
+                        color="#00087a"
+                        ariaLabel="watch-loading"
+                      />
+                      <p className="text-primary">Extracting…</p>
                     </div>
                   ) : (
                     <div className="rounded-xl border border-border/60 bg-card/40 overflow-hidden p-3">
-                      <Label className="text-muted-foreground font-medium text-xs">
-                        Text Extraction from PDF, DOC, PPT up to 10MB
-                      </Label>
                       <FileInput onFileSelect={handleExtractTextFromDocument} />
                     </div>
                   )}

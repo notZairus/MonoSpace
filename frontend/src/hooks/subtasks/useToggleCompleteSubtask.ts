@@ -12,9 +12,9 @@ export function useToggleCompleteSubtask() {
       const data = await completeSubtask(token as string, id);
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       query.invalidateQueries({
-        queryKey: ["task", "id", data.subtask.parentId],
+        queryKey: ["tasks"],
       });
     },
   });

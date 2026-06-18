@@ -153,3 +153,24 @@ ol {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+
+.scroll-custom::-webkit-scrollbar {
+  width: 8px;   
+  height: 5px;
+}
+
+.scroll-custom::-webkit-scrollbar-track {
+  background: #edebed;
+  border-radius: 6px;
+}
+
+.scroll-custom::-webkit-scrollbar-thumb {
+  background-color: #00087a;
+  border-radius: 0px;
+  transition: all 1s ease-out;
+}
+
+.scroll-custom::-webkit-scrollbar-thumb:hover {
+  background:#00087a; 
+}

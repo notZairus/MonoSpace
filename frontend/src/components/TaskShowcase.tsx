@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -72,9 +72,17 @@ interface TaskShowcaseProps {
 }
 
 const TaskShowcase = ({ open = false, setOpen, task }: TaskShowcaseProps) => {
-  const [taskCopy, setTaskCopy] = useState<Task | null>(task);
+  const [taskCopy, setTaskCopy] = useState<Task | null>(null);
   const [openAddSubTaskModal, setOpenSubTaskModal] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+
+  useEffect(() => {
+    function syncTask() {
+      setTaskCopy(task);
+    }
+
+    syncTask();
+  }, [task]);
 
   const toggleComplete = useToggleCompleteTask();
   const updateTask = useUpdateTask();
@@ -388,7 +396,7 @@ const TaskShowcase = ({ open = false, setOpen, task }: TaskShowcaseProps) => {
               </div>
 
               <div>
-                <ScrollArea className="h-32 rounded-xl border border-border/50 bg-card/30">
+                <ScrollArea className="h-28 rounded-xl border border-border/50 bg-card/30">
                   <ScrollBar />
                   <div className="rounded-xl border border-border/50 bg-card/30 divide-y divide-border/30 overflow-hidden">
                     {task.subtasks?.map((sub) => (

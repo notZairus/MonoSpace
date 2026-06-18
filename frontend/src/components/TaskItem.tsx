@@ -3,6 +3,7 @@ import { cn } from "../lib/utils";
 import TaskShowcase from "./TaskShowcase";
 import { useState } from "react";
 import type { Tag } from "../schemas/tags.schema";
+import { motion } from "motion/react";
 
 const statusStyles = {
   PENDING: "bg-slate-100 text-slate-700 ring-slate-200",
@@ -36,7 +37,7 @@ const TaskItem = ({
     <>
       <TaskShowcase open={showTask} setOpen={setShowTask} task={task} />
 
-      <div
+      <motion.div
         className={cn(
           "rounded-3xl border w-full border-border bg-background/80 px-3 py-2",
           "w-full flex gap-1 min-h-20 cursor-pointer",
@@ -108,7 +109,7 @@ const TaskItem = ({
             </span>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

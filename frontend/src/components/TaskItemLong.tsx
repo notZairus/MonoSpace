@@ -51,9 +51,7 @@ function TaskItemLong({ task }: { task: Task }) {
 
   return (
     <>
-      {openTask && (
-        <TaskShowcase open={openTask} setOpen={setOpenTask} task={task} />
-      )}
+      <TaskShowcase open={openTask} setOpen={setOpenTask} task={task} />
 
       <div
         className={`flex items-center justify-between p-3 gap-3 hover:bg-muted/20 transition-colors group/row cursor-pointer`}

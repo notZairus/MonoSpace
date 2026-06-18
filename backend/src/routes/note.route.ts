@@ -95,10 +95,12 @@ router.post(
     const extractedText = output.trimStart().trimEnd().split("   ").join("");
     const aiOutput = await makeCleanMarkdown(extractedText);
 
-    return res.json({
-      title: "Note Title",
-      content: aiOutput,
-    });
+    return res.json(aiOutput);
+
+    // return res.json({
+    //   title: "Note Title",
+    //   content: extractedText,
+    // });
   },
 );
 

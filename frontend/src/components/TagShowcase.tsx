@@ -64,7 +64,11 @@ const TagShowcase = ({ open = false, setOpen, tag }: TagShowcaseProps) => {
       <AddTaskModal open={openAddTaskModal} setOpen={setOpenAddTaskModal} />
       <AddNoteModal open={openAddNoteModal} setOpen={setOpenAddNoteModal} />
 
-      <Dialog open={openConfirmDelete} onOpenChange={setOpenConfirmDelete}>
+      <Dialog
+        open={openConfirmDelete}
+        onOpenChange={setOpenConfirmDelete}
+        modal={false}
+      >
         <DialogContent className="sm:max-w-md p-6 rounded-2xl border bg-background shadow-xl">
           <DialogTitle className="text-lg font-semibold tracking-tight">
             Delete Tag
