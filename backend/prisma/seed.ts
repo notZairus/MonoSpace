@@ -8,10 +8,10 @@ const adapter = new PrismaBetterSqlite3({ url: connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const singleSub = await prisma.subject.create({
+  const singleSub = await prisma.tag.create({
     data: {
       userId: "user_3ELLuVRYI9vSdxvsujMaNsZPx58",
-      name: "Example Subject",
+      name: "Example Tag",
     },
   });
 
