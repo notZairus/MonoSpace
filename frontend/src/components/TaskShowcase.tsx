@@ -360,9 +360,9 @@ const TaskShowcase = ({ open = false, setOpen, task }: TaskShowcaseProps) => {
                   Tags
                 </span>
 
-                <div className="flex flex-wrap justify-end gap-1.5 max-w-[75%] items-center h-16 overflow-auto border rounded-xl">
+                <div className="flex flex-wrap justify-end gap-1.5 max-w-[75%] items-center h-12 overflow-auto border rounded-xl">
                   <TagInput
-                    className="max-w-56 border-0"
+                    className="max-w-32 sm:max-w-48 border-0"
                     items={taskCopy.tags.map((tag: TagType) => tag.name) || []}
                     addItem={(newItem) => {
                       handleAddTag(newItem);
