@@ -29,4 +29,27 @@ export async function completeSubtask(token: string, id: string) {
   return data;
 }
 
-// TODO: update and delete subtask
+export async function updateSubtask(
+  token: string,
+  id: string,
+  data: Partial<SubtaskDTO>,
+) {
+  await fetch(`${serverUrl}/subtasks/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteSubtask(token: string, id: string) {
+  await fetch(`${serverUrl}/subtasks/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}

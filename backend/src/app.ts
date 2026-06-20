@@ -32,14 +32,14 @@ app.use(
     },
   }),
 );
-app.use(
-  rateLimit({
-    windowMs: 1000 * 60 * 15,
-    max: 100,
-    message: "Too many requests, please try again later.",
-    statusCode: 429,
-  }),
-);
+// app.use(
+//   rateLimit({
+//     windowMs: 1000 * 60 * 15,
+//     max: 100,
+//     message: "Too many requests, please try again later.",
+//     statusCode: 429,
+//   }),
+// );
 
 app.get("/api", (req, res) => {
   res.status(200).send("hello from api!!");

@@ -29,7 +29,32 @@ export const createSubTaskSchema = z.object({
 
 export type SubtaskDTO = z.infer<typeof createSubTaskSchema>;
 
-export type Subtask = Omit<SubtaskDTO, "subjects"> & {
+export type Subtask = SubtaskDTO & {
   id: string;
   parent?: Task;
 };
+
+export const updateSubTaskSchema = z.object({
+  name: z
+    .string({
+      error: "Subtask name is required",
+    })
+    .trim()
+    .min(1, "Subtask name is required")
+    .min(4, "Subtask name must be at least 4 characters long")
+    .optional(),
+
+  description: z.string().optional(),
+
+  color: z
+    .enum(["red", "yellow", "green"], {
+      error: "Please select a valid subtask color",
+    })
+    .optional(),
+
+  status: z
+    .enum(["PENDING", "COMPLETED"], {
+      error: "Please select a valid subtask status",
+    })
+    .optional(),
+});

@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import { Calendar, Pin } from "lucide-react";
 
 const tasks = [

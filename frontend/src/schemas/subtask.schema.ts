@@ -29,7 +29,7 @@ export const createSubTaskSchema = z.object({
 
 export type SubtaskDTO = z.infer<typeof createSubTaskSchema>;
 
-export type Subtask = Omit<SubtaskDTO, "subjects"> & {
+export type Subtask = SubtaskDTO & {
   id: string;
   parent?: Task;
 };

@@ -15,10 +15,10 @@ import type { Note } from "../schemas/note.schema";
 import { useDebouncedCallback } from "use-debounce";
 import { useUpdateTag } from "../hooks/tags/useUpdateTag";
 import { useDeleteTag } from "../hooks/tags/useDeleteTag";
-import TaskItemLong from "./TaskItemLong";
 import NoteItem from "./NoteItem";
 import AddTaskModal from "./AddTaskModal";
 import AddNoteModal from "./AddNoteModal";
+import TaskItem from "./TaskItem";
 
 interface TagShowcaseProps {
   open: boolean;
@@ -164,10 +164,10 @@ const TagShowcase = ({ open = false, setOpen, tag }: TagShowcaseProps) => {
               <div>
                 <ScrollArea className="h-44 rounded-xl border border-border/50 bg-card/30">
                   <ScrollBar />
-                  <div className="divide-y divide-border/30 overflow-hidden">
+                  <div className="divide-y pb-4 divide-border/30 overflow-hidden">
                     {tag.tasks &&
                       tag.tasks.map((task: Task) => (
-                        <TaskItemLong key={task.id} task={task} />
+                        <TaskItem key={task.id} task={task} />
                       ))}
 
                     {tag.tasks?.length === 0 && (

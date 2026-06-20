@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTask } from "../../api/task.api";
+import { deleteSubtask } from "../../api/subtask.api";
 import { useAuth } from "@clerk/react";
 
-export function useDeleteTask() {
+export function useDeleteSubtask() {
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
       const token = await getToken();
-      await deleteTask(token as string, id);
+      await deleteSubtask(token as string, id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

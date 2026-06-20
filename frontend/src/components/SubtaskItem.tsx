@@ -1,8 +1,11 @@
 import { type Subtask } from "../schemas/subtask.schema";
 import { type Task } from "../schemas/task.schema";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { HoverCard } from "./ui/hover-card";
 import { CheckCircle2, Circle } from "lucide-react";
 import { useToggleCompleteSubtask } from "../hooks/subtasks/useToggleCompleteSubtask";
+import { cn } from "../lib/utils";
+import SubtaskShowcase from "./SubtaskShowcase";
+import { useState } from "react";
 
 const colorConfig: Record<
   Task["color"],
@@ -32,61 +35,73 @@ const colorConfig: Record<
 };
 
 function SubtaskItem({ subtask }: { subtask: Subtask }) {
+  const [openSubtaskShowcase, setOpenSubtaskShowcase] = useState(false);
   const subConfig = colorConfig[subtask.color];
   const subCompleted = subtask.status === "COMPLETED";
   const toggleComplete = useToggleCompleteSubtask();
 
   return (
-    <HoverCard key={subtask.id}>
-      <div className="flex items-center justify-between p-3 gap-3 hover:bg-muted/20 transition-colors group/row">
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <button
-            className="shrink-0 transition-transform active:scale-95 focus:outline-none"
-            onClick={() => {
-              toggleComplete.mutate(subtask.id);
-            }}
-          >
-            {subCompleted ? (
-              <CheckCircle2 className="size-4 text-emerald-500 fill-emerald-50 dark:fill-emerald-950/20" />
-            ) : (
-              <Circle className="size-4 text-muted-foreground/40 group-hover/row:text-muted-foreground/70" />
-            )}
-          </button>
-          <HoverCardTrigger className="min-w-0 flex-1" asChild>
-            <span
-              className={`text-sm tracking-tight truncate transition-colors ${
-                subCompleted
-                  ? "line-through text-muted-foreground/50"
-                  : "text-foreground/90"
-              }`}
-            >
-              {subtask.name}
-            </span>
-          </HoverCardTrigger>
-          <HoverCardContent
-            className="w-auto p-3 rounded-xl max-w-xs border shadow-lg"
-            align="start"
-          >
-            <p
-              className={`text-sm leading-relaxed ${
-                subCompleted
-                  ? "line-through text-muted-foreground/50"
-                  : "text-foreground/90"
-              }`}
-            >
-              {subtask.description || "No description provided."}
-            </p>
-          </HoverCardContent>
-        </div>
+    <>
+      <SubtaskShowcase
+        open={openSubtaskShowcase}
+        setOpen={setOpenSubtaskShowcase}
+        subtask={subtask}
+      />
 
-        <div className="flex items-center gap-2 shrink-0 pl-1">
-          <span
-            className={`size-1.5 rounded-full ${subConfig.dot}`}
-            title={subConfig.label}
-          />
+      <HoverCard key={subtask.id}>
+        <div
+          className={cn(
+            "flex items-center justify-between p-3 gap-3 transition-colors group",
+            subtask.color === "red"
+              ? "bg-red-400/4 hover:bg-red-400/10"
+              : subtask.color === "yellow"
+                ? "bg-yellow-400/4 hover:bg-yellow-400/10"
+                : "bg-green-400/4 hover:bg-green-400/10",
+          )}
+        >
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <button
+              className="shrink-0 transition-transform active:scale-95 focus:outline-none"
+              onClick={() => {
+                toggleComplete.mutate(subtask.id);
+              }}
+            >
+              {subCompleted ? (
+                <CheckCircle2 className="size-4 text-emerald-500 fill-emerald-50 dark:fill-emerald-950/20" />
+              ) : (
+                <Circle className="size-4 text-muted-foreground/40 group-hover:text-muted-foreground/70" />
+              )}
+            </button>
+            <div
+              className="min-w-0 flex-1 flex items-center cursor-pointer w-40 gap-4"
+              onClick={() => setOpenSubtaskShowcase(true)}
+            >
+              <>
+                <span
+                  className={`text-sm cursor-pointer w-32 max-w-32  tracking-tight truncate transition-colors line-clamp-1 ${
+                    subCompleted
+                      ? "line-through text-muted-foreground/50"
+                      : "text-foreground/90"
+                  }`}
+                >
+                  {subtask.name}
+                </span>
+                <span className="text-xs text-muted-foreground/80 tracking-tight truncate w-32 max-w-32 line-clamp-1">
+                  {subtask.description}
+                </span>
+              </>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0 pl-1">
+            <span
+              className={`size-1.5 rounded-full ${subConfig.dot}`}
+              title={subConfig.label}
+            />
+          </div>
         </div>
-      </div>
-    </HoverCard>
+      </HoverCard>
+    </>
   );
 }
 

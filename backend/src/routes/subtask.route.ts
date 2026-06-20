@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { createSubTaskSchema } from "../schemas/subtask.schema";
+import {
+  createSubTaskSchema,
+  updateSubTaskSchema,
+} from "../schemas/subtask.schema";
 import z from "zod";
 import { prisma } from "../../prisma/client";
 import { authenticate } from "../middleware/authenticate";
@@ -57,6 +60,41 @@ router.patch(`/:subtaskId/status`, authenticate, async (req, res) => {
   return res.status(200).send({
     subtask: updated,
   });
+});
+
+router.patch("/:subtaskId", authenticate, async (req, res) => {
+  const { subtaskId } = req.params;
+
+  const result = updateSubTaskSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json(z.treeifyError(result.error));
+  }
+
+  const data = result.data;
+
+  const subtask = await prisma.subtask.update({
+    where: { id: subtaskId as string },
+    data: {
+      ...data,
+    },
+  });
+
+  return res.status(200).send({
+    subtask: subtask,
+  });
+});
+
+router.delete("/:subtaskId", authenticate, async (req, res) => {
+  const { subtaskId } = req.params;
+
+  await prisma.subtask.delete({
+    where: {
+      id: subtaskId as string,
+    },
+  });
+
+  return res.status(200).send({ message: "successful" });
 });
 
 export default router;
