@@ -42,7 +42,7 @@ const TagShowcase = ({ open = false, setOpen, tag }: TagShowcaseProps) => {
         field: updatedFields,
       });
     },
-    300,
+    600,
   );
 
   if (!tag || !tagCopy) {

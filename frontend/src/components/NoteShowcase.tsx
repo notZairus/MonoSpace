@@ -53,7 +53,7 @@ function NoteShowcase({
     (noteId: string, field: Partial<NoteDTO>) => {
       updateNote.mutate({ id: noteId, data: field });
     },
-    500,
+    600,
   );
 
   useEffect(() => {

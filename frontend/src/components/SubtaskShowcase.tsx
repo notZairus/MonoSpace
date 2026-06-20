@@ -87,7 +87,7 @@ const SubtaskShowcase = ({
         data: updatedFields,
       });
     },
-    300,
+    600,
   );
 
   if (!subtask || !subtaskCopy) {

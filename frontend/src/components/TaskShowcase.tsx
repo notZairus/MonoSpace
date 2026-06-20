@@ -95,7 +95,7 @@ const TaskShowcase = ({ open = false, setOpen, task }: TaskShowcaseProps) => {
         data: updatedFields,
       });
     },
-    300,
+    600,
   );
 
   if (!task || !taskCopy) {
