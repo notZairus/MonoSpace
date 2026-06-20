@@ -7,8 +7,8 @@ import { Checkbox } from "./ui/checkbox";
 import { cn } from "../lib/utils";
 
 const taskColorStyles = {
-  red: "bg-red-300",
-  yellow: "bg-yellow-300",
+  red: "bg-red-400",
+  yellow: "bg-yellow-400",
   green: "bg-green-400",
 };
 
