@@ -1,19 +1,13 @@
 import type { Task } from "../schemas/task.schema";
-import { cn } from "../lib/utils";
 import TaskShowcase from "./TaskShowcase";
 import { useState } from "react";
-import type { Tag } from "../schemas/tags.schema";
-import { motion } from "motion/react";
-import { Checkbox } from "./ui/checkbox";
 import { useToggleCompleteTask } from "../hooks/tasks/useToggleComplete";
-
-const statusStyles = {
-  PENDING: "bg-slate-100 text-slate-700 ring-slate-200",
-  COMPLETED: "bg-emerald-100 text-emerald-900 ring-emerald-200",
-};
+import { Calendar, Pin } from "lucide-react";
+import { Checkbox } from "./ui/checkbox";
+import { cn } from "../lib/utils";
 
 const taskColorStyles = {
-  red: "bg-red-500",
+  red: "bg-red-300",
   yellow: "bg-yellow-300",
   green: "bg-green-400",
 };
@@ -26,13 +20,7 @@ const deadlineFormatter = new Intl.DateTimeFormat("en-US", {
   minute: "2-digit",
 });
 
-const TaskItem = ({
-  task,
-  variant = "secondary",
-}: {
-  task: Task;
-  variant?: "primary" | "secondary";
-}) => {
+const TaskItem = ({ task }: { task: Task }) => {
   const [showTask, setShowTask] = useState(false);
   const toggleComplete = useToggleCompleteTask();
 
@@ -40,87 +28,60 @@ const TaskItem = ({
     <>
       <TaskShowcase open={showTask} setOpen={setShowTask} task={task} />
 
-      <motion.div
-        className={cn(
-          "rounded-3xl border w-full border-border bg-background/80 px-3 py-2",
-          "w-full flex gap-1 min-h-20 cursor-pointer",
-          variant === "primary" && "bg-white/10 border-0 shadow-md",
-        )}
-      >
-        <div className="flex items-center">
-          <Checkbox
-            className="w-6 h-6"
-            checked={task.status === "COMPLETED"}
-            onCheckedChange={() => toggleComplete.mutate(task.id)}
-          />
+      <div className="flex max-w-120 w-full min-w-56 rounded-xl overflow-hidden border">
+        <div className="w-6 flex flex-col border-r">
+          <div className="h-9 flex items-center justify-center">
+            <Checkbox
+              checked={task.status === "COMPLETED"}
+              onCheckedChange={() => toggleComplete.mutate(task.id)}
+            />
+          </div>
+          <div className={cn("flex-1", taskColorStyles[task.color])}></div>
         </div>
-
         <div
-          key={task.id}
-          className={cn(
-            "w-full border-border p-2 flex-1 flex flex-col justify-between",
-          )}
+          className="flex-1 px-3 py-2 cursor-pointer"
           onClick={() => setShowTask(true)}
         >
-          <div className="flex items-center justify-between gap-3 ">
-            <div className="flex items-center gap-2 min-w-0">
-              <h3
-                className={cn(
-                  "text-sm font-medium text-foreground truncate wrap-break-word max-w-24",
-                  variant === "primary" && "text-white",
-                )}
-              >
-                {task.name}
-              </h3>
-            </div>
-
-            <span
-              className={cn(
-                `shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ring-1 ring-inset ${statusStyles[task.status]}`,
-                variant === "primary" && "bg-white/25 ring-0",
-              )}
-            >
-              {task.status}
-            </span>
+          <p
+            className={cn(
+              "text-lg border-b mb-1 font-semibold line-clamp-1 w-full",
+              task.status === "COMPLETED" &&
+                "text-muted-foreground line-through",
+            )}
+          >
+            {task.name}
+          </p>
+          <p
+            className={cn(
+              "text-muted-foreground text-sm text-ellipsis line-clamp-2",
+              task.status === "COMPLETED" && "line-through",
+            )}
+          >
+            {task.description}
+          </p>
+          <div
+            className={cn(
+              "mt-2 flex gap-1 items-center text-muted-foreground",
+              task.status === "COMPLETED" && "line-through",
+            )}
+          >
+            <Calendar size="12" />
+            <p className={cn("text-xs leading-0")}>
+              {deadlineFormatter.format(new Date(task.deadline))}
+            </p>
           </div>
-
-          {task.description && (
-            <div className="mb-2 flex-1">
-              <p
-                className={cn(
-                  "text-xs text-muted-foreground truncate wrap-break-word flex-1 max-w-56",
-                  variant === "primary" && "text-white/80",
-                )}
-              >
-                {task.description}
-              </p>
+          {task.tags.length > 0 && (
+            <div className="flex items-center flex-wrap gap-1  mt-2">
+              <Pin size="12" className="text-muted-foreground" />
+              {task.tags.map((tag) => (
+                <span className="text-xs border px-2 py-1 rounded-full">
+                  {tag.name}
+                </span>
+              ))}
             </div>
           )}
-
-          <div className="flex items-center justify-between mt-1 gap-2 ">
-            <span
-              className={cn(
-                "text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60",
-                variant === "primary" && "text-white/60",
-              )}
-            >
-              {task.tags.map((tag: Tag) => tag.name).join(", ")}
-            </span>
-            <span
-              className={cn(
-                "shrink-0 text-[10px] uppercase tracking-widest text-muted-foreground/70",
-                variant === "primary" && "text-white/70",
-              )}
-            >
-              {deadlineFormatter.format(new Date(task.deadline as string))}
-            </span>
-          </div>
         </div>
-
-        <div
-          className={`shrink-0 aspect-square w-2  rounded-full ${taskColorStyles[task.color]}`}
-        />
-      </motion.div>
+      </div>
     </>
   );
 };
