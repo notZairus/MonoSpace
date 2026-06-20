@@ -47,7 +47,7 @@ const TaskItem = ({ task }: { task: Task }) => {
         <div className="flex flex-col border-r">
           <div
             onClick={() => toggleComplete.mutate(task.id)}
-            className="p-1.5 flex items-center justify-center"
+            className="p-1 flex items-center justify-center"
           >
             {task.status === "COMPLETED" ? (
               <CheckCircle2 className="size-4 text-green-500" />
@@ -63,7 +63,7 @@ const TaskItem = ({ task }: { task: Task }) => {
         >
           <p
             className={cn(
-              "font-medium text-[1rem] border-b mb-1 line-clamp-1 w-full",
+              "font-medium max-w-54 text-[1rem] border-b mb-1 line-clamp-1 text-ellipsis",
               task.status === "COMPLETED" &&
                 "text-muted-foreground line-through",
             )}

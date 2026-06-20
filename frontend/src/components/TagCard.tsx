@@ -56,7 +56,7 @@ function TagsCard() {
           ) : (
             <ScrollArea className="h-40 sm:h-[calc(100dvh-28.5rem)] rounded-lg">
               <ScrollBar />
-              <div className="space-y-2 flex flex-wrap items-start gap-x-2">
+              <div className="space-y-2 flex flex-wrap items-start gap-x-2 p-1">
                 {tags?.map((tag: Tag) => (
                   <SubjectItem tag={tag} />
                 ))}

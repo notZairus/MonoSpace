@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { useQueryClient } from "@tanstack/react-query";
+import monospace_icon from "../assets/monospace_icon.png";
 
 function DateTimeCard() {
   const [dateTime, setDateTime] = useState(new Date());
@@ -30,8 +31,13 @@ function DateTimeCard() {
       <CardHeader>
         <CardTitle className="text-center">MONOSPACE</CardTitle>
       </CardHeader>
-      <CardContent className="flex justify-center h-full">
-        <div className="flex flex-col items-center justify-center h-full gap-4">
+      <CardContent className="relative flex justify-center h-full">
+        <img
+          src={monospace_icon}
+          alt="Monospace Icon"
+          className="absolute w-75 -top-22 -left-15 opacity-20 z-10"
+        />
+        <div className="z-20 flex flex-col items-center justify-center h-full gap-4">
           <div className="flex flex-col items-center  justify-center">
             <p className="text-center font-semibold text-lg">
               {dateTime.toLocaleDateString("en-US", {
