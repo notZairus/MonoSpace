@@ -4,6 +4,8 @@ import TaskShowcase from "./TaskShowcase";
 import { useState } from "react";
 import type { Tag } from "../schemas/tags.schema";
 import { motion } from "motion/react";
+import { Checkbox } from "./ui/checkbox";
+import { useToggleCompleteTask } from "../hooks/tasks/useToggleComplete";
 
 const statusStyles = {
   PENDING: "bg-slate-100 text-slate-700 ring-slate-200",
@@ -32,6 +34,7 @@ const TaskItem = ({
   variant?: "primary" | "secondary";
 }) => {
   const [showTask, setShowTask] = useState(false);
+  const toggleComplete = useToggleCompleteTask();
 
   return (
     <>
@@ -43,17 +46,21 @@ const TaskItem = ({
           "w-full flex gap-1 min-h-20 cursor-pointer",
           variant === "primary" && "bg-white/10 border-0 shadow-md",
         )}
-        onClick={() => setShowTask(true)}
       >
-        <div
-          className={`shrink-0 aspect-square w-2  rounded-full ${taskColorStyles[task.color]}`}
-        />
+        <div className="flex items-center">
+          <Checkbox
+            className="w-6 h-6"
+            checked={task.status === "COMPLETED"}
+            onCheckedChange={() => toggleComplete.mutate(task.id)}
+          />
+        </div>
 
         <div
           key={task.id}
           className={cn(
             "w-full border-border p-2 flex-1 flex flex-col justify-between",
           )}
+          onClick={() => setShowTask(true)}
         >
           <div className="flex items-center justify-between gap-3 ">
             <div className="flex items-center gap-2 min-w-0">
@@ -109,6 +116,10 @@ const TaskItem = ({
             </span>
           </div>
         </div>
+
+        <div
+          className={`shrink-0 aspect-square w-2  rounded-full ${taskColorStyles[task.color]}`}
+        />
       </motion.div>
     </>
   );

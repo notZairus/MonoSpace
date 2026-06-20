@@ -70,7 +70,7 @@ const TagShowcase = ({ open = false, setOpen, tag }: TagShowcaseProps) => {
         modal={false}
       >
         <DialogContent className="sm:max-w-md p-6 rounded-2xl border bg-background shadow-xl">
-          <DialogTitle className="text-lg font-semibold tracking-tight">
+          <DialogTitle className="text-lg tracking-tight">
             Delete Tag
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground mt-2">
